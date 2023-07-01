@@ -16,7 +16,6 @@ class PdfFilesResource extends JsonResource
     {
         return [
             'pdf_link' => url($this->pdf_link ),
-            'name' => $this->name,
         ];
     }
 }
