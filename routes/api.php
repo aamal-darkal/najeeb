@@ -26,7 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('lecture/{id}',[\App\Http\Controllers\Api\LectureController::class,'show']);
     Route::get('my_payments',[\App\Http\Controllers\Api\AuthController::class,'myPayments']);
     Route::get('attend/{id}' , [\App\Http\Controllers\Api\AttendeeController::class,'attend']);
-    Route::post('class_order_create/{id}' , [\App\Http\Controllers\Api\SubjectController::class,'subscribe']);
+    Route::post('class_order_create' , [\App\Http\Controllers\Api\SubjectController::class,'subscribe']);
     Route::post('student/ClasseOrderCreate' , [\App\Http\Controllers\Api\AuthController::class,'registerAndSubscribe']);
 
 });

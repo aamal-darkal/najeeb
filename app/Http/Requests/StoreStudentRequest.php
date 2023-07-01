@@ -27,8 +27,12 @@ class StoreStudentRequest extends FormRequest
             'father_name' => ['required', 'string', 'max:255'],
             'phone' => ['required','unique:App\Models\Student,phone'],
             'land_line' => ['sometimes'],
-            'governorate' => ['required'],
             'parent_phone' => ['sometimes'],
+            'governorate' => ['required'],
+            'subjects_ids' => 'required',
+            'amount' => 'required',
+            'bill_number' => 'required',
+            'payment_method_id' =>'required'
         ];
     }
 }

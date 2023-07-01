@@ -21,7 +21,8 @@ class DatabaseSeeder extends Seeder
             SubjectsTableSeeder::class,
             WeekProgTableSeeder::class,
             LecturesTableSeeder::class,
-            SettingsTableSeeder::class
+            SettingsTableSeeder::class,
+            PaymentMethodsSeeder::class
         ]);
         // \App\Models\User::factory(10)->create();
 

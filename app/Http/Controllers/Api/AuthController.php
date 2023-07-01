@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Helpers\ResponseHelper;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Resources\PaymentResource;
 use App\Http\Resources\UserInfoResource;
@@ -10,20 +11,29 @@ use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Student;
 use App\Models\User;
+use App\Traits\SubcribeTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    use SubcribeTrait;
+
     public function registerStudent(StoreStudentRequest $request)
     {
-        $student = Student::create($request->validated());
-
-        return response()->json([
+        $student = Student::create($request->all());
+        if(!$student) return response()->json([
             'data' => $student,
-            'message' => 'registered successfully'
+            'errors' => 'error in register student',
         ]);
+        $subjects = $this->subcribe(
+            $request->subjects_ids , 
+            $request->amount , 
+            $request->bill_number , 
+            $request->payment_method_id 
+            );        
+        return ResponseHelper::success($subjects, 'Subscribed successfully');        
     }
 
     public function login(Request $request){
@@ -92,4 +102,6 @@ class AuthController extends Controller
             'data' => $data,
         ]);
     }
+
+    
 }
