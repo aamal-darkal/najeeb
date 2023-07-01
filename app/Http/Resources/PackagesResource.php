@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Http\Resources;
+
+use App\Http\Requests\SubscribeRequest;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class PackagesResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(Request $request): array
+    {
+        return [
+                'id' => $this->id ,
+                'name' => $this->name,
+                'start_date' => $this->start_date,
+                'end_date' => $this->end_date,
+                'created_at' => $this->created_at,
+                'updated_at' => $this->updated_at,
+                'subjects' => SubjectsResource::collection($this->subjects)
+//                'subjects' => [
+//                    'id' => $this->subject_id,
+//                    'package_id' => $this->package_id ,
+//                    'name' => $this->subject_name ,
+//                    'cost' => $this->cost ,
+//                    'created_at' => $this->created_at ,
+//                    'updated_at' => $this->updated_at ,
+//                    'lectures' => [
+//                        'id' => $this->lecture_id,
+//                        'name' => $this->lecture_name,
+//                        'video_link' => $this->video_link,
+//                        'time_publish' => $this->date,
+//                        'duration' => $this->duration,
+//                    ],
+//                ],
+        ];
+    }
+}
