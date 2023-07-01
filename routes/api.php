@@ -35,3 +35,7 @@ Route::post('register',[\App\Http\Controllers\Api\AuthController::class,'registe
 Route::post('login',[\App\Http\Controllers\Api\AuthController::class,'login']);
 
 Route::get('test',[App\Http\Controllers\Admin\SubscriptionController::class, 'getSubs']);
+
+
+Route::post('reset-token',[\App\Http\Controllers\Admin\StudentController::class,'resetTokenDate']);
+
