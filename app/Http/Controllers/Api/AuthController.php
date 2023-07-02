@@ -47,7 +47,7 @@ class AuthController extends Controller
         $user = User::where('user_name', $request['user_name'])->firstOrFail();
         if($user->token_birth && Carbon::make($user->token_birth)->diffInDays(Carbon::now()) <= 30)
             return response()->json([
-                'message' => 'You are not allowed to login, Your last login was within the last 30 days.'
+                'message' => 'لا يمكن تسجبل الدخول-لم يمض 30 بوم على اخر تسجبل دخول لك'
             ], 401);
 
         $user->update(['fcm_token' => $request->fcm_token, 'token_birth' => Carbon::now()]);
