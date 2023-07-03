@@ -83,11 +83,11 @@ class StudentController extends Controller
     public function store(StoreStudentRequest $request)
     {
         $student = (new AuthController)->registerStudent($request);
-        $approveRequest = new Request(['ids' => $student->getData()->data->id,'status' => 'current']);
-        //$request->merge(['name' => 'John Doe']);
-        $this->changeStatus($approveRequest);
-        if($student->getStatusCode() == 401)
-            return redirect()->back()->with('error', 'Student was not registered');
+        // $approveRequest = new Request(['ids' => $student->getData()->data->id,'status' => 'current']);
+        // //$request->merge(['name' => 'John Doe']);
+        // $this->changeStatus($approveRequest);
+        // if($student->getStatusCode() == 401)
+            // return redirect()->back()->with('error', 'Student was not registered');
 
         return redirect()->back()->with('success', 'Student was registered successfully');
 

@@ -42,11 +42,11 @@
                             @foreach($orders as $order)
                                 <tr>
                                     <td><label class="ui-check m-0"><input type="checkbox" name="ids[]" value="{{$order->id}}"><i style="background-color: #f1efef"></i></label></td>
-                                    <td>{{$order->payment->bill_number}}</td>
+                                    {{-- <td>{{$order->payment->bill_number}}</td> --}}
                                     <td>{{$order->amount}}</td>
                                     <td>{{$order->subjects_count}}</td>
                                     <td>{{$order->created_at}}</td>
-                                    @if($order->payment->state == 'approved')
+                                    {{-- @if($order->payment->state == 'approved')
                                         <td><span class="label success" title="Suspended">{{$order->payment->state}}</span>
                                         </td>
                                     @elseif($order->payment->state == 'rejected')
@@ -55,7 +55,7 @@
                                     @elseif($order->payment->state == 'pending')
                                         <td><span class="label warn" title="Suspended">{{$order->payment->state}}</span>
                                         </td>
-                                    @endif
+                                    @endif --}}
                                         <td>
                                             <span class="label primary" title="Suspended"><a href="{{route('student-details',$order->student->id)}}">{{$order->student->first_name .' '. $order->student->last_name}}</a></span>
                                         </td>

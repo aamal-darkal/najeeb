@@ -40,20 +40,21 @@
                             @foreach($orders as $order)
                                 <tr>
                                     <td></td>
-                                    <td>{{$order->payment->bill_number}}</td>
+                                    {{-- <td>{{$order->pa   yments->bill_number}}</td> --}}
                                     <td>{{$order->amount}}</td>
                                     <td>{{$order->subjects_count}}</td>
                                     <td>{{$order->created_at}}</td>
-                                    @if($order->payment->state == 'approved')
+                                    {{-- error --}}
+                                    {{-- @if($order->payments->state == 'approved')
                                         <td><span class="label success" title="Suspended">{{$order->payment->state}}</span>
                                         </td>
-                                    @elseif($order->payment->state == 'rejected')
+                                    @elseif($order->payments->state == 'rejected')
                                         <td><span class="label danger" title="Suspended">{{$order->payment->state}}</span>
                                         </td>
-                                    @elseif($order->payment->state == 'pending')
+                                    @elseif($order->payments->state == 'pending')
                                         <td><span class="label warn" title="Suspended">{{$order->payment->state}}</span>
                                         </td>
-                                    @endif
+                                    @endif --}}
                                         <td>
                                             <span class="label primary" title="Suspended"><a href="{{route('student-details',$order->student->id)}}">{{$order->student->first_name .' '. $order->student->last_name}}</a></span>
                                         </td>
