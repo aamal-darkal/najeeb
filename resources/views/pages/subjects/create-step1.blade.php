@@ -53,7 +53,7 @@
                                 <td>{{$package->end_date}}</td>
                                 <td class="text-center">{{$package->subjects_count}}</td>
                                 <td class="text-center">
-                                    <form method="post" action="{{route('create.subject.step2')}}">
+                                    <form method="get" action="{{route('create.subject.step2')}}">
                                         @csrf
                                         <input type="hidden" name="package_id" value="{{$package->id}}">
                                         <input type="hidden" name="package_name" value="{{$package->name}}">

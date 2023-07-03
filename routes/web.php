@@ -58,7 +58,7 @@ Route::get('delete-package/{id}',[\App\Http\Controllers\Admin\PackageController:
 Route::get('subjects',[\App\Http\Controllers\Admin\SubjectController::class,'index'])->name('subjects');
 Route::get('subject-subscriptions',[\App\Http\Controllers\Admin\SubscriptionController::class,'getSubscribedStudents'])->name('subject.subscriptions');
 Route::get('create-subject-step1',[\App\Http\Controllers\Admin\SubjectController::class,'create1'])->name('create.subject.step1');
-Route::post('create-subject-step2',[\App\Http\Controllers\Admin\SubjectController::class,'create2'])->name('create.subject.step2');
+Route::get('create-subject-step2',[\App\Http\Controllers\Admin\SubjectController::class,'create2'])->name('create.subject.step2');
 Route::post('store-subject',[\App\Http\Controllers\Admin\SubjectController::class,'store'])->name('store-subject');
 Route::get('delete-subject/{id}',[\App\Http\Controllers\Admin\SubjectController::class,'destroy'])->name('delete.subject');
 

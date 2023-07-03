@@ -52,10 +52,10 @@
                                 <th></th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody>                                
                             @foreach($students as $student)
                                 <tr>
-                                    <td>{{$student->user->user_name}}</td>
+                                    <td>{{$student->user? $student->user->user_name : ''}}</td>
                                     <td>{{$student->first_name}}</td>
                                     <td>{{$student->last_name}}</td>
                                     <td>{{$student->father_name}}</td>
