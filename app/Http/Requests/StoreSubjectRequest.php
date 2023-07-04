@@ -25,9 +25,9 @@ class StoreSubjectRequest extends FormRequest
             'package_id' => 'required',
             'name' => 'required',
             'cost' => 'required',
-            'day' => 'required',
-            'start_time' => 'required|date_format:g:i A',
-            'end_time' => 'required|date_format:g:i A|after:start_time',
+            'days.*' => 'required',
+            'start_times.*' => ['required','regex:/(1[012]|[1-9]):[0-5][0-9][\\s]?(?i)(am|pm)/'],
+            'end_times.*' => ['required','regex:/(1[012]|[1-9]):[0-5][0-9][\\s]?(?i)(am|pm)/'],
         ];
     }
 }

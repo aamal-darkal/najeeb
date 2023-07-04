@@ -23,9 +23,9 @@ class Subject extends Model
     {
         return $this->belongsToMany(Student::class,'student_subject');
     }
-    public function weekProg()
+    public function weekProgs()
     {
-        return $this->hasOne(Week_program::class);
+        return $this->hasMany(Week_program::class);
     }
     public function lectures()
     {

@@ -9,8 +9,7 @@ trait SubcribeTrait {
     
     public function subcribe($subjects_ids , $amount , $bill_number , $payment_method_id)
     {
-        $subjects = Subject::find($subjects_ids);
-        return $subjects;
+        $subjects = Subject::find($subjects_ids);        
         if (!$subjects)
             return response()->json('These subjects does not exist');
 
@@ -24,18 +23,18 @@ trait SubcribeTrait {
                 'amount' => $amount,
             ]
         );
+
         foreach ($subjects as $subject)
         {
             $order->subjects()->attach($subject->id,['cost' => $subject->cost]);
         }
-        $order->payment()->create([
+        $order->payments()->create([
             'bill_number' => $bill_number,
             'amount' => $amount,
             'payment_method_id' => $payment_method_id,
-            'start_duration_date' => Carbon::now(),
-            'payment_date' => Carbon::now(),
+            'start_duration_date' => $subjects->first()->package->start_date,
+            'payment_date' => Carbon::now(), //should be given by app
         ]);
-
         return $subjects;
     }
     

@@ -19,7 +19,7 @@ Route::get('my_public_classes', [\App\Http\Controllers\Api\PackageController::cl
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('user', [\App\Http\Controllers\Api\AuthController::class, "getUserInfo"]);
     Route::get('my_payments',[\App\Http\Controllers\Api\AuthController::class,'myPayments']);
-    Route::post('student/ClasseOrderCreate' , [\App\Http\Controllers\Api\AuthController::class,'registerAndSubscribe']);
+    // Route::post('student/ClasseOrd   erCreate' , [\App\Http\Controllers\Api\AuthController::class,'registerAndSubscribe']);
 
 
     Route::get('my_classes', [\App\Http\Controllers\Api\PackageController::class, "getSubjects"]);    

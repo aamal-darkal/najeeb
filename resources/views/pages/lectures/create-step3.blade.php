@@ -25,7 +25,7 @@
                 <div class="box-divider m-0"></div>
                 <div class="box-body">
                     <form id="myForm" method="POST" action="{{ route('store.lecture')}}" enctype="multipart/form-data" >
-                        @csrf
+                        @csrf                        
                         <input type="hidden" value="{{$weekProgId}}" name="week_program_id">
                         <input type="hidden" value="{{$subjectId}}" name="subject_id">
                         <div class="form-group">

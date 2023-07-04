@@ -7,7 +7,6 @@ use App\Http\Helpers\ResponseHelper;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Resources\PaymentResource;
 use App\Http\Resources\UserInfoResource;
-use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Student;
 use App\Models\User;

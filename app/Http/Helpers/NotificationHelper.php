@@ -114,7 +114,7 @@ class NotificationHelper
     {
         $ids = Student::select('id')->whereHas('packages', function($q) use ($id){
             return $q->whereHas('subjects', function($q) use ($id){
-                return $q->whereHas('weekProg', function($q) use ($id){
+                return $q->whereHas('weekProgs', function($q) use ($id){
                     return $q->where('subject_id', $id);
                 });
             });

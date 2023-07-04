@@ -18,7 +18,7 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        $subjects = Subject::with('package','weekProg')->withCount('students')->get();
+        $subjects = Subject::with('package','weekProgs')->withCount('students')->get();
         return view('pages.subjects.index',compact('subjects'));
     }
 
@@ -33,12 +33,12 @@ class SubjectController extends Controller
      */
     public function create2(Request $request)
     {
-        $package = Package::with('subjects','subjects.weekProg')->find($request->package_id);
+        $package = Package::with('subjects','subjects.weekProgs')->find($request->package_id);
         $notAllowedTimes = [];
         foreach ($package->subjects as $subject)
         {
             // array_push($notAllowedTimes , [Carbon::parse($subject->weekProg->start_time)->format('g'), Carbon::parse($subject->weekProg->end_time)->format('g')]);
-            $notAllowedTimes[] =  [$subject->weekProg->day,Carbon::parse($subject->weekProg->start_time)->format('g:i A'), Carbon::parse($subject->weekProg->end_time)->format('g:i A') ];
+            // $notAllowedTimes[] =  [$subject->weekProg->day,Carbon::parse($subject->weekProg->start_time)->format('g:i A'), Carbon::parse($subject->weekProg->end_time)->format('g:i A') ];
         }
         // return $notAllowedTimes;
         return view('pages.subjects.create-step2',compact('package', 'notAllowedTimes'));
@@ -51,10 +51,13 @@ class SubjectController extends Controller
      */
     public function store(StoreSubjectRequest $request): RedirectResponse
     {
-        $request['start_time'] = Carbon::createFromFormat('g:i A', $request['start_time']);
-        $request['end_time'] = Carbon::createFromFormat('g:i A', $request['end_time']);
         $subject = Subject::create($request->only(['name','cost','package_id']));
-        $subject->weekProg()->create($request->only(['day','start_time','end_time']));
+        $days = $request->days;
+        foreach($days as $i => $day) {
+            $start_time = Carbon::createFromFormat('h:i A', $request['start_times'][$i]);
+            $end_time = Carbon::createFromFormat('h:i A', $request['end_times'][$i]);
+            $subject->weekProgs()->create(['day' => $day ,'start_time' => $start_time,'end_time' => $end_time]);
+        }             
 
         return redirect()->route('subjects');
     }

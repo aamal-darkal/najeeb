@@ -25,7 +25,7 @@ class AttendeeController extends Controller
             $lectures->save();
         }
         else
-            $lectures = Student::where('user_id',Auth::id())->first()->lecturesAttended()->attach($id,['date' => Carbon::now()]);
+            $lectures = Student::where('user_id',Auth::id())->first()->lecturesAttended()->attach($id,['date' => Carbon::now() , 'views' =>1]);
 
         return ResponseHelper::success($lectures, 'lecture has been viewed');
 

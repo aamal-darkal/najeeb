@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Payment;
 use App\Models\Student;
 use App\Models\Subject;
 use Illuminate\Http\Request;
@@ -14,26 +15,28 @@ class SubscriptionController extends Controller
 {
     public function index()
     {
-        $orders = Order::withCount('subjects')->has('payments')->with('payments')->get();
-          //return $orders;
-        return view('pages.subscriptions.index', compact('orders'));
+        $payments = Payment::with('order', 'order.subjects', 'order.student')->get();
+        return view('pages.subscriptions.index', compact('payments'));
     }
 
     public function getSubs()
     {
         $currentRoute = Route::currentRouteName();
-        $orders = Order::whereHas('payments', function ($q) use ($currentRoute) {
-            if ($currentRoute == 'subscriptions.approved')
+        $payments = Payment::with('order', 'order.subjects', 'order.student')
+            ->when($currentRoute == 'subscriptions.approved', function ($q) use ($currentRoute) {
                 return $q->where('state', 'approved');
-            elseif ($currentRoute == 'subscriptions.rejected')
+            })->when($currentRoute == 'subscriptions.rejected', function ($q) use ($currentRoute) {
                 return $q->where('state', 'rejected');
-            return $q->where('state', 'pending');
-        })->with('student','payments')->withCount('subjects')->get();
-        if($currentRoute == 'subscriptions.pending')
-           // return $orders;
-        return view('pages.subscriptions.requests', compact('orders'));
+            })->when($currentRoute == 'subscriptions.pending', function ($q) use ($currentRoute) {
+                return $q->where('state', 'pending');
+            })->get();
+
+
+        if ($currentRoute == 'subscriptions.pending')
+            // return $orders;
+            return view('pages.subscriptions.requests', compact('payments'));
         //return $orders;
-        return view('pages.subscriptions.index', compact('orders'));
+        return view('pages.subscriptions.index', compact('payments'));
     }
 
     public function changeStatus(Request $request)
@@ -44,17 +47,16 @@ class SubscriptionController extends Controller
         ]);
         $status = $validated['status'];
 
-        $orders = Order::whereIn('id', $validated['ids'])->with('payments','subjects.weekProg')->get();
-//************ eeror*/
-        // $orders->each(function($order) use ($status) {
-        //     $order->payments()->update(['state' => $status]);
-        // });
+        $payments = payment::with('order')->find($validated['ids']);
+        foreach ($payments as $payment)
+            $payment->update(['state' => $status]);
 
-        foreach ($orders as $order)
-        {
-            $ids = $order->subjects->pluck('id');
-            $student = Student::find($order->student_id);
-            $student->subjects()->attach($ids);
+        if ($status == 'approved') {
+            foreach ($payments as $payment) {
+                $subjects = $payment->order->subjects;
+                $student = Student::find($payment->order->student_id);
+                $student->subjects()->attach($subjects);
+            }
         }
         return redirect()->back();
     }

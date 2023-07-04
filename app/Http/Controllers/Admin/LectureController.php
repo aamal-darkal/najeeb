@@ -58,7 +58,8 @@ class LectureController extends Controller
     {
 
         $packageName = $request->package_name;
-        $subjects = Subject::where('package_id', $request->package_id)->with('weekProg')->get();
+        $subjects = Subject::where('package_id', $request->package_id)->with('weekProgs')->get();
+        // return $subjects;
         return view('pages.lectures.create-step2',compact('subjects','packageName'));
     }
 

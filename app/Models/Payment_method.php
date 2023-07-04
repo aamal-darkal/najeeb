@@ -15,7 +15,7 @@ class Payment_method extends Model
         'name'
     ];
 
-    public function payment()
+    public function payments()
     {
         $this->hasMany(Payment::class);
     }
