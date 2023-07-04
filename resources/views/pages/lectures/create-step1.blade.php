@@ -43,7 +43,7 @@
                                         <td>{{ $package->end_date }}</td>
                                         <td class="text-center">{{ $package->subjects_count }}</td>
                                         <td class="text-center">
-                                            <form action="{{ route('create.subject.step2') }}" method="post">
+                                            <form action="{{ route('package.show') }}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="package_id" value="{{ $package->id }}">
                                                 <button

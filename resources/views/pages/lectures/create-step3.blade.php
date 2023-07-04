@@ -4,8 +4,8 @@
         <div class="col-xs-12 col-md-8 offset-md-2">
             <div class="wrapper-progressBar">
                 <ul class="progressBar">
-                    <li class="active text-primary">{{$packageName}}</li>
-                    <li class="active text-primary">{{$subjectName}}</li>
+                    <li class="active text-primary">{{$package_name}}</li>
+                    <li class="active text-primary">{{$subject_name}}</li>
                     <li>Create lecture</li>
                 </ul>
             </div>
@@ -26,14 +26,14 @@
                 <div class="box-body">
                     <form id="myForm" method="POST" action="{{ route('store.lecture')}}" enctype="multipart/form-data" >
                         @csrf                        
-                        <input type="hidden" value="{{$weekProgId}}" name="week_program_id">
-                        <input type="hidden" value="{{$subjectId}}" name="subject_id">
+                        <input type="hidden" value="{{$week_program_id}}" name="week_program_id">
+                        <input type="hidden" value="{{$subject_id}}" name="subject_id">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Name</label>
                             <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter name" name="name" required>
                         </div>
                         <div class="form-group">
-                            <label >Duration</label>
+                            <label >Duration - by minutes</label>
                             <input type="number" class="form-control" name="duration" required>
 
                         </div>

@@ -19,16 +19,15 @@ class PackageController extends Controller
     public function index()
     {
         $packages = Package::withCount('subjects')->get();
-        return view('pages.packages.index',compact('packages'));
+        return view('pages.packages.index', compact('packages'));
     }
 
     public function paginatedIndex(Request $request)
     {
-            if($request->ajax())
-            {
-        $packages = Package::withCount('subjects')->paginate(2);
-        return view('pages.packages.index',compact('packages'))->render();
-            }
+        if ($request->ajax()) {
+            $packages = Package::withCount('subjects')->paginate(2);
+            return view('pages.packages.index', compact('packages'))->render();
+        }
     }
 
 
@@ -37,7 +36,6 @@ class PackageController extends Controller
      */
     public function create(): Response
     {
-
     }
 
     /**
@@ -46,10 +44,10 @@ class PackageController extends Controller
     public function store(StorePackageRequest $request): RedirectResponse
     {
         $data = $request->validated();
-        $path = 'images/packages' ;
-        if($request->file('image')) {
-           $img = $this->uploadImage( $request->file('image'),$path);
-            $data['image'] = $path.'/'. $img;
+        $path = 'images/packages';
+        if ($request->file('image')) {
+            $img = $this->uploadImage($request->file('image'), $path);
+            $data['image'] = $path . '/' . $img;
         }
 
         Package::create($data);
@@ -62,7 +60,7 @@ class PackageController extends Controller
     public function show(Request $request)
     {
         $package = Package::with('subjects')->find($request->package_id);
-        return view('pages.packages.show',compact('package'));
+        return view('pages.packages.show', compact('package'));
     }
 
     /**

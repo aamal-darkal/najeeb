@@ -4,7 +4,7 @@
         <div class="col-xs-12 col-md-8 offset-md-2">
             <div class="wrapper-progressBar">
                 <ul class="progressBar">
-                    <li class="active">{{ $packageName }}</li>
+                    <li class="active">{{ $package_name }}</li>
                     <li class="active">Choose subject</li>
                     <li>Create lecture</li>
                 </ul>
@@ -42,7 +42,7 @@
 
                                             <form method="post" action="{{ route('create.lecture.step3') }}">
                                                 @csrf
-                                                <select name="weekProgId" id="" class="form-control">
+                                                <select name="week_program_id" id="" class="form-control">
                                                     @foreach ($subject->weekProgs as $weekProg)
                                                         <option value="{{ $weekProg->id }}">{{ $weekProg->day }} -
                                                             {{ $weekProg->start_time }} - {{  $weekProg->end_time }}</option>
@@ -52,7 +52,7 @@
                                         <td>
                                             <input type="hidden" name="subject_id" value="{{ $subject->id }}">
                                             <input type="hidden" name="subject_name" value="{{ $subject->name }}">
-                                            <input type="hidden" name="package_name" value="{{ $packageName }}">
+                                            <input type="hidden" name="package_name" value="{{ $package_name }}">
                                             <button class="md-btn md-raised m-b-sm primary text-white"><i
                                                     class="fa fa-check-square-o"></i></button>
                                         </td>

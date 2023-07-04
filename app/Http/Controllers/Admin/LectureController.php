@@ -20,28 +20,33 @@ class LectureController extends Controller
     use ImageTrait;
     public function index($subjectId = null)
     {
-
-        $lecturess = Lecture::join('week_programs', 'week_programs.id', '=', 'lectures.week_program_id')
+        $lectures = Lecture::join('week_programs', 'lectures.week_program_id' , '=' ,'week_programs.id')
             ->when($subjectId, function ($query, $subjectId) {
                 return $query->where('week_programs.subject_id', $subjectId);
             })
-            ->select('lectures.id', 'name as title', DB::raw("CONCAT(date,'T',week_programs.start_time) as start") , DB::raw("CONCAT(date,'T',week_programs.end_time) as end"))
-           // ->select('name as title', 'week_programs.start_time as start' ,'week_programs.end_time as end')
+            ->select('lectures.id', 'name as title', DB::raw("CONCAT(date,'T',week_programs.start_time) as start"), DB::raw("CONCAT(date,'T',week_programs.end_time) as end"))
             ->get(3);
-        $lecturess->map(function ($lectures){
-            $lectures['color'] = ['#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT)] ;
-            //$lectures['url'] = '{{route(\''.'test\''.','.$lectures->id.')}}';
-            $lectures['url'] = route('lecture.show',$lectures->id);
-            return $lectures;
+            // return $lectures;
+        $lectures->map(function ($lecture) {    
+            $lecture['color'] = $this->rndRGBColorCode(200);
+            $lecture['url'] = route('lecture.show', $lecture->id);
+            return $lecture;
         });
-        foreach($lecturess as $key => $value) {
-            $lectures[str_replace('""', '', $key)] = str_replace('""', '', $value);
+
+        foreach ($lectures as $lecture) {
+            $newLectures[] = (string) $lecture;
         }
-        if(isset($lectures))
-        $lectures = implode(',',$lectures);
+
+        if (isset($newLectures))
+            $lectures = implode(',', $newLectures);
         else
-            $lectures = null ;
-        return view('pages.lectures.index',compact('lectures'));
+            $lectures = null;
+        return view('pages.lectures.index', compact('lectures'));
+    }
+
+    private function rndRGBColorCode($min =0 , $max=255)
+    {
+        return 'rgb(' . rand($min, $max) . ',' . rand($min, $max) . ',' . rand($min, $max) . ')'; #using the inbuilt random function 
     }
 
     public function show($id){
@@ -57,19 +62,19 @@ class LectureController extends Controller
     public function create2(Request $request)
     {
 
-        $packageName = $request->package_name;
+        $package_name = $request->package_name;
         $subjects = Subject::where('package_id', $request->package_id)->with('weekProgs')->get();
         // return $subjects;
-        return view('pages.lectures.create-step2',compact('subjects','packageName'));
+        return view('pages.lectures.create-step2',compact('subjects','package_name'));
     }
 
     public function create3(Request $request)
     {
-        $packageName = $request->package_name;
-        $subjectName = $request->subject_name;
-        $weekProgId = $request->weekProg_id;
-        $subjectId = $request->subject_id ;
-        return view('pages.lectures.create-step3',compact('packageName', 'subjectName', 'subjectId', 'weekProgId'));
+        $package_name = $request->package_name;
+        $subject_name = $request->subject_name;
+        $week_program_id = $request->week_program_id;
+        $subject_id = $request->subject_id ;
+        return view('pages.lectures.create-step3',compact('package_name', 'subject_name', 'subject_id', 'week_program_id'));
     }
 
     public function store(StoreLectureRequest $request)
