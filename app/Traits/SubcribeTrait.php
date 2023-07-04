@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 trait SubcribeTrait {
     
-    public function subcribe($subjects_ids , $amount , $bill_number , $payment_method_id)
+    public function subcribe($subjects_ids , $amount , $bill_number , $payment_method_id , $student)
     {
         $subjects = Subject::find($subjects_ids);        
         if (!$subjects)
@@ -18,7 +18,7 @@ trait SubcribeTrait {
         if($totalCost > $amount)
             return response()->json('the amount you paid is less than the cost');
 
-        $order = Auth::user()->student->orders()->create(
+        $order = $student->orders()->create(
             [
                 'amount' => $amount,
             ]

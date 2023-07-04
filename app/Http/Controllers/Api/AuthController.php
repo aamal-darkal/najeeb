@@ -21,21 +21,24 @@ class AuthController extends Controller
 
     public function registerStudent(StoreStudentRequest $request)
     {
+        // order = Auth::user()->
         $student = Student::create($request->all());
-        if(!$student) return response()->json([
+        if (!$student) return response()->json([
             'data' => $student,
             'errors' => 'error in register student',
         ]);
         $subjects = $this->subcribe(
-            $request->subjects_ids , 
-            $request->amount , 
-            $request->bill_number , 
-            $request->payment_method_id 
-            );        
-        return ResponseHelper::success($subjects, 'Subscribed successfully');        
+            $request->subjects_ids,
+            $request->amount,
+            $request->bill_number,
+            $request->payment_method_id,
+            $student
+        );
+        return ResponseHelper::success($subjects, 'Subscribed successfully');
     }
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
         $request['user_name'] = $request->username;
         if (!Auth::attempt($request->only('user_name', 'password'))) {
             return response()->json([
@@ -44,7 +47,7 @@ class AuthController extends Controller
         }
 
         $user = User::where('user_name', $request['user_name'])->firstOrFail();
-        if($user->token_birth && Carbon::make($user->token_birth)->diffInDays(Carbon::now()) <= 30)
+        if ($user->token_birth && Carbon::make($user->token_birth)->diffInDays(Carbon::now()) <= 30)
             return response()->json([
                 'message' => 'لا يمكن تسجبل الدخول أكثر من مرةخلال 30 بوم'
             ], 401);
@@ -53,27 +56,27 @@ class AuthController extends Controller
         $token = $user->createToken('authToken')->plainTextToken;
         $student = Student::where('user_id', $user->id)->first();
         $user['photo'] = null;
-        $user['name'] = $student->first_name .' '. $student->last_name ;
+        $user['name'] = $student->first_name . ' ' . $student->last_name;
         $user['phone'] = $student->phone;
         $user['token'] = $token;
         return response()->json([
-            'status' => 200 ,
+            'status' => 200,
             'data' => $user,
         ]);
     }
 
     public function getUserInfo(Request $request)
     {
-        $user = User::with('student')->find(Auth::id()) ;
+        $user = User::with('student')->find(Auth::id());
         $user['token'] = $request->bearerToken();
-        return new UserInfoResource($user) ;
+        return new UserInfoResource($user);
     }
 
     public function myPayments()
     {
         $payments = Payment::with('order', 'order.student')->get();
         // return $payments;
-       return  PaymentResource::collection($payments);
+        return  PaymentResource::collection($payments);
     }
 
     public function registerAndSubscribe(Request $request)
@@ -97,10 +100,8 @@ class AuthController extends Controller
         );
 
         return response()->json([
-            'status' => 200 ,
+            'status' => 200,
             'data' => $data,
         ]);
     }
-
-    
 }

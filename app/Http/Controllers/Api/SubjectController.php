@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
 use App\Traits\SubcribeTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SubjectController extends Controller
 {
@@ -22,7 +23,8 @@ class SubjectController extends Controller
                                     $request->subjects_ids , 
                                     $request->amount , 
                                     $request->bill_number , 
-                                    $request->payment_method_id 
+                                    $request->payment_method_id,
+                                        Auth::user()->student
                                     );
         return ResponseHelper::success($subjects, 'Subscribed successfully');
     }
