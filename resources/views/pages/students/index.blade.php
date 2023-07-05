@@ -24,18 +24,7 @@
                         @csrf
                         <input type="hidden" name="status" id="status" value="">
                         <input type="hidden" name="ids[]" id="ids" value="">
-                        <table
-                            {{--                    ui-jp="dataTable" ui-options="{--}}
-                            {{--          sAjaxSource: 'api/datatable.json',--}}
-                            {{--          aoColumns: [--}}
-                            {{--            { mData: 'engine' },--}}
-                            {{--            { mData: 'browser' },--}}
-                            {{--            { mData: 'platform' },--}}
-                            {{--            { mData: 'version' },--}}
-                            {{--            { mData: 'grade' }--}}
-                            {{--          ]--}}
-                            {{--        }" --}}
-                            class="table table-striped b-t b-b">
+                        <table class="table table-striped b-t b-b">
                             <thead>
                             <tr>
                                 <th>User name</th>

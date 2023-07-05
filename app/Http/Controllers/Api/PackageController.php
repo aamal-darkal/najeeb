@@ -17,18 +17,26 @@ class PackageController extends Controller
      *
      * @return void
      */
-    public function getMySubjects()
+    public function getSubjects()
     {
-       
-        $studentId = Student::select('id')->where('user_id', Auth::id())->first()->id;
 
-        $packages = Package::whereHas('subjects', function($query) use ($studentId){
-                 $query->whereHas('students', function($query) use ($studentId){
-                     $query->where('student_id', $studentId);
-                }) ;
-            })
-            ->with('subjects.lectures.pdfFiles')
-            ->get();
+        $studentId = Student::select('id')->where('user_id', Auth::id())->first()->id;
+        $packages = Package::whereHas('subjects', function ($query) use ($studentId) {
+            return $query->whereHas('students', function ($query) use ($studentId) {
+                return $query->where('student_id', $studentId);
+            });
+        })->with([
+            'subjects' => function ($q) use ($studentId) {
+                return $q->whereHas(
+                    'students',
+                    function ($query) use ($studentId) {
+                        return $query->where('student_id', $studentId);
+                    }
+                );
+            }
+        , 'subjects.lectures.pdfFiles'])->get();
+        return $packages;
+
         if ($packages) {
             $data = ['my_classes' => PackagesResource::collection($packages)];
             return ResponseHelper::success($data, 'Your packages');
@@ -40,38 +48,38 @@ class PackageController extends Controller
         );
     }
 
-    public function getSubjects()
-    {
-        //return all packages with all detail  and relation to student            
-        $packages = Package::with('subjects.lectures.pdfFiles')->get();
-        $studentId = Student::select('id')->where('user_id', Auth::id())->first()->id;
-        //get ids of student subjects
-        $studentSubjectsIds = Subject::select('id')->whereHas('students', function($q) use($studentId) {
-            $q->where('student_id', $studentId);
-        })->pluck('id')->toArray();
+    // public function getSubjects()
+    // {
+    //     //return all packages with all detail  and relation to student            
+    //     $packages = Package::with('subjects.lectures.pdfFiles')->get();
+    //     $studentId = Student::select('id')->where('user_id', Auth::id())->first()->id;
+    //     //get ids of student subjects
+    //     $studentSubjectsIds = Subject::select('id')->whereHas('students', function($q) use($studentId) {
+    //         $q->where('student_id', $studentId);
+    //     })->pluck('id')->toArray();
 
-        //Add has_relation field to every subject        
-        $packages = $packages->map(function ($package) use ($studentSubjectsIds) {
-            $package->subjects = $package->subjects->map(function ($subject) use ($studentSubjectsIds) {
-                $subject->has_relation = in_array($subject->id, $studentSubjectsIds);
-                return $subject;
-            });
+    //     //Add has_relation field to every subject        
+    //     $packages = $packages->map(function ($package) use ($studentSubjectsIds) {
+    //         $package->subjects = $package->subjects->map(function ($subject) use ($studentSubjectsIds) {
+    //             $subject->has_relation = in_array($subject->id, $studentSubjectsIds);
+    //             return $subject;
+    //         });
 
-            return $package;
-        });
-        if ($packages) {
-            $data = ['my_classes' => PackagesResource::collection($packages)];
-            return ResponseHelper::success($data, 'Your packages');
-        }
-        return response()->json(
-            [
-                'message' => 'There is no packages yet'
-            ]
-        );
-    }
+    //         return $package;
+    //     });
+    //     if ($packages) {
+    //         $data = ['my_classes' => PackagesResource::collection($packages)];
+    //         return ResponseHelper::success($data, 'Your packages');
+    //     }
+    //     return response()->json(
+    //         [
+    //             'message' => 'There is no packages yet'
+    //         ]
+    //     );
+    // }
 
     public function getPublicSubjects()
-    {     
+    {
         $packages = Package::with('subjects.lectures.pdfFiles')->get();
         if ($packages) {
             $data = ['my_classes' => PackagesResource::collection($packages)];

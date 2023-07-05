@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('order_id');
             $table->foreignId('payment_method_id');
-            $table->string('bill_number')->unique();
+            $table->string('bill_number');
             $table->string('amount');
             $table->string('start_duration_date');
             $table->enum('state',['pending','rejected','approved'])->default('pending');

@@ -11,7 +11,7 @@
                 <div class="box-body">
                     <div class="text-danger">
                         @foreach ($errors->all() as $error)
-                            <p>{{ $error }}</p> 
+                            <p>{{ $error }}</p>
                         @endforeach
                     </div>
                     @if (session('error'))
@@ -112,11 +112,81 @@
                                 @enderror
                             </div>
                         </div>
+                        {{-- subjects_ids[]                                                                    
+                         --}}
+                        <div class="col-10">
+                            <select id="packages" onchange="filter(this, 'subjects')" class="form-control mt-2">
+                                <option value="" selected hidden>--select packages</option>
+                                @foreach ($packages as $package)
+                                    <option value="{{ $packages->id }}">{{ $packages->name }}</option>
+                                @endforeach
+                            </select>
+                            <select id="subjects"  class="form-control mt-2">
+                                <option value="" selected hidden>--select subjects</option>
+                                @foreach ($subjects as $subject)
+                                    <option value="{{ $subject->id }}" data-fk="{{ $subjects->package_id }}">
+                                        {{ $domain->title }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        {{-- -- --}}
+                        <div class="form-group">
+                            <label for="amount">amount</label>
+                            <input type="number" class="form-control" placeholder="Enter amount" name="amount"
+                                id="amount" value="{{ old('amount') }}" required>
+                            <div class="text-danger">
+                                @error('amount')
+                                    {{ $message }}
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="bill_number">bill_number</label>
+                            <input type="text" id="bill_number" class="form-control" placeholder="Enter bill Number"
+                                name="bill_number" value="{{ old('bill_number') }}" required>
+                            <div class="text-danger">
+                                @error('bill_number')
+                                    {{ $message }}
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="payment_method">payment method</label>
+                            <select name="payment_method_id" id="payment_method" class="form-control">
+                                <option hidden>Enter PaymentMethod</option>
+                                @foreach ($paymentMethods as $paymentMethod)
+                                    <option value="{{ $paymentMethod->id }}" @selected($paymentMethod->id == old('payment_method_id'))>
+                                        {{ $paymentMethod->name }}</option>
+                                @endforeach
+                            </select>
+                            <div class="text-danger">
+                                @error('payment_method_id')
+                                    {{ $message }}
+                                @enderror
+                            </div>
+                        </div>
+
+
                         <button type="submit" class="btn white m-b">Submit</button>
                     </form>
                 </div>
             </div>
         </div>
+        <script>
+            function filter(parentList, filteredList) {
+                filteredList = document.getElementById(filteredList)
+                filteredList.options[0].selected = true
+                for (option of filteredList.options) {
+                    if (option.getAttribute('data-fk') != parentList.value)
+                        option.hidden = true
+                    else
+                        option.hidden = false
+                }
+            }
+        </script>
 
         <!-- ############ PAGE END-->
     @endsection

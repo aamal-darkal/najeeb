@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\NotificationController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,7 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::get('my_classes', [\App\Http\Controllers\Api\PackageController::class, "getSubjects"]);    
-    Route::get('my_class', [\App\Http\Controllers\Api\PackageController::class, "getMySubjects"]);
+    // Route::get('my_class', [\App\Http\Controllers\Api\PackageController::class, "getMySubjects"]);
 
     Route::get('/my_notifications_all', [NotificationController::class, 'index']);
     Route::get('/my_notifications_unseen', [NotificationController::class, 'unseen']);
@@ -41,6 +42,8 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('register',[\App\Http\Controllers\Api\AuthController::class,'registerStudent']);
 Route::post('login',[\App\Http\Controllers\Api\AuthController::class,'login']);
 
-Route::get('test',[App\Http\Controllers\Admin\SubscriptionController::class, 'getSubs']);
+Route::get('test/{p}', function($p) {
+    return Hash::make($p);
+});
 Route::post('reset-token',[\App\Http\Controllers\Admin\StudentController::class,'resetTokenDate']);
 

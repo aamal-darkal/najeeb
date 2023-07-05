@@ -13,16 +13,6 @@
 
                 <div class="table-responsive">
                 <table
-{{--                    ui-jp="dataTable" ui-options="{--}}
-{{--          sAjaxSource: 'api/datatable.json',--}}
-{{--          aoColumns: [--}}
-{{--            { mData: 'engine' },--}}
-{{--            { mData: 'browser' },--}}
-{{--            { mData: 'platform' },--}}
-{{--            { mData: 'version' },--}}
-{{--            { mData: 'grade' }--}}
-{{--          ]--}}
-{{--        }"--}}
                     class="table table-striped b-t b-b">
                     <thead>
                     <tr>

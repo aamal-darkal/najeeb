@@ -6,15 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\MessagingHelper;
 use App\Http\Requests\StoreStudentRequest;
 use App\Models\Student;
-use App\Models\StudentSubject;
 use App\Models\User;
 use App\Http\Controllers\Api\AuthController;
+use App\Models\Package;
+use App\Models\PaymentMethod;
+use App\Models\Subject;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use function PHPUnit\Framework\isEmpty;
 
 class StudentController extends Controller
 {
@@ -28,31 +28,35 @@ class StudentController extends Controller
             ->get();
         return view('pages.students.index',compact('students','status'));
     }
-    public function resetTokenDate(Request $request)
+    
+    
+
+    function create() {
+        $paymentMethods = PaymentMethod::get();
+        $packages = Package::get();
+        $subjects = Subject::get();
+        return view('pages.students.create', compact('paymentMethods' , 'packages', 'subjects'));
+
+    }
+    public function store(StoreStudentRequest $request)
     {
-            $test = User::find($request->user_id)->update(['token_birth' => null]);
-            return $test;
-            return redirect()->back();
+        $student = (new AuthController)->registerStudent($request);
+        if (!$student) 
+        return redirect()->back()->with('error', 'Student was not registered successfully');
+
+        // $approveRequest = new Request(['ids' => $student->getData()->data->id,'status' => 'current']);
+        // //$request->merge(['name' => 'John Doe']);
+        // $this->changeStatus($approveRequest);
+        // if($student->getStatusCode() == 401)
+            // return redirect()->back()->with('error', 'Student was not registered');
+
+        return redirect()->back()->with('success', 'Student was registered successfully');
+
+
     }
 
-    public function changePass(Request $request)
-    {
-        $request->validate([
-            'user_id' => 'required',
-            'password' => 'required|min:6'
-        ]);
-        $newPassword = $request->password;
-        $user = User::find($request->user_id);
-        $user->update(['password' => Hash::make($newPassword)]);
-        $student = Student::select('first_name','phone')->where('user_id', $user->id)->first();
+    //****************************** functions for get info */
 
-        $msg = "مرحباً $student->first_name لقد تم تغيير كلمة سر حسابك "."\n"." كلمة السر الجديدة : $newPassword" ;
-        $to = $student->phone ;
-
-        (new MessagingHelper)->sendMessage($msg, $to);
-
-        return redirect()->back()->with('success', 'Password changed successfully');
-    }
     public function search(Request $request)
     {
         $search = $request->search ;
@@ -80,26 +84,13 @@ class StudentController extends Controller
         return view('pages.students.requests',compact('requests'));
     }
 
-    public function store(StoreStudentRequest $request)
-    {
-        $student = (new AuthController)->registerStudent($request);
-        // $approveRequest = new Request(['ids' => $student->getData()->data->id,'status' => 'current']);
-        // //$request->merge(['name' => 'John Doe']);
-        // $this->changeStatus($approveRequest);
-        // if($student->getStatusCode() == 401)
-            // return redirect()->back()->with('error', 'Student was not registered');
-
-        return redirect()->back()->with('success', 'Student was registered successfully');
-
-
-    }
 
     public function getStudentDetails($id)
     {
         $student = Student::with('subjects.package','lecturesAttended')->withCount('subjects','lecturesAttended')->find($id);
         return view('pages.students.details',compact('student'));
     }
-
+//********************** tasks for student */
     public function rejectStudent($id)
     {
          Student::find($id)->update(['state'=>'rejected']);
@@ -125,26 +116,57 @@ class StudentController extends Controller
             });
             return redirect()->back();
         }
+        //accepted
         $students->each(function($student) use ($status) {
             $isUnique = true;
+            //create user   
             while ($isUnique) {
                 $code = rand(111,999);
                 $userName = $student->first_name . '_' . $student->last_name . '_' . $code ;
                 $isUnique = User::where('user_name', $userName)->exists();
             }
             $password = Str::random(8);
-
+            
+            //create user
             $user = $student->user()->create([
                 'user_name' =>  $userName,
                 'password' => Hash::make($password),
             ]);
+            
+            //change user status
             $student->update(['state' => $status, 'user_id' => $user->id]);
             $msg = "مرحباً ". $student->first_name ." لقد تم تأكيد طلبكم لقد أصبح لديك حساب في تطبيق نجيب \n أسم المستخدم: ". $userName . " و كلمة السر : " . $password;
             $to = $student->phone ;
-
             (new MessagingHelper)->sendMessage($msg, $to);
             event(new Registered($user));
         });
         return redirect()->back();
+    }
+
+
+    public function resetTokenDate(Request $request)
+    {
+            $test = User::find($request->user_id)->update(['token_birth' => null]);
+            return $test;
+            return redirect()->back();
+    }
+
+    public function changePass(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required',
+            'password' => 'required|min:6'
+        ]);
+        $newPassword = $request->password;
+        $user = User::find($request->user_id);
+        $user->update(['password' => Hash::make($newPassword)]);
+        $student = Student::select('first_name','phone')->where('user_id', $user->id)->first();
+
+        $msg = "مرحباً $student->first_name لقد تم تغيير كلمة سر حسابك "."\n"." كلمة السر الجديدة : $newPassword" ;
+        $to = $student->phone ;
+
+        (new MessagingHelper)->sendMessage($msg, $to);
+
+        return redirect()->back()->with('success', 'Password changed successfully');
     }
 }

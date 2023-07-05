@@ -28,6 +28,6 @@ class Payment extends Model
 
     public function method()
     {
-        $this->belongsTo(Payment_method::class);
+        $this->belongsTo(PaymentMethod::class);
     }
 }

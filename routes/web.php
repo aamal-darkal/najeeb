@@ -34,7 +34,8 @@ Route::middleware('auth')->group(function () {
 ///////////////Student Routes////////////
 Route::get('students/{status?}/{search?}',[\App\Http\Controllers\Admin\StudentController::class,'index'])->name('students');
 Route::post('searched-students',[\App\Http\Controllers\Admin\StudentController::class,'search'])->name('search.students');
-Route::view('add-student','pages.students.create')->name('add.student');
+// Route::view('add-student','pages.students.create')->name('add.student');
+Route::get('add-student',[\App\Http\Controllers\Admin\StudentController::class,'create'])->name('add.student');
 Route::post('store-student',[\App\Http\Controllers\Admin\StudentController::class,'store'])->name('store.student');
 Route::get('student-requests',[\App\Http\Controllers\Admin\StudentController::class,'getRequests'])->name('student-requests');
 Route::get('student-details/{id}',[\App\Http\Controllers\Admin\StudentController::class,'getStudentDetails'])->name('student-details');

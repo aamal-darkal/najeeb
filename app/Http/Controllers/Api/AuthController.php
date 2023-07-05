@@ -74,7 +74,12 @@ class AuthController extends Controller
 
     public function myPayments()
     {
-        $payments = Payment::with('order', 'order.student')->get();
+        $studentId = Student::select('id')->where('user_id', Auth::id())->first()->id;
+
+        $payments = Payment::whereHas('order', function($q) use($studentId){
+            return $q->where('student_id' , $studentId) ;
+        })
+        ->get();
         // return $payments;
         return  PaymentResource::collection($payments);
     }

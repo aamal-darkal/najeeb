@@ -23,21 +23,7 @@ class PackagesResource extends JsonResource
                 'created_at' => $this->created_at,
                 'updated_at' => $this->updated_at,
                 'subjects' => SubjectsResource::collection($this->subjects)
-//                'subjects' => [
-//                    'id' => $this->subject_id,
-//                    'package_id' => $this->package_id ,
-//                    'name' => $this->subject_name ,
-//                    'cost' => $this->cost ,
-//                    'created_at' => $this->created_at ,
-//                    'updated_at' => $this->updated_at ,
-//                    'lectures' => [
-//                        'id' => $this->lecture_id,
-//                        'name' => $this->lecture_name,
-//                        'video_link' => $this->video_link,
-//                        'time_publish' => $this->date,
-//                        'duration' => $this->duration,
-//                    ],
-//                ],
+
         ];
     }
 }
