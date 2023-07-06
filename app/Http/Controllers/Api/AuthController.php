@@ -21,20 +21,23 @@ class AuthController extends Controller
 
     public function registerStudent(StoreStudentRequest $request)
     {
-        // order = Auth::user()->
         $student = Student::create($request->all());
         if (!$student) return response()->json([
             'data' => $student,
             'errors' => 'error in register student',
         ]);
-        $subjects = $this->subcribe(
+        $result = $this->subcribe(
             $request->subjects_ids,
             $request->amount,
             $request->bill_number,
             $request->payment_method_id,
-            $student
+            $student,
+            'pending'
         );
-        return ResponseHelper::success($subjects, 'Subscribed successfully');
+        if ($result['status'] = 'success')
+            return ResponseHelper::success($result['subjects'], 'Subscribed successfully');
+        else
+            return response()->json($result['msg']);
     }
 
     public function login(Request $request)
@@ -76,37 +79,10 @@ class AuthController extends Controller
     {
         $studentId = Student::select('id')->where('user_id', Auth::id())->first()->id;
 
-        $payments = Payment::whereHas('order', function($q) use($studentId){
-            return $q->where('student_id' , $studentId) ;
+        $payments = Payment::whereHas('order', function ($q) use ($studentId) {
+            return $q->where('student_id', $studentId);
         })
-        ->get();
-        // return $payments;
+            ->get();
         return  PaymentResource::collection($payments);
-    }
-
-    public function registerAndSubscribe(Request $request)
-    {
-        $data['registerResponse'] = app('router')->prepareResponse(
-            $request,
-            app('router')->dispatch(
-                app('router')->getRoutes()->match(
-                    app('request')->create('/register', 'POST')
-                )
-            )
-        );
-
-        $data['subscribeResponse'] = app('router')->prepareResponse(
-            $request,
-            app('router')->dispatch(
-                app('router')->getRoutes()->match(
-                    app('request')->create('/subscribe', 'POST')
-                )
-            )
-        );
-
-        return response()->json([
-            'status' => 200,
-            'data' => $data,
-        ]);
     }
 }

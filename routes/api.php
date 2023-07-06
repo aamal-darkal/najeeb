@@ -24,7 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::get('my_classes', [\App\Http\Controllers\Api\PackageController::class, "getSubjects"]);    
-    // Route::get('my_class', [\App\Http\Controllers\Api\PackageController::class, "getMySubjects"]);
+    Route::get('my_class', [\App\Http\Controllers\Api\PackageController::class, "getMySubjects"]);
 
     Route::get('/my_notifications_all', [NotificationController::class, 'index']);
     Route::get('/my_notifications_unseen', [NotificationController::class, 'unseen']);

@@ -24,7 +24,8 @@ class SubjectController extends Controller
                                     $request->amount , 
                                     $request->bill_number , 
                                     $request->payment_method_id,
-                                        Auth::user()->student
+                                    Auth::user()->student,
+                                    'pending'
                                     );
         return ResponseHelper::success($subjects, 'Subscribed successfully');
     }

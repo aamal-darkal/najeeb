@@ -8,9 +8,11 @@ use App\Http\Requests\StoreStudentRequest;
 use App\Models\Student;
 use App\Models\User;
 use App\Http\Controllers\Api\AuthController;
-use App\Models\Package;
+use App\Models\Order;
 use App\Models\PaymentMethod;
 use App\Models\Subject;
+use App\Traits\SubcribeTrait;
+use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -18,6 +20,8 @@ use Illuminate\Support\Str;
 
 class StudentController extends Controller
 {
+    use SubcribeTrait;
+
     public function index($status = null)
     {
         $students = Student::when($status, function ($query, $status) {
@@ -26,74 +30,80 @@ class StudentController extends Controller
             ->withCount('subjects')
             ->with('user')
             ->get();
-        return view('pages.students.index',compact('students','status'));
+        return view('pages.students.index', compact('students', 'status'));
     }
-    
-    
 
-    function create() {
+    function create()
+    {
         $paymentMethods = PaymentMethod::get();
-        $packages = Package::get();
-        $subjects = Subject::get();
-        return view('pages.students.create', compact('paymentMethods' , 'packages', 'subjects'));
-
+        $subjects = Subject::with('package')->orderBy('package_id')->get();
+        return view('pages.students.create', compact('paymentMethods', 'subjects'));
     }
     public function store(StoreStudentRequest $request)
     {
-        $student = (new AuthController)->registerStudent($request);
-        if (!$student) 
-        return redirect()->back()->with('error', 'Student was not registered successfully');
+        $student = Student::create($request->all());
 
-        // $approveRequest = new Request(['ids' => $student->getData()->data->id,'status' => 'current']);
-        // //$request->merge(['name' => 'John Doe']);
-        // $this->changeStatus($approveRequest);
-        // if($student->getStatusCode() == 401)
-            // return redirect()->back()->with('error', 'Student was not registered');
+        if (!$student)
+            return back()->with('error', 'Student was not registered successfully');
 
-        return redirect()->back()->with('success', 'Student was registered successfully');
+        $subjectsIds =  $request->subjects_ids;
+        $result = $this->subcribe(
+            $subjectsIds,
+            $request->amount,
+            $request->bill_number,
+            $request->payment_method_id,
+            $student,
+            'approved'
+        );
+        if ($result['status'] = 'error')
+            return back()->with('error', $result['msg']);
 
+        $student->subjects()->attach($subjectsIds);
 
+        $this->createUser($student);
+
+        return back()->with('success', 'Student was registered successfully');
     }
 
     //****************************** functions for get info */
 
     public function search(Request $request)
     {
-        $search = $request->search ;
-        $students = Student::when($search, function ($query) use ($search){
-                return $query->whereHas('user',function($query) use ($search){
-                    return $query->where('user_name','LIKE', "%$search%")->orWhere('last_name','LIKE', "%$search%");
-                });
+        $search = $request->search;
+        $students = Student::when($search, function ($query) use ($search) {
+            return $query->whereHas('user', function ($query) use ($search) {
+                return $query->where('user_name', 'LIKE', "%$search%")->orWhere('last_name', 'LIKE', "%$search%");
+            });
         })
             ->withCount('subjects')->with('subjects')->paginate(10);
 
-        return view('pages.students.index',compact('students','search'));
+        return view('pages.students.index', compact('students', 'search'));
     }
 
     public function fetchData(Request $request)
     {
         $searchTerm = $request->input('searchTerm');
-        $items = User::select('id','user_name')->has('student')->where('user_name', 'LIKE', "%$searchTerm%")->get();
+        $items = User::select('id', 'user_name')->has('student')->where('user_name', 'LIKE', "%$searchTerm%")->get();
 
         return response()->json($items);
     }
 
     public function getRequests()
     {
-        $requests = Student::where('state','new')->latest()->get();
-        return view('pages.students.requests',compact('requests'));
+        $requests = Student::where('state', 'new')->latest()->get();
+        return view('pages.students.requests', compact('requests'));
     }
 
 
     public function getStudentDetails($id)
     {
-        $student = Student::with('subjects.package','lecturesAttended')->withCount('subjects','lecturesAttended')->find($id);
-        return view('pages.students.details',compact('student'));
+        $student = Student::with('subjects.package', 'lecturesAttended')->withCount('subjects', 'lecturesAttended')->find($id);
+        return view('pages.students.details', compact('student'));
     }
-//********************** tasks for student */
+    //********************** tasks for student */
     public function rejectStudent($id)
     {
-         Student::find($id)->update(['state'=>'rejected']);
+        Student::find($id)->update(['state' => 'rejected']);
 
         return redirect()->back();
     }
@@ -101,54 +111,58 @@ class StudentController extends Controller
     public function changeStatus(Request $request)
     {
         $validated = $request->validate([
-            'status' => 'required',
+            'status' => 'required|in:new,current,rejected',
             'ids' => 'required'
-                ]);
+        ]);
         $status = $validated['status'];
-        if(is_int($validated['ids']))
+        if (is_int($validated['ids']))
             $validated['ids'] = array($validated['ids']);
         $students = Student::whereIn('id', $validated['ids'])->get();
 
-        if ($status == 'rejected')
-        {
-            $students->each(function($student) use ($status) {
-                $student->update(['state' => $status]);
+        if ($status == 'rejected') {
+            $students->each(function ($student) {
+                $student->update(['state' => 'rejected']);
             });
-            return redirect()->back();
+        } else {
+            //accepted
+            $students->each(function ($student) {
+                $this->createUser($student);
+            });
         }
-        //accepted
-        $students->each(function($student) use ($status) {
-            $isUnique = true;
-            //create user   
-            while ($isUnique) {
-                $code = rand(111,999);
-                $userName = $student->first_name . '_' . $student->last_name . '_' . $code ;
-                $isUnique = User::where('user_name', $userName)->exists();
-            }
-            $password = Str::random(8);
-            
-            //create user
-            $user = $student->user()->create([
-                'user_name' =>  $userName,
-                'password' => Hash::make($password),
-            ]);
-            
-            //change user status
-            $student->update(['state' => $status, 'user_id' => $user->id]);
-            $msg = "مرحباً ". $student->first_name ." لقد تم تأكيد طلبكم لقد أصبح لديك حساب في تطبيق نجيب \n أسم المستخدم: ". $userName . " و كلمة السر : " . $password;
-            $to = $student->phone ;
-            (new MessagingHelper)->sendMessage($msg, $to);
-            event(new Registered($user));
-        });
-        return redirect()->back();
+        back()->with('success', 'Opertaion done successfuly');
+    }
+
+    private function createUser($student)
+    {
+        //get username
+        $usedUserName = true;
+        while ($usedUserName) {
+            $code = rand(111, 999);
+            $userName = $student->first_name . '_' . $student->last_name . '_' . $code;
+            $usedUserName = User::where('user_name', $userName)->exists();
+        }
+        $usedUserName = true;
+        $password = Str::random(8);
+
+        $user = $student->user()->create([
+            'user_name' =>  $userName,
+            'password' => Hash::make($password),
+        ]);
+
+        //change user status
+        $student->update(['state' => 'current', 'user_id' => $user->id]);
+        $msg = "مرحباً " . $student->first_name . " لقد تم تأكيد طلبكم لقد أصبح لديك حساب في تطبيق نجيب \n أسم المستخدم: " . $userName . " و كلمة السر : " . $password;
+        $to = $student->phone;
+        (new MessagingHelper)->sendMessage($msg, $to);
+        event(new Registered($user));
     }
 
 
     public function resetTokenDate(Request $request)
     {
-            $test = User::find($request->user_id)->update(['token_birth' => null]);
-            return $test;
-            return redirect()->back();
+        $test = User::find($request->user_id)->update(['token_birth' => null]);
+        return $test;
+        return redirect()->back();
     }
 
     public function changePass(Request $request)
@@ -160,10 +174,10 @@ class StudentController extends Controller
         $newPassword = $request->password;
         $user = User::find($request->user_id);
         $user->update(['password' => Hash::make($newPassword)]);
-        $student = Student::select('first_name','phone')->where('user_id', $user->id)->first();
+        $student = Student::select('first_name', 'phone')->where('user_id', $user->id)->first();
 
-        $msg = "مرحباً $student->first_name لقد تم تغيير كلمة سر حسابك "."\n"." كلمة السر الجديدة : $newPassword" ;
-        $to = $student->phone ;
+        $msg = "مرحباً $student->first_name لقد تم تغيير كلمة سر حسابك " . "\n" . " كلمة السر الجديدة : $newPassword";
+        $to = $student->phone;
 
         (new MessagingHelper)->sendMessage($msg, $to);
 

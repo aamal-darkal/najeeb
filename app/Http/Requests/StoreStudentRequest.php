@@ -29,10 +29,11 @@ class StoreStudentRequest extends FormRequest
             'land_line' => ['sometimes'],
             'parent_phone' => ['sometimes'],
             'governorate' => ['required'],
-            // 'subjects_ids' => 'required',
-            // 'amount' => 'required',
-            // 'bill_number' => 'required',
-            // 'payment_method_id' =>'required'
+            'subjects_ids' => 'required',
+            'amount' => 'required',
+            'bill_number' => 'required',
+            'payment_method_id' =>'required'
         ];
+        
     }
 }

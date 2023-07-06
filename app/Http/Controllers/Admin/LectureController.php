@@ -3,15 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Helpers\NotificationHelper;
 use App\Http\Requests\StoreLectureRequest;
-use App\Http\Requests\StoreSubjectRequest;
 use App\Models\Lecture;
 use App\Models\Package;
 use App\Models\Subject;
-use App\Models\Week_program;
 use App\Traits\ImageTrait;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

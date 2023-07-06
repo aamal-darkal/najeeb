@@ -9,7 +9,12 @@ class ResponseHelper
     public static function success($data, $message)
     {
         return response()->json([
-            'status' => ['original' => ['ok' => true, 'msg' => $message]],
+            'status' => [
+                'original' => [
+                    'ok' => true,
+                    'msg' => $message
+                ]
+            ],
             'data' => $data
         ]);
     }

@@ -14,7 +14,7 @@
         <ul class="nav navbar-nav mr-auto">
             <li class="pull-right">
 
-                <div >
+                <div>
                 </div>
             </li>
         </ul>
@@ -27,9 +27,10 @@
     <!-- navbar right -->
     <ul class="nav navbar-nav ml-auto flex-row">
         <li class="nav-item dropdown pos-stc-xs">
-            <form action="{{route('logout')}}" method="post">
+            <form action="{{ route('logout') }}" method="post">
                 @csrf
-            <button class=" btn btn-outline b-danger border-0 text-danger p-2 "> <i class="material-icons">power_settings_new </i></button>
+                <button class=" btn btn-outline b-danger border-0 text-danger p-2 "> <i
+                        class="material-icons">power_settings_new </i></button>
             </form>
         </li>
         <li class="nav-item dropdown">
