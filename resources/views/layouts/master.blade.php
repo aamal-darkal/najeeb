@@ -32,10 +32,9 @@
     <link rel="stylesheet" href="{{ asset('assets/styles/app.css') }}" type="text/css" />
     <!-- endbuild -->
     <link rel="stylesheet" href="{{ asset('assets/styles/font.css') }}" type="text/css" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    
     @stack('css')
+    
 </head>
 
 <body>
@@ -143,6 +142,8 @@
     <!-- ajax -->
     <script src="{{ asset('libs/jquery/jquery-pjax/jquery.pjax.js') }}"></script>
     <script src="{{ asset('scripts/ajax.js') }}"></script>
+    {{-- font-awsome --}}
+    <script src="{{ asset('scripts/all.min.js') }}"></script>
 
     @stack('js')
 </body>

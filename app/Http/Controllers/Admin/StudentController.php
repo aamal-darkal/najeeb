@@ -5,13 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\MessagingHelper;
 use App\Http\Requests\StoreStudentRequest;
+use App\Models\Package;
 use App\Models\Student;
 use App\Models\User;
-use App\Http\Controllers\Api\AuthController;
-use App\Models\Order;
 use App\Models\PaymentMethod;
 use App\Models\Subject;
-use App\Traits\SubcribeTrait;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
@@ -20,7 +18,6 @@ use Illuminate\Support\Str;
 
 class StudentController extends Controller
 {
-    use SubcribeTrait;
 
     public function index($status = null)
     {
@@ -36,27 +33,51 @@ class StudentController extends Controller
     function create()
     {
         $paymentMethods = PaymentMethod::get();
-        $subjects = Subject::with('package')->orderBy('package_id')->get();
-        return view('pages.students.create', compact('paymentMethods', 'subjects'));
+        $subjects = Subject::get();
+        $packages = Package::get();
+        return view('pages.students.create', compact('paymentMethods', 'subjects' , 'packages'));
     }
+
     public function store(StoreStudentRequest $request)
     {
+        $subjectsIds =  $request->subjects_ids;
+        $amount =  $request->amount;
+        $bill_number =  $request->bill_number;
+        $payment_method_id =  $request->payment_method_id;
+
+        $subjects = Subject::find($subjectsIds);
+
+        if (!$subjects)
+            return back()->with('', 'These subjects does not exist');
+
+        $totalCost = $subjects->sum('cost');
+
+        if ($totalCost > $amount)
+            return back()->with('error', 'the amount you paid is less than the cost');
+
+
         $student = Student::create($request->all());
 
         if (!$student)
             return back()->with('error', 'Student was not registered successfully');
 
-        $subjectsIds =  $request->subjects_ids;
-        $result = $this->subcribe(
-            $subjectsIds,
-            $request->amount,
-            $request->bill_number,
-            $request->payment_method_id,
-            $student,
-            'approved'
+        $order = $student->orders()->create(
+            [
+                'amount' => $amount,
+            ]
         );
-        if ($result['status'] = 'error')
-            return back()->with('error', $result['msg']);
+        
+        foreach ($subjects as $subject) {
+            $order->subjects()->attach($subject->id, ['cost' => $subject->cost]);
+        }
+        $order->payments()->create([
+            'bill_number' => $bill_number,
+            'amount' => $amount,
+            'payment_method_id' => $payment_method_id,
+            'start_duration_date' => $subjects->first()->package->start_date,
+            'payment_date' => Carbon::now(), //should be given by app
+            'state' => 'approved'
+        ]);               
 
         $student->subjects()->attach($subjectsIds);
 

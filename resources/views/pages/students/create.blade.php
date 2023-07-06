@@ -106,17 +106,30 @@
                             </div>
                         </div>
                         {{-- -------------- subjects --------------- --}}
-                        @php
-                            $subjectIds = old('subjects_ids' , []);
-                        @endphp
+                            @php                                    
+                                $subjectsIds =old('subjects_ids', [])
+                            @endphp
                         <div class="form-group">
                             <div class="row">
                                 <div class="col">
-                                    <label for="subjects">subjects</label>
-                                    <select multiple id='subjects' name="subjects_ids[]"
+                                    <label for="packages">packages</label>
+                                    <select id='packages' onchange="filter(this, 'subjects')"
                                         class="form-control mt-2 ui search selection dropdown">
+                                        <option value="" selected hidden>--select packages</option>
+                                        @foreach ($packages as $package)
+                                            <option value="{{ $package->id }}" >
+                                                {{ $package->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="subjects">subjects</label>
+                                    <select id='subjects' name="subjects_ids[]" onchange="addSubject($this.value)"
+                                        class="form-control mt-2 ui search selection dropdown">
+                                        <option value="" selected hidden> -- add subjects </option>
                                         @foreach ($subjects as $subject)
-                                            <option value="{{ $subject->id }}" @selected(in_array($subject->id, $subjectIds))>{{ $subject->package->name }} -
+                                            <option value="{{ $subject->id }}" data-fk="{{ $subject->package_id }}">
                                                 {{ $subject->name }}
                                             </option>
                                         @endforeach
@@ -128,85 +141,113 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col">
-                                    <label for="amount">amount</label>
-                                    <input type="number" class="form-control" placeholder="Enter amount" name="amount"
-                                        id="amount" value="{{ old('amount') }}" required>
-                                    <div class="text-danger">
-                                        @error('amount')
-                                            {{ $message }}
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <label for="land_line">Land line</label>
-                                    <input type="text" id="land_line" class="form-control"
-                                        placeholder="Enter land line number" name="land_line"
-                                        value="{{ old('land_line') }}" required>
-                                    <div class="text-danger">
-                                        @error('land_line')
-                                            {{ $message }}
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                            <div class="form-group- my-2">
+                                <div class="row">
+                                    {{-- template --}}
+                                    <div id="subject-names" class="col">
 
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col">
-                                    <label for="bill_number">bill_number</label>
-                                    <input type="text" id="bill_number" class="form-control"
-                                        placeholder="Enter bill Number" name="bill_number"
-                                        value="{{ old('bill_number') }}" required>
-                                    <div class="text-danger">
-                                        @error('bill_number')
-                                            {{ $message }}
-                                        @enderror
+                                        <div class="row">
+                                            <div id="subject-template" class="alert alert-success d-inline p-1">
+                                                
+                                                <button type="button" class="btn btn-sm bg-transparent" onclick="delete_subject(this)"> <i
+                                                        class="fas fa-close"></i> </button>
+                                                <input type="hidden" name="amount" value="50">
+                                                <input type="hidden" name="packages_ids[]" value="">
+                                                <span class="subject-value d-inline"></span>
+                                            </div>                                           
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col">
-                                    <label for="payment_method">payment method</label>
-                                    <select name="payment_method_id" id="payment_method" class="form-control">
-                                        <option hidden>Enter PaymentMethod</option>
-                                        @foreach ($paymentMethods as $paymentMethod)
-                                            <option value="{{ $paymentMethod->id }}" @selected($paymentMethod->id == old('payment_method_id'))>
-                                                {{ $paymentMethod->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <div class="text-danger">
-                                        @error('payment_method_id')
-                                            {{ $message }}
-                                        @enderror
+                                    <div class="col-md-3 text-secondary py-2">
+                                        <label for="sum-subject">sum of subject</label>
+                                    </div>
+                                    <div class="col-md-3"><input id="sum-subject" type="text"  value=0
+                                            class="form-control">
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <button type="submit" class="btn white m-b">Submit</button>
+                            {{-- end of subjects --}}
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="amount">amount</label>
+                                        <input type="number" class="form-control" placeholder="Enter amount"
+                                            name="amount" id="amount" value="{{ old('amount') }}" required>
+                                        <div class="text-danger">
+                                            @error('amount')
+                                                {{ $message }}
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <label for="land_line">Land line</label>
+                                        <input type="text" id="land_line" class="form-control"
+                                            placeholder="Enter land line number" name="land_line"
+                                            value="{{ old('land_line') }}" required>
+                                        <div class="text-danger">
+                                            @error('land_line')
+                                                {{ $message }}
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="bill_number">bill_number</label>
+                                        <input type="text" id="bill_number" class="form-control"
+                                            placeholder="Enter bill Number" name="bill_number"
+                                            value="{{ old('bill_number') }}" required>
+                                        <div class="text-danger">
+                                            @error('bill_number')
+                                                {{ $message }}
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <label for="payment_method">payment method</label>
+                                        <select name="payment_method_id" id="payment_method" class="form-control">
+                                            <option hidden>Enter PaymentMethod</option>
+                                            @foreach ($paymentMethods as $paymentMethod)
+                                                <option value="{{ $paymentMethod->id }}" @selected($paymentMethod->id == old('payment_method_id'))>
+                                                    {{ $paymentMethod->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="text-danger">
+                                            @error('payment_method_id')
+                                                {{ $message }}
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn white m-b">Submit</button>
                     </form>
                 </div>
             </div>
         </div>
         <!-- ############ PAGE END-->
         <script>
-            $('.ui.dropdown').dropdown();
-            //reload selected img
-            $(document).ready(() => {
-                $('#cover').change(function() {
-                    const file = this.files[0];
-                    console.log(file);
-                    if (file) {
-                        let reader = new FileReader();
-                        reader.onload = function(event) {
-                            console.log(event.target.result);
-                            $('#imgPreview').attr('src', event.target.result);
-                        }
-                        reader.readAsDataURL(file);
-                    }
-                });
-            });
+            function filter(parentList, filteredList) {
+                filteredList = document.getElementById(filteredList)
+                filteredList.options[0].selected = true
+                for (option of filteredList.options) {
+                    if (option.getAttribute('data-fk') != parentList.value)
+                        option.hidden = true
+                    else
+                        option.hidden = false
+                }
+            }
+
+            function addSubject() {
+
+            }
+
+            function delete_subject(inp) {
+                document.getElementById("sum-subject").value = Number( document.getElementById("sum-subject").value) - Number( inp.nextElementSibling.value)
+                inp.parentNode.remove();
+                
+            }
         </script>
     @endsection

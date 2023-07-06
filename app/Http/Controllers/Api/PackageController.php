@@ -35,8 +35,7 @@ class PackageController extends Controller
                 );
             }
         , 'subjects.lectures.pdfFiles'])->get();
-        return $packages;
-
+            
         if ($packages) {
             $data = ['my_classes' => PackagesResource::collection($packages)];
             return ResponseHelper::success($data, 'Your packages');
