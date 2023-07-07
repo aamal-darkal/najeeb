@@ -9,11 +9,11 @@
                 </div>
                 <div class="box-divider m-0"></div>
                 <div class="box-body">
-                    <div class="text-danger">
+                    {{-- <div class="text-danger">
                         @foreach ($errors->all() as $error)
                             <p>{{ $error }}</p>
                         @endforeach
-                    </div>
+                    </div> --}}
                     @if (session('error'))
                         <div class="alert alert-danger">
                             {{ session('error') }}
@@ -25,6 +25,18 @@
                             {{ session('success') }}
                         </div>
                     @endif
+
+                    {{-- template --}}
+                    <div id="template-subject" class="d-none">                                                
+                        <div class="alert alert-success p-1 d-inline">
+                            <button type="button" class="btn btn-sm bg-transparent" onclick="delete_subject(this)"> <i
+                                    class="fas fa-close"></i> </button>
+                            <input type="hidden" name="amount" value="50">
+                            <input type="hidden" name="subjects_ids[]" value="">
+                            <span class="d-inline"></span>
+                        </div>
+                    </div>    
+                    {{-- end of template --}}
 
                     <form role="form" method="POST" action="{{ route('store.student') }}">
                         @csrf
@@ -105,10 +117,8 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- -------------- subjects --------------- --}}
-                            @php                                    
-                                $subjectsIds =old('subjects_ids', [])
-                            @endphp
+                        {{-- -------------- subjects --------------- --}}                              
+                            
                         <div class="form-group">
                             <div class="row">
                                 <div class="col">
@@ -125,17 +135,17 @@
                                 </div>
                                 <div class="col">
                                     <label for="subjects">subjects</label>
-                                    <select id='subjects' name="subjects_ids[]" onchange="addSubject($this.value)"
+                                    <select id='subjects' onchange="addSubject(this)"
                                         class="form-control mt-2 ui search selection dropdown">
                                         <option value="" selected hidden> -- add subjects </option>
                                         @foreach ($subjects as $subject)
-                                            <option value="{{ $subject->id }}" data-fk="{{ $subject->package_id }}">
+                                            <option value="{{ $subject->id }}" data-fk="{{ $subject->package_id }}" data-info="{{ $subject->package->name }} - {{ $subject->name }}" data-cost={{ $subject->cost }}>
                                                 {{ $subject->name }}
                                             </option>
                                         @endforeach
                                     </select>
                                     <div class="text-danger">
-                                        @error('subjects')
+                                        @error('subjects_ids')
                                             {{ $message }}
                                         @enderror
                                     </div>
@@ -145,16 +155,8 @@
                                 <div class="row">
                                     {{-- template --}}
                                     <div id="subject-names" class="col">
-
                                         <div class="row">
-                                            <div id="subject-template" class="alert alert-success d-inline p-1">
-                                                
-                                                <button type="button" class="btn btn-sm bg-transparent" onclick="delete_subject(this)"> <i
-                                                        class="fas fa-close"></i> </button>
-                                                <input type="hidden" name="amount" value="50">
-                                                <input type="hidden" name="packages_ids[]" value="">
-                                                <span class="subject-value d-inline"></span>
-                                            </div>                                           
+                                                                                   
                                         </div>
                                     </div>
                                     <div class="col-md-3 text-secondary py-2">
@@ -240,12 +242,27 @@
                 }
             }
 
-            function addSubject() {
-
+            function doAddSubject(subjectId , subjectCost , label) {
+                let template = document.getElementById("template-subject").children[0]
+                let newSubject = template.cloneNode(true)
+                newSubject.children[1].value= subjectCost 
+                newSubject.children[2].value= subjectId
+                newSubject.children[3].innerHTML= label
+                document.querySelector("#subject-names .row").appendChild(newSubject)
+                document.getElementById("sum-subject").value = Number( document.getElementById("sum-subject").value) + Number( subjectCost)                
+            }
+            
+            function addSubject(inp) {
+                let selectedOption = inp.options[inp.selectedIndex]
+                let subjectId = selectedOption.value 
+                let subjectCost = selectedOption.getAttribute('data-Cost')
+                let label = selectedOption.getAttribute('data-info')
+                doAddSubject(subjectId , subjectCost , label)                
             }
 
             function delete_subject(inp) {
-                document.getElementById("sum-subject").value = Number( document.getElementById("sum-subject").value) - Number( inp.nextElementSibling.value)
+                subjectCost = inp.nextElementSibling.value
+                document.getElementById("sum-subject").value = Number( document.getElementById("sum-subject").value) - Number( subjectCost )
                 inp.parentNode.remove();
                 
             }

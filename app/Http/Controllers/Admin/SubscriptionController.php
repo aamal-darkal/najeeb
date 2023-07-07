@@ -55,6 +55,6 @@ class SubscriptionController extends Controller
                 $student->subjects()->attach($subjects);
             }
         }
-        return redirect()->back();
+        return back();
     }
 }

@@ -33,7 +33,7 @@ class StudentController extends Controller
     function create()
     {
         $paymentMethods = PaymentMethod::get();
-        $subjects = Subject::get();
+        $subjects = Subject::with('package')->get();
         $packages = Package::get();
         return view('pages.students.create', compact('paymentMethods', 'subjects' , 'packages'));
     }
@@ -48,12 +48,12 @@ class StudentController extends Controller
         $subjects = Subject::find($subjectsIds);
 
         if (!$subjects)
-            return back()->with('', 'These subjects does not exist');
+            return back()->with('', 'These subjects does not exist')->withInput();
 
         $totalCost = $subjects->sum('cost');
 
         if ($totalCost > $amount)
-            return back()->with('error', 'the amount you paid is less than the cost');
+            return back()->with('error', 'the amount you paid is less than the cost')->withInput();
 
 
         $student = Student::create($request->all());
@@ -83,7 +83,7 @@ class StudentController extends Controller
 
         $this->createUser($student);
 
-        return back()->with('success', 'Student was registered successfully');
+        return redirect()->route('students')->with('success', 'Student was registered successfully');
     }
 
     //****************************** functions for get info */
@@ -128,7 +128,12 @@ class StudentController extends Controller
 
         return redirect()->back();
     }
-
+    /**
+     * approve or reject student
+     *
+     * @param Request $request
+     * @return void
+     */
     public function changeStatus(Request $request)
     {
         $validated = $request->validate([
@@ -150,7 +155,7 @@ class StudentController extends Controller
                 $this->createUser($student);
             });
         }
-        back()->with('success', 'Opertaion done successfuly');
+        return redirect()->route('student-requests')->with('success', 'Opertaion done successfuly');
     }
 
     private function createUser($student)
