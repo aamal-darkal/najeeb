@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +45,9 @@ Route::view('change-student-password', 'pages.students.change-pass')->name('chan
 Route::post('update-password',[\App\Http\Controllers\Admin\StudentController::class,'changePass'])->name('update.password');
 Route::post('reset-token-date',[\App\Http\Controllers\Admin\StudentController::class,'resetTokenDate'])->name('reset.token.date');
 Route::get('/fetch-data', [\App\Http\Controllers\Admin\StudentController::class,'fetchData'])->name('fetch.data');
+
+Route::get('student/delete/{student}', [StudentController::class, 'delete'])->name('student.delete');;
+Route::delete('student/{student}', [StudentController::class,'destroy'])->name('student.destroy');
 
 
 ///////////////Package Routes////////////

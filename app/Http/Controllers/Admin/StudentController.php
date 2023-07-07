@@ -35,7 +35,7 @@ class StudentController extends Controller
         $paymentMethods = PaymentMethod::get();
         $subjects = Subject::with('package')->get();
         $packages = Package::get();
-        return view('pages.students.create', compact('paymentMethods', 'subjects' , 'packages'));
+        return view('pages.students.create', compact('paymentMethods', 'subjects', 'packages'));
     }
 
     public function store(StoreStudentRequest $request)
@@ -66,7 +66,7 @@ class StudentController extends Controller
                 'amount' => $amount,
             ]
         );
-        
+
         foreach ($subjects as $subject) {
             $order->subjects()->attach($subject->id, ['cost' => $subject->cost]);
         }
@@ -77,13 +77,49 @@ class StudentController extends Controller
             'start_duration_date' => $subjects->first()->package->start_date,
             'payment_date' => Carbon::now(), //should be given by app
             'state' => 'approved'
-        ]);               
+        ]);
 
         $student->subjects()->attach($subjectsIds);
 
         $this->createUser($student);
 
         return redirect()->route('students')->with('success', 'Student was registered successfully');
+    }
+
+    /**
+     * Show the form for removing the specified resource.
+     * 
+     * @param  \App\Models\Domain  $domain
+     * @return \Illuminate\Http\Response
+     */
+    public function delete(Student $student)
+    {
+        $student = Student::with('user', 'orders.payments.paymentMethod', 'subjects.package')->withCount('user', 'orders', 'subjects')->find($student->id);
+        return view('pages.students.delete', compact('student'));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Domain  $domain
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Student $student)
+    {
+        
+        $student->user()->delete();
+        foreach ($student->orders as $order) {
+            foreach ($order->payments as $paymant)
+                $paymant->delete();
+            $order->delete();
+        }
+
+        foreach ($student->subjects as $subject)             
+                $subject->delete();            
+        
+        $student->delete();
+     
+        return redirect()->route('students')->with('success', "student deleted successfully");
     }
 
     //****************************** functions for get info */
