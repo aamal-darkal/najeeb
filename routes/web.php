@@ -52,11 +52,12 @@ Route::delete('student/{student}', [StudentController::class,'destroy'])->name('
 
 ///////////////Package Routes////////////
 Route::get('packages',[\App\Http\Controllers\Admin\PackageController::class,'index'])->name('packages');
-Route::post('show',[\App\Http\Controllers\Admin\PackageController::class,'show'])->name('package.show');
+Route::get('show',[\App\Http\Controllers\Admin\PackageController::class,'show'])->name('package.show');
 Route::get('paginated-packages',[\App\Http\Controllers\Admin\PackageController::class,'paginatedIndex'])->name('paginated.packages');
-Route::view('create-package','pages.packages.create')->name('create-package');
+Route::get('create-package', [\App\Http\Controllers\Admin\PackageController::class,'create'])->name('create-package');
 Route::post('store-package',[\App\Http\Controllers\Admin\PackageController::class,'store'])->name('store-package');
 Route::get('delete-package/{id}',[\App\Http\Controllers\Admin\PackageController::class,'destroy'])->name('delete.package');
+Route::get('edit-package',[\App\Http\Controllers\Admin\PackageController::class,'edit'])->name('packages.edit');
 
 
 ///////////////Subject Routes////////////
@@ -71,8 +72,8 @@ Route::get('delete-subject/{id}',[\App\Http\Controllers\Admin\SubjectController:
 Route::get('lectures/{subjectId?}',[\App\Http\Controllers\Admin\LectureController::class,'index'])->name('lectures');
 Route::get('lecture/{id}',[\App\Http\Controllers\Admin\LectureController::class,'show'])->name('lecture.show');
 Route::get('create-lecture',[\App\Http\Controllers\Admin\LectureController::class,'create'])->name('create.lecture');
-Route::post('create-lecture-step2',[\App\Http\Controllers\Admin\LectureController::class,'create2'])->name('create.lecture.step2');
-Route::post('create-lecture-step3',[\App\Http\Controllers\Admin\LectureController::class,'create3'])->name('create.lecture.step3');
+Route::get('create-lecture-step2',[\App\Http\Controllers\Admin\LectureController::class,'create2'])->name('create.lecture.step2');
+Route::get('create-lecture-step3',[\App\Http\Controllers\Admin\LectureController::class,'create3'])->name('create.lecture.step3');
 Route::post('store-lecture',[\App\Http\Controllers\Admin\LectureController::class,'store'])->name('store.lecture');
 Route::get('delete-lecture/{id}',[\App\Http\Controllers\Admin\LectureController::class,'destroy'])->name('delete.lecture');
 

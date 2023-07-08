@@ -4,9 +4,9 @@
         <div class="col-xs-12 col-md-8 offset-md-2">
             <div class="wrapper-progressBar">
                 <ul class="progressBar">
-                    <li class="active text-primary">{{$package_name}}</li>
-                    <li class="active text-primary">{{$subject_name}}</li>
-                    <li>Create lecture</li>
+                    <li><a href="{{ route('create.lecture') }}" title="change package" class="md-btn md-raised m-b-sm w-sm primary text-white r-15"><i class="fas fa-long-arrow-left"></i> {{ $package_name }}</a>    </li>
+                    <li><a href="{{ route('create.lecture.step2' , ['package_name' => $package_name , 'package_id' => $package_id ]) }}" title="change subject" class="md-btn md-raised m-b-sm w-sm primary text-white r-15"><i class="fas fa-long-arrow-left"></i> {{ $subject_name }}</a>    </li>
+                    <li class="active text-primary">Create lecture</li>
                 </ul>
             </div>
         </div>
@@ -26,35 +26,56 @@
                 <div class="box-body">
                     <form id="myForm" method="POST" action="{{ route('store.lecture')}}" enctype="multipart/form-data" >
                         @csrf                        
-                        <input type="hidden" value="{{$week_program_id}}" name="week_program_id">
-                        <input type="hidden" value="{{$subject_id}}" name="subject_id">
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Name</label>
-                            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter name" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label >Duration - by minutes</label>
-                            <input type="number" class="form-control" name="duration" required>
+                        <input type="hidden" value="{{old('week_program_id' , $week_program_id) }}" name="week_program_id">
+                        <input type="hidden" value="{{old('subject_id' , $subject_id)}}" name="subject_id">
 
-                        </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Video link</label>
-                            <input type="text" class="form-control" placeholder="Enter video link" name="video_link" required>
+                            <label for="name">Name</label>
+                            <input type="text" id="name" class="form-control" placeholder="Enter name" name="name" value="{{old('name')}}" required>
+                            <div class="text-danger">
+                                @error('name')
+                                    {{ $message }}
+                                @enderror
+                            </div>
+                        </div>
+                        
 
+                        <div class="form-group">
+                            <label for="duration">Duration - by minutes</label>
+                            <input type="number" class="form-control" name="duration" value="{{old('duration')}}" required >
+                            <div class="text-danger">
+                                @error('duration')
+                                    {{ $message }}
+                                @enderror
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Pdf file</label>
-                            <input type="file" class="form-control" placeholder="Upload pdf file" id="pdf_file" name="pdf_file">
+                            <label for="video_link">Video link</label>
+                            <input type="url" class="form-control" placeholder="Enter video link" name="video_link" value="{{old('video_link')}}" required>
+                            <div class="text-danger">
+                                @error('video_link')
+                                    {{ $message }}
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="pdf_files">Pdf file (hold ctrl key - choose many files )</label>
+                            <input type="file" multiple class="form-control" placeholder="Upload pdf file" id="pdf_files" name="pdf_files[]" value="{{old('pdf_files')}}" accept=".pdf">
                             <div id="pdfFileError" class="alert alert-danger" style="display: none">File type should be PDF</div>
+                            <div class="text-danger">
+                                @error('pdf_files')
+                                    {{ $message }}
+                                @enderror
+                            </div>
                         </div>
-                        <div id="extraInput" class="form-group hidden">
+                        {{-- <div id="extraInput" class="form-group hidden">
                             <label for="exampleInputEmail1">Pdf file Name</label>
                             <input type="text" class="form-control" placeholder="Enter pdf file name" id="pdf_file_name" name="pdf_file_name">
-                        </div>
+                        </div> --}}
                         <div class="form-group">
-                            <label>Date</label>
+                            <label for="date">Date</label>
                             <div id='datetimepicker8'>
-                                <input type='date' class="form-control" name="date" required>
+                                <input type='date' class="form-control" name="date"  required>
 
                                 <script type="text/javascript">
                                     $(function () {
@@ -69,8 +90,13 @@
                                     });
                                 </script>
                             </div>
+                            <div class="text-danger">
+                                @error('date')
+                                    {{ $message }}
+                                @enderror
+                            </div>
                         </div>
-                        <button type="submit" class="btn white m-b">Submit</button>
+                        <div class='text-center'><button type="submit" class="md-btn md-raised m-b-sm w-lg primary text-white r-15"  >Save Lecture</button></div>
                     </form>
                 </div>
             </div>

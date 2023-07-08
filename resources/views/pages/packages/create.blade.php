@@ -21,7 +21,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputFile">Image</label>
-                                <input type="file" id="exampleInputFile" class="form-control" name="image" required>
+                                <input type="file" id="exampleInputFile" class="form-control" name="image" required accept="image/*">
                                 @error('image')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror

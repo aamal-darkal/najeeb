@@ -57,7 +57,7 @@
                                         @csrf
                                         <input type="hidden" name="package_id" value="{{$package->id}}">
                                         <input type="hidden" name="package_name" value="{{$package->name}}">
-                                        <button type="submit" class="md-btn md-raised m-b-sm primary text-white"><i class="fa fa-check-square-o"></i></button>
+                                        <button type="submit" class="md-btn md-raised m-b-sm primary text-white"><i class="fas fa-long-arrow-right"></i></button>
                                     </form>
                                 </td>
                             </tr>

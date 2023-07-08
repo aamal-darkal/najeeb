@@ -5,14 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePackageRequest;
 use App\Models\Package;
-use App\Traits\ImageTrait;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class PackageController extends Controller
 {
-    use ImageTrait;
     /**
      * Display a listing of the resource.
      */
@@ -34,8 +32,9 @@ class PackageController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): Response
+    public function create()
     {
+        return view('pages.packages.create');
     }
 
     /**
@@ -43,14 +42,18 @@ class PackageController extends Controller
      */
     public function store(StorePackageRequest $request): RedirectResponse
     {
-        $data = $request->validated();
-        $path = 'images/packages';
-        if ($request->file('image')) {
-            $img = $this->uploadImage($request->file('image'), $path);
-            $data['image'] = $path . '/' . $img;
-        }
+        $package  = Package::create($request->validated());
 
-        Package::create($data);
+        if ($request->file('image')) {
+            $path = 'images/packages';
+            $file = $request->file('image');
+            $filename = $package->id . '.' . $file->extension();
+            $file->storeAs($path,  $filename, 'public');
+        } else
+            $filename = 'no-image.png';
+        $package->image = $filename;
+        $package->save();
+
         return redirect()->route('packages');
     }
 

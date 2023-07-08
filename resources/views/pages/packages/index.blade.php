@@ -29,15 +29,7 @@
                                 <td>{{ $package->end_date }}</td>
                                 <td class="text-center">{{ $package->subjects_count }}</td>
                                 <td class="text-center">
-                                    <form action="{{ route('package.show') }}" method="post">
-                                        @csrf
-                                        <input type="hidden" name="package_id" value="{{ $package->id }}">
-                                        <button type="submit"
-                                            class="p-0 text-md btn-rounded text-primary border-0 bg-transparent"
-                                            title="details">
-                                            <i class="fa fa-bars"></i>
-                                        </button>
-                                    </form>
+                                    <a title="details" class="p-0 text-md btn-rounded text-primary border-0 bg-transparent" href="{{ route('package.show' , ['package_id' => $package->id ]) }}"><i class="fa fa-bars"></i></a>                                    
                                 </td>
                                 <td class="text-center">
                                     <button class="p-0 text-md btn-rounded text-danger border-0 bg-transparent"

@@ -1,17 +1,5 @@
 @extends('layouts.master')
-@section('content')
-    <div class="col-md-6 offset-md-3 mt-1">
-        @if (session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-        @endif
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-    </div>
+@section('content')    
     <!-- ############ PAGE START-->
     <div class="padding">
         <form action="{{ route('search.students') }}" method="post" class="m-b-md">

@@ -48,21 +48,35 @@
             <div class="app-header white box-shadow">
                 @include('layouts.navBar')
             </div>
-            <div class="app-footer">
-                <div class="p-2 text-xs">
-                    <div class="pull-right text-muted py-1">
-                        &copy; 2023 <strong>Najeeb</strong>
-                        <a ui-scroll-to="content"><i class="fa fa-long-arrow-up p-x-sm"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div ui-view class="app-body" id="view">
+           
 
+            <div ui-view class="app-body" id="view">
+                <div class="col-md-6 offset-md-3 mt-1">
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+                    @if (session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+                </div>
                 @yield('content')
 
             </div>
         </div>
         <!-- / content -->
+
+        <div class="app-footer">
+            <div class="p-2 text-xs">
+                <div class="pull-right text-muted py-1">
+                    &copy; 2023 <strong>Najeeb</strong>
+                    <a ui-scroll-to="content"><i class="fa fa-long-arrow-up p-x-sm"></i></a>
+                </div>
+            </div>
+        </div>
 
         <!-- theme switcher -->
         <div id="switcher">

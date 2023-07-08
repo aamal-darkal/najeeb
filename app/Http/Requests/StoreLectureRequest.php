@@ -24,27 +24,16 @@ class StoreLectureRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'week_program_id' => 'sometimes',
-            'subject_id' => 'sometimes',
+            'week_program_id' => 'required',
+            'subject_id' => 'required',
             'name' => 'required',
             'date' => 'required',
             'video_link' => 'required',
-            'duration' => 'required',
-            'pdf_file' => 'sometimes|mimes:pdf',
-            'pdf_file_name' => 'required_if:pdf_file,!=,null'
+            'duration' => 'sometimes',
+            'pdf_files.*' => 'sometimes|mimes:pdf',
+            // 'pdf_file_name' => 'required_if:pdf_file,!=,null'
         ];
     }
 
-    protected function failedValidation(Validator|\Illuminate\Contracts\Validation\Validator $validator)
-    {
-        throw new HttpResponseException($this->response($validator->errors()->toArray()));
-    }
-
-    protected function response(array $errors)
-    {
-        // Customize your redirect behavior here
-        // For example, redirect to a specific URL or route
-        return redirect()->route('create.lecture');
-    }
 
 }

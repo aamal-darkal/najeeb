@@ -1,30 +1,14 @@
 @extends('layouts.master')
 @section('content')
     <!-- ############ PAGE START-->
-    <div class="padding" style="background-color: rgb(233, 230, 230)">
+    <div class="padding" >
         <div style="margin-left: 20%; margin-right: 20%">
             <div class="box">
                 <div class="box-header">
-                    <h2>Add new Student</h2>
+                    <h2 class="text-primary text-2x">Add new Student</h2>
                 </div>
                 <div class="box-divider m-0"></div>
                 <div class="box-body">
-                    {{-- <div class="text-danger">
-                        @foreach ($errors->all() as $error)
-                            <p>{{ $error }}</p>
-                        @endforeach
-                    </div> --}}
-                    @if (session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
-                    @endif
-
-                    @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
-                    @endif
 
                     {{-- template --}}
                     <div id="template-subject" class="d-none">                                                
@@ -224,7 +208,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn white m-b">Submit</button>
+                            <button type="submit" class="btn primary m-b">Submit</button>
                     </form>
                 </div>
             </div>

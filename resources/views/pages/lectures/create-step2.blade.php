@@ -4,7 +4,7 @@
         <div class="col-xs-12 col-md-8 offset-md-2">
             <div class="wrapper-progressBar">
                 <ul class="progressBar">
-                    <li class="active">{{ $package_name }}</li>
+                    <li><a href="{{ route('create.lecture') }}" title="change package" class="md-btn md-raised m-b-sm w-sm primary text-white r-15" ><i class="fas fa-long-arrow-left"></i> {{ $package_name }}</a>    </li>
                     <li class="active">Choose subject</li>
                     <li>Create lecture</li>
                 </ul>
@@ -20,7 +20,7 @@
                 <div class="box">
 
                     <div class="box-header">
-                        <h2>Packages</h2>
+                        <h2>Subjects</h2>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-striped b-t b-b">
@@ -40,8 +40,7 @@
                                         <td>{{ $subject->cost }}</td>
                                         <td>
 
-                                            <form method="post" action="{{ route('create.lecture.step3') }}">
-                                                @csrf
+                                            <form method="get" action="{{ route('create.lecture.step3') }}">
                                                 <select name="week_program_id" id="" class="form-control">
                                                     @foreach ($subject->weekProgs as $weekProg)
                                                         <option value="{{ $weekProg->id }}">{{ $weekProg->day }} -
@@ -50,11 +49,12 @@
                                                 </select>
                                         </td>
                                         <td>
+                                            <input type="hidden" name="package_id" value="{{ $package_id }}">
                                             <input type="hidden" name="subject_id" value="{{ $subject->id }}">
                                             <input type="hidden" name="subject_name" value="{{ $subject->name }}">
                                             <input type="hidden" name="package_name" value="{{ $package_name }}">
-                                            <button class="md-btn md-raised m-b-sm primary text-white"><i
-                                                    class="fa fa-check-square-o"></i></button>
+                                            <button class="md-btn md-raised m-b-sm w-xs primary text-white r-15"><i
+                                                    class="fas fa-long-arrow-right"></i></button>
                                         </td>
                                         </form>
                                         </td>

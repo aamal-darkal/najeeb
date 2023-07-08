@@ -4,7 +4,7 @@
         <div class="col-xs-12 col-md-8 offset-md-2">
             <div class="wrapper-progressBar">
                 <ul class="progressBar">
-                    <li class="active">Choose package</li>
+                    <li class="active"> Choose package</a></li>
                     <li>Choose subject</li>
                     <li>Create lecture</li>
                 </ul>
@@ -43,21 +43,13 @@
                                         <td>{{ $package->end_date }}</td>
                                         <td class="text-center">{{ $package->subjects_count }}</td>
                                         <td class="text-center">
-                                            <form action="{{ route('package.show') }}" method="post">
-                                                @csrf
-                                                <input type="hidden" name="package_id" value="{{ $package->id }}">
-                                                <button
-                                                    class="md-btn md-raised m-b-sm w-xs primary text-white">Details</button>
-                                            </form>
+                                            <a class="md-btn md-raised m-b-sm w-sm primary text-white r-15" 
+                                                href="{{ route('package.show', ['package_id' => $package->id]) }}">Details</a>
                                         </td>
                                         <td class="text-center">
-                                            <form method="post" action="{{ route('create.lecture.step2') }}">
-                                                @csrf
-                                                <input type="hidden" name="package_id" value="{{ $package->id }}">
-                                                <input type="hidden" name="package_name" value="{{ $package->name }}">
-                                                <button type="submit" class="md-btn md-raised m-b-sm primary text-white"><i
-                                                        class="fa fa-check-square-o"></i></button>
-                                            </form>
+                                            <a class="md-btn md-raised m-b-sm w-xs primary text-white r-15"
+                                                href="{{ route('create.lecture.step2', ['package_id' => $package->id, 'package_name' => $package->name]) }}"><i
+                                                    class="fas fa-long-arrow-right"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach
