@@ -131,7 +131,7 @@
     </div>
 
     <!-- jQuery -->
-    <script src="{{ asset('libs/jquery/jquery/dist/jquery.js') }}"></script>
+    {{-- <script src="{{ asset('libs/jquery/jquery/dist/jquery.js') }}"></script> --}}
     <!-- Bootstrap -->
     <script src="{{ asset('libs/jquery/tether/dist/js/tether.min.js') }}"></script>
     <script src="{{ asset('libs/jquery/bootstrap/dist/js/bootstrap.js') }}"></script>
