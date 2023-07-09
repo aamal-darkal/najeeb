@@ -14,7 +14,7 @@
             <div ui-include="'../views/blocks/aside.top.2.html'"></div>
         </div>
         <div flex class="hide-scroll">
-            <nav class="scroll nav-stacked nav-active-primary">
+            <nav class="scroll nav-stacked nav-active-primary text-white">
 
                 <ul class="nav" ui-nav>
                     @if (Route::has('dashboard'))

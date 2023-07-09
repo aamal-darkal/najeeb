@@ -28,6 +28,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet" /> --}}
+
+
     <!-- build:css ../assets/styles/app.min.css -->
     <link rel="stylesheet" href="{{ asset('assets/styles/app.css') }}" type="text/css" />
     <!-- endbuild -->
@@ -132,9 +135,11 @@
 
     <!-- jQuery -->
     {{-- <script src="{{ asset('libs/jquery/jquery/dist/jquery.js') }}"></script> --}}
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script> --}}
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <!-- Bootstrap -->
-    <script src="{{ asset('libs/jquery/tether/dist/js/tether.min.js') }}"></script>
-    <script src="{{ asset('libs/jquery/bootstrap/dist/js/bootstrap.js') }}"></script>
+    {{-- <script src="{{ asset('libs/jquery/tether/dist/js/tether.min.js') }}"></script> --}}
+    {{-- <script src="{{ asset('libs/jquery/bootstrap/dist/js/bootstrap.js') }}"></script> --}}
     <!-- core -->
     <script src="{{ asset('libs/jquery/underscore/underscore-min.js') }}"></script>
     <script src="{{ asset('libs/jquery/jQuery-Storage-API/jquery.storageapi.min.js') }}"></script>
