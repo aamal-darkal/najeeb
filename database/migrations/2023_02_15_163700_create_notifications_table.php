@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('title' , 25);
             $table->string('description');
-            $table->timestamp('time_publish');
-            //$table->foreignId('created_by')->constrained()->nullable();
-
+            $table->datetime('time_publish');
+            $table->timestamp('created_at');
         });
     }
 

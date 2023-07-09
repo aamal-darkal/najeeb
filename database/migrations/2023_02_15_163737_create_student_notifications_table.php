@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('student_notifications', function (Blueprint $table) {
+        Schema::create('notification_student', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id');
-            $table->foreignId('notification_id');
+            $table->foreignId('student_id')->constrained()->onDelete('cascade');
+            $table->foreignId('notification_id')->constrained()->onDelete('cascade');
             $table->boolean('seen')->default(false);
         });
     }

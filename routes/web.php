@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -78,9 +79,7 @@ Route::post('store-lecture',[\App\Http\Controllers\Admin\LectureController::clas
 Route::get('delete-lecture/{id}',[\App\Http\Controllers\Admin\LectureController::class,'destroy'])->name('delete.lecture');
 
 ///////////////Notification Routes////////////
-Route::view('Broadcast-notification', 'pages.notifications.create')->name('Broadcast.notification');
-Route::view('send-user-notification', 'pages.notifications.user-notification-create')->name('send.user.notification');
-Route::post('send-notification',[\App\Http\Controllers\NotificationController::class,'send'])->name('notification.send');
+Route::resource('notification' , NotificationController::class  )->only('create' , 'store');
 
 ///////////////Subscription Routes////////////
 Route::get('subscriptions',[\App\Http\Controllers\Admin\SubscriptionController::class,'index'])->name('subscriptions');

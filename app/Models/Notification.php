@@ -12,11 +12,12 @@ class Notification extends Model
     protected $fillable = [
         'title',
         'description',
-        'time_publish'
+        'time_publish',
+        'created_at'
     ];
     public $timestamps = false ;
     public function students()
     {
-        return $this->belongsToMany(Student::class,'student_notifications')->withPivot(['seen']);
+        return $this->belongsToMany(Student::class)->withPivot(['seen']);
     }
 }

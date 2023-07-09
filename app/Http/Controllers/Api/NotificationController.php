@@ -42,8 +42,8 @@ class NotificationController extends Controller
                 return ResponseHelper::success(NotificationResource::collection($notifications), 'nothing to update');
             }
             {
-                foreach ($notifications as $n){
-                        $n->pivot->update(['seen' => true]);
+                foreach ($notifications as $notification){
+                        $notification->pivot->update(['seen' => true]);
                 }
             }
         }

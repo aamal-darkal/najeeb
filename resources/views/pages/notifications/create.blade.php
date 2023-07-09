@@ -1,45 +1,87 @@
 @extends('layouts.master')
 @section('content')
-
     <!-- ############ PAGE START-->
-    <div class="padding">
+    <div class="container padding">
         <div style="margin-left: 20%; margin-right: 20%">
             <div class="box">
-                <div class="box-header">
-                    <h2>Send notification</h2>
+                <div class="box-header text-primary text-xl">
+                    <h1>Send notification</h1>
                 </div>
-                <div class="box-divider m-0"></div>
-                <div class="box-body">
-                    @if (session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
-                    @endif
 
-                    @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
+                <div class="box-divider"></div>
+                <form role="form" method="POST" action="{{ route('notification.store') }}" class="container mt-2">
+                    @csrf
+                    @if ($search)
+                    <div class="form-group">
+                        <div><label for="user_id">Choose student</label></div>
+                        <select name='student_ids' multiple="" class="ui search selection dropdown">
+                            <option value=""> Select Multiple students </option>
+                            @foreach ($students as $student)
+                                <option value="{{ $student->id }}">
+                                    {{ $student->first_name }} {{ $student->last_name }}
+                                </option>
+                            @endforeach
+                        </select>                                                  
+                        @error('student_ids')
+                            {{ $message }}
+                        @enderror
                         </div>
                     @endif
-                    <form role="form" method="POST" action="{{ route('notification.send') }}" >
-                        @csrf
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Title</label>
-                            <input type="text" class="form-control"
-                                   placeholder="Enter notification title" name="title" required>
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" class="form-control" placeholder="Enter notification title" id="title"
+                            id="title" name="title" value="{{ old('title') }}" required>
+                        <div class="text-danger">
+                            @error('title')
+                                {{ $message }}
+                            @enderror
                         </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Content</label>
-                            <input type="text" class="form-control"
-                                   placeholder="Enter notification content" name="body" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Content</label>
+                        <input type="text" class="form-control" placeholder="Enter notification content" id="description"
+                            id="description" name="description" value="{{ old('description') }}" required>
+                        <div class="text-danger">
+                            @error('description')
+                                {{ $message }}
+                            @enderror
                         </div>
-                        <button type="submit" class="btn white m-b">Submit</button>
-                    </form>
-                </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="time_publish">Publish Time</label>
+                        <div id="time_publish" class='input-group date' ui-jp="datetimepicker"
+                            ui-options="{ defaultDate: '{{ old('time_publish', Carbon\Carbon::now()) }} '}">
+                            <input type='text' class="form-control" name="time_publish" id="time_publish" required />
+                            <span class="input-group-addon">
+                                <span class="fa fa-calendar"></span>
+                            </span>
+                        </div>
+                        <div class="text-danger">
+                            @error('time_publish')
+                                {{ $message }}
+                            @enderror
+                        </div>
+                    </div>
+
+
+
+                    <button type="submit" class="btn white m-b m-t primary">Submit</button>
+                </form>
             </div>
         </div>
+    </div>
 
-        <!-- ############ PAGE END-->
+    <script>
+        $('.ui.dropdown').dropdown();
+    </script>
+    @push('css')
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet" />
+    @endpush
 
-
+    @push('js')
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    @endpush
+    <!-- ############ PAGE END-->
 @endsection

@@ -8,14 +8,13 @@ use App\Models\User;
 
 class NotificationHelper
 {
-    public static function broadcastNotification($title, $body)
+    public static function broadcastNotification($notification)
     {
         $tokens = User::whereHas('student',function($q){
             $q->where('state', 'current');
         })->get();
         $usersIds = $tokens->pluck('id');
         $students = Student::whereIn('user_id', $usersIds)->get();
-        $notification = Notification::create(['title' => $title, 'description' => $body, 'time_publish' => now()]);
         $SERVER_API_KEY = 'AAAAK-2cV9k:APA91bG_0iTqiuL8jkrOrPd5SLVrfH-ncsN6L7TA9ywzESej7ACUi4OCVroRDwam7iHj7V77piYyPTCJE3xvThyvyxK5jOTMJsOgd_itFBeHPp_Co6f6RDr1BfRIX-CXR89f6aWYESfd' ;
 
         foreach ($students as $student)
@@ -30,8 +29,8 @@ class NotificationHelper
         $data = [
             "registration_ids" => $FCMs, // for All device
             "notification" => array(
-                'title' => $title,
-                'body' => $body,
+                'title' => $notification->title,
+                'body' => $notification->body,
                 'sound' => "default" // required for sound on ios
 
             ),
@@ -60,11 +59,11 @@ class NotificationHelper
         return $response;
     }
 
-    public static function userNotification($user_id, $title, $body)
+    public static function userNotification($user_id, $notification)
     {
         // insert into db
         $student = Student::where('user_id', $user_id)->first();
-        $notification = Notification::create(['title' => $title, 'description' => $body, 'time_publish' => now()]);
+
         $student->notifications()->attach($notification->id);
 
 
@@ -75,8 +74,8 @@ class NotificationHelper
         $data = [
             "registration_ids" => $FCMs, // for All device
             "notification" => array(
-                'title' => $title,
-                'body' => $body,
+                'title' => $notification->title,
+                'body' => $notification->body,
                 'sound' => "default" // required for sound on ios
 
             ),
@@ -105,13 +104,12 @@ class NotificationHelper
         return $response;
     }
 
-    public static function broadcastLectureNotification($subject_id, $title, $body)
+    public static function broadcastLectureNotification($subject_id, $notification)
     {
         $students = Student::select('id')->whereHas('subjects', function($q) use ($subject_id){
                     return $q->where('subject_id', $subject_id);
         })->get();
         // insert into db
-        $notification = Notification::create(['title' => $title, 'description' => $body, 'time_publish' => now()]);
 
         foreach ($students as $student)
         {
@@ -133,8 +131,8 @@ class NotificationHelper
         $data = [
             "registration_ids" => $FCMs, // for All device
             "notification" => array(
-                'title' => $title,
-                'body' => $body,
+                'title' => $notification->title,
+                'body' => $notification->body,
                 'sound' => "default" // required for sound on ios
 
             ),

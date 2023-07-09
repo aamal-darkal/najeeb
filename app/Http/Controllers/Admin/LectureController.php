@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\NotificationHelper;
 use App\Http\Requests\StoreLectureRequest;
 use App\Models\Lecture;
+use App\Models\Notification;
 use App\Models\Package;
 use App\Models\Subject;
 use Illuminate\Http\Request;
@@ -76,8 +77,8 @@ class LectureController extends Controller
 
     public function store(StoreLectureRequest $request)
     {        
-        $data = $request->validated();
-        $lecture = Lecture::create($data);
+        $validated = $request->validated();
+        $lecture = Lecture::create($validated);
         if ($request->has('pdf_files')) {
             $path = 'pdf/files';
             foreach ($request->file('pdf_files') as $pdf) {
@@ -87,7 +88,9 @@ class LectureController extends Controller
                 $lecture->pdfFiles()->create(['pdf_link' => $link_pdf, 'name' => '']);
             }
         }
-        NotificationHelper::broadcastLectureNotification($data['subject_id'], 'New Lecture', "$lecture->name at $lecture->date ");
+        $notification = Notification::create(['title' => 'New Lecture', 'description' => "$lecture->name at $lecture->date", 'time_publish' => $validated['date'] , 'created_at'  => now()]);
+
+        NotificationHelper::broadcastLectureNotification($validated['subject_id'], $notification );
         return redirect()->route('lectures')->with('success' , 'Lecture Saved successfuly');
     }
 

@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
+            $table->string('first_name' , 50);
+            $table->string('last_name' , 50);
             $table->foreignId('user_id')->nullable()->constrained();
-            $table->string('phone')->unique();
-            $table->string('land_line')->nullable();
-            $table->string('governorate');
-            $table->string('father_name');
-            $table->string('parent_phone');
-            $table->enum('state',['new','current','rejected'])->default('new');
+            $table->char('phone',10)->unique();
+            $table->char('land_line',10)->nullable();
+            $table->char('parent_phone',10)->nullable();
+            $table->string('governorate' ,50); //should lookup table &*&*&*
+            $table->string('father_name' , 50);
+            $table->enum('state',['new','current','rejected','past'])->default('new');
             $table->timestamps();
         });
     }

@@ -28,7 +28,7 @@ class Student extends Model
 
     public function subjects()
     {
-        return $this->belongsToMany(Subject::class,'student_subject');
+        return $this->belongsToMany(Subject::class);
     }
 
     public function lecturesAttended()
@@ -43,6 +43,6 @@ class Student extends Model
 
     public function notifications()
     {
-        return $this->belongsToMany(Notification::class,'student_notifications')->withPivot(['seen']);
+        return $this->belongsToMany(Notification::class)->withPivot(['seen']);
     }
 }
