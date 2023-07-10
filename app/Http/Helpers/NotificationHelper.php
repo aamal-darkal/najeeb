@@ -8,26 +8,13 @@ use App\Models\User;
 
 class NotificationHelper
 {
-    public static function broadcastNotification($notification)
-    {
-        $tokens = User::whereHas('student',function($q){
-            $q->where('state', 'current');
-        })->get();
-        $usersIds = $tokens->pluck('id');
-        $students = Student::whereIn('user_id', $usersIds)->get();
-        $SERVER_API_KEY = 'AAAAK-2cV9k:APA91bG_0iTqiuL8jkrOrPd5SLVrfH-ncsN6L7TA9ywzESej7ACUi4OCVroRDwam7iHj7V77piYyPTCJE3xvThyvyxK5jOTMJsOgd_itFBeHPp_Co6f6RDr1BfRIX-CXR89f6aWYESfd' ;
-
-        foreach ($students as $student)
-        {
-            $student->notifications()->attach($notification->id);
-        }
-        $FCMs = [];
-        foreach ($tokens as $key => $token) {
-            $FCMs[$key] = $token['fcm_token'];
-        }
+    public static function sendNotification($notification , $tokens)
+    {                
+        
+        $SERVER_API_KEY = 'AAAAK-2cV9k:APA91bG_0iTqiuL8jkrOrPd5SLVrfH-ncsN6L7TA9ywzESej7ACUi4OCVroRDwam7iHj7V77piYyPTCJE3xvThyvyxK5jOTMJsOgd_itFBeHPp_Co6f6RDr1BfRIX-CXR89f6aWYESfd' ;       
 
         $data = [
-            "registration_ids" => $FCMs, // for All device
+            "registration_ids" => $tokens, // for All device
             "notification" => array(
                 'title' => $notification->title,
                 'body' => $notification->body,
@@ -59,10 +46,10 @@ class NotificationHelper
         return $response;
     }
 
-    public static function userNotification($user_id, $notification)
+    public static function userNotification($user_ids, $notification) // old methods for review
     {
         // insert into db
-        $student = Student::where('user_id', $user_id)->first();
+        $student = Student::wherein('user_id', $user_ids);
 
         $student->notifications()->attach($notification->id);
 

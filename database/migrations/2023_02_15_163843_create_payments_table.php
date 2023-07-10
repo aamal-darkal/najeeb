@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id');
-            $table->foreignId('payment_method_id');
-            $table->string('bill_number');
-            $table->string('amount');
+            $table->foreignId('order_id')->constrained()->onDetete('cascade');
+            $table->foreignId('payment_method_id')->constrained();
+            $table->string('bill_number',20);
+            $table->integer('amount' );
             $table->string('start_duration_date');
             $table->enum('state',['pending','rejected','approved'])->default('pending');
-            $table->dateTime('payment_date')->nullable();
+            $table->date('payment_date')->nullable();
             $table->dateTime('confirm_date')->nullable();
         });
     }

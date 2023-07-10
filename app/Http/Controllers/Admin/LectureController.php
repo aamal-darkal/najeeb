@@ -9,7 +9,9 @@ use App\Models\Lecture;
 use App\Models\Notification;
 use App\Models\Package;
 use App\Models\Subject;
+use App\Models\Week_program;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class LectureController extends Controller
@@ -71,13 +73,30 @@ class LectureController extends Controller
         $package_name = $request->package_name;
         $subject_name = $request->subject_name;
         $week_program_id = $request->week_program_id;
+        // $allowedDays = Week_program::select('day' + 1)->find('week_program_id')->day;
+        $allowedDates = DB::select('select day+0 as dayNum , day from week_programs where id= ?' , [$week_program_id]);
+        $allowedDay = $allowedDates[0]->dayNum - 2;
+        $allowedDayName = $allowedDates[0]->day;
+        $denyDays = "[";
+        for ($i= 0 ; $i < 7 ; $i++)
+        {
+            if ($i != $allowedDay)
+                $denyDays.= "$i,";
+        }
+
+        $denyDays = substr($denyDays , 0 ,-1);
+        $denyDays.= "]";
+
+        
         $subject_id = $request->subject_id;
-        return view('pages.lectures.create-step3', compact('package_name', 'package_id', 'subject_name', 'subject_id', 'week_program_id'));
+        return view('pages.lectures.create-step3', compact('package_name', 'package_id', 'subject_name', 'subject_id', 'week_program_id' , 'denyDays' , 'allowedDayName' ));
     }
 
     public function store(StoreLectureRequest $request)
     {        
         $validated = $request->validated();
+        $validated['date'] = Carbon::parse($validated['date'])->format('Y-m-d H:i');
+
         $lecture = Lecture::create($validated);
         if ($request->has('pdf_files')) {
             $path = 'pdf/files';

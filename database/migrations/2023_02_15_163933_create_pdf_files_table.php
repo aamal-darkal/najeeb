@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('pdf_files', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('lecture_id');
+            $table->foreignId('lecture_id')->constrained()->onDelete('cascade'); /// error//
             $table->string('pdf_link');
-            $table->string('name');
+            $table->string('name' ,100);
             $table->timestamps();
         });
     }

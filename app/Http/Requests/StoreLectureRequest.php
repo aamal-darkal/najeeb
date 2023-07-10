@@ -27,7 +27,7 @@ class StoreLectureRequest extends FormRequest
             'week_program_id' => 'required',
             'subject_id' => 'required',
             'name' => 'required',
-            'date' => 'required',
+            'date' => 'required|date',
             'video_link' => 'required',
             'duration' => 'sometimes',
             'pdf_files.*' => 'sometimes|mimes:pdf',

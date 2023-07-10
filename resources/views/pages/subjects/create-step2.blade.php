@@ -183,13 +183,15 @@
                                                 </div>
                                             </div>
         
+
+
                                             <div class="row">
                                                 <div class="form-group col-sm-5">
                                                     <label for="start_time">Start time</label>
                                                     <div class='input-group date' id='start_time'>
                                                         <input type='text' class="form-control" name="start_times[]"
                                                             id="start_time" value="{{ old('start_time') }}"
-                                                            placeholder="08:00 AM" required pattern="(1[012]|[1-9]):[0-5][0-9] (am|pm|AM|PM)" title="time 12:00PM"/>
+                                                            placeholder="8:00 AM" required pattern="(1[012]|[1-9]):[0-5][0-9] (am|pm|AM|PM)" title="time 8:00PM"/>
                                                         <span class="input-group-addon">
                                                             <span class="glyphicon glyphicon-time"></span>
                                                         </span>
@@ -200,7 +202,7 @@
                                                     <div class='input-group date' id='start_time'>
                                                         <input type='text' class="form-control" name="end_times[]"
                                                             id="end_time" value="{{ old('end_time') }}"
-                                                            placeholder="12:00 AM" required pattern="(1[012]|[1-9]):[0-5][0-9] (am|pm|AM|PM)" title="time 12:00PM"/>
+                                                            placeholder="8:00 AM" required pattern="(1[012]|[1-9]):[0-5][0-9] (am|pm|AM|PM)" title="time 8:00PM"/>
                                                         <span class="input-group-addon">
                                                             <span class="glyphicon glyphicon-time"></span>
                                                         </span>
@@ -223,7 +225,16 @@
             </div>
         </div>
     </div>
+@push('css')
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+@endpush
 
+@push('js')
+<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+@endpush
+
+    
+@endpush
     <script>
         // $(function() {
         //     $('#start_time').datetimepicker({

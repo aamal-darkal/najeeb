@@ -21,6 +21,7 @@ class LecturesTableSeeder extends Seeder
                 'video_link' => 'https://www.youtube.com/watch?v=UK8e9gm6mYs',
                 'date' => Carbon::now(),
                 'duration' => 40,
+                'subject_id' => 7,
             ],
             [
                 'week_program_id' => 2,
@@ -28,6 +29,7 @@ class LecturesTableSeeder extends Seeder
                 'video_link' => 'https://www.youtube.com/watch?v=UK8e9gm6mYs',
                 'date' => Carbon::now(),
                 'duration' => 40,
+                'subject_id' => 8,
             ],
             [
                 'week_program_id' => 3,
@@ -35,6 +37,7 @@ class LecturesTableSeeder extends Seeder
                 'video_link' => 'https://www.youtube.com/watch?v=UK8e9gm6mYs',
                 'date' => Carbon::now(),
                 'duration' => 40,
+                'subject_id' => 6,
             ],
             [
                 'week_program_id' => 4,
@@ -42,6 +45,7 @@ class LecturesTableSeeder extends Seeder
                 'video_link' => 'https://www.youtube.com/watch?v=UK8e9gm6mYs',
                 'date' => Carbon::now(),
                 'duration' => 40,
+                'subject_id' => 4,
             ],
             [
                 'week_program_id' => 5,
@@ -49,6 +53,7 @@ class LecturesTableSeeder extends Seeder
                 'video_link' => 'https://www.youtube.com/watch?v=UK8e9gm6mYs',
                 'date' => Carbon::now(),
                 'duration' => 40,
+                'subject_id' => 4,
             ],
             [
                 'week_program_id' => 6,
@@ -56,6 +61,7 @@ class LecturesTableSeeder extends Seeder
                 'video_link' => 'https://www.youtube.com/watch?v=UK8e9gm6mYs',
                 'date' => Carbon::now(),
                 'duration' => 40,
+                'subject_id' => 3,
             ],
             [
                 'week_program_id' => 7,
@@ -63,6 +69,7 @@ class LecturesTableSeeder extends Seeder
                 'video_link' => 'https://www.youtube.com/watch?v=UK8e9gm6mYs',
                 'date' => Carbon::now(),
                 'duration' => 40,
+                'subject_id' => 1,
             ],
             [
                 'week_program_id' => 8,
@@ -70,6 +77,7 @@ class LecturesTableSeeder extends Seeder
                 'video_link' => 'https://www.youtube.com/watch?v=UK8e9gm6mYs',
                 'date' => Carbon::now(),
                 'duration' => 40,
+                'subject_id' => 1,
             ],
             [
                 'week_program_id' => 9,
@@ -77,6 +85,7 @@ class LecturesTableSeeder extends Seeder
                 'video_link' => 'https://www.youtube.com/watch?v=UK8e9gm6mYs',
                 'date' => Carbon::now(),
                 'duration' => 40,
+                'subject_id' => 9,
             ],
         ];
 

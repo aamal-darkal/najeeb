@@ -107,18 +107,16 @@ class StudentController extends Controller
     public function destroy(Student $student)
     {
         
-        $student->user()->delete();
         foreach ($student->orders as $order) {
             foreach ($order->payments as $paymant)
                 $paymant->delete();
             $order->delete();
         }
-
-        foreach ($student->subjects as $subject)             
-                $subject->delete();            
-        
+                        
         $student->delete();
-     
+
+        $student->user()->delete();
+        
         return redirect()->route('students')->with('success', "student deleted successfully");
     }
 

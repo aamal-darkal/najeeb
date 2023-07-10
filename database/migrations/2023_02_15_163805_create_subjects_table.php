@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('subjects', function (Blueprint $table) {
             $table->id();
             $table->foreignId('package_id')->constrained();
-            $table->string('name');
-            $table->float('cost');
+            $table->string('name' , 100);
+            $table->integer('cost');
             $table->timestamps();
         });
     }

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id');
-            $table->float('amount');
+            $table->foreignId('student_id')->constrained();
+            $table->integer('amount' );
             $table->timestamps();
         });
     }

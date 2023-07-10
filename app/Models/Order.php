@@ -21,7 +21,7 @@ class Order extends Model
 
     public function subjects()
     {
-        return $this->belongsToMany(Subject::class,'subject_orders');
+        return $this->belongsToMany(Subject::class);
     }
 
     public function payments()

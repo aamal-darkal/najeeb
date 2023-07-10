@@ -33,6 +33,6 @@ class Subject extends Model
     }
     public function orders()
     {
-        return $this->belongsToMany(Order::class,'subject_orders');
+        return $this->belongsToMany(Order::class);
     }
 }

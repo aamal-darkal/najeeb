@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('attendees', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained();
-            $table->foreignId('lecture_id')->constrained();
+            $table->foreignId('student_id')->constrained()->onDelete('cascade');
+            $table->foreignId('lecture_id')->constrained()->onDelete('cascade');
             $table->date('date');
-            $table->integer('views');
+            $table->unsignedTinyInteger('views');
             $table->timestamps();
         });
     }

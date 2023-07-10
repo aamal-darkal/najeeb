@@ -14,7 +14,7 @@
                     @if ($search)
                         <div class="form-group">
                             <div><label for="user_id">Choose student</label></div>
-                            <select name='student_ids' multiple="" class="ui search selection dropdown">
+                            <select name='student_ids[]' multiple="" class="ui search selection dropdown">
                                 <option value=""> Select Multiple students </option>
                                 @foreach ($students as $student)
                                     <option value="{{ $student->id }}">
@@ -50,15 +50,21 @@
 
                     <div class="form-group">
                         <label for="time_publish">Publish Time</label>
-                        <input type='text' class="form-control datetimepicker" name="time_publish" id="time_publish"
-                            required autocomplete="off">
-                        </span>
-                        <div class="text-danger">
-                            @error('time_publish')
-                                {{ $message }}
-                            @enderror
+                            <div id="time_publish" class='input-group date' ui-jp="datetimepicker"
+                                ui-options="{ 
+                                    defaultDate: '{{ old('time_publish', Carbon\Carbon::now()) }}'  
+                                }">
+                                <input type='text' class="form-control" name="time_publish" id="time_publish" required />
+                                <span class="input-group-addon">
+                                    <span class="fa fa-calendar"></span>
+                                </span>
+                            </div>
+                            <div class="text-danger">
+                                @error('time_publish')
+                                    {{ $message }}
+                                @enderror
+                            </div>
                         </div>
-                    </div>
 
 
 

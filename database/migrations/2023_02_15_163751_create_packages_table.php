@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name' , 100);
             $table->date('start_date');
             $table->date('end_date');
             $table->string('image')->nullable();
