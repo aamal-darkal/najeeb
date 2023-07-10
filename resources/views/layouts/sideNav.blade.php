@@ -14,15 +14,14 @@
             <div ui-include="'../views/blocks/aside.top.2.html'"></div>
         </div>
         <div flex class="hide-scroll">
-            <nav class="scroll nav-stacked nav-active-primary text-white">
+            <nav class="scroll nav-stacked nav-active-primary">
 
                 <ul class="nav" ui-nav>
                     @if (Route::has('dashboard'))
                         <li>
                             <a href="{{ route('dashboard') }}">
                                 <span class="nav-icon">
-                                    <i class="material-icons">&#xe3fc;
-                                        {{--                      <span ui-include="'../assets/images/i_0.svg'"></span> --}}
+                                    <i class="material-icons">&#xe3fc;  
                                     </i>
                                 </span>
                                 <span class="nav-text">Dashboard</span>

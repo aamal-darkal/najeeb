@@ -12,19 +12,19 @@
                 <form role="form" method="POST" action="{{ route('notification.store') }}" class="container mt-2">
                     @csrf
                     @if ($search)
-                    <div class="form-group">
-                        <div><label for="user_id">Choose student</label></div>
-                        <select name='student_ids' multiple="" class="ui search selection dropdown">
-                            <option value=""> Select Multiple students </option>
-                            @foreach ($students as $student)
-                                <option value="{{ $student->id }}">
-                                    {{ $student->first_name }} {{ $student->last_name }}
-                                </option>
-                            @endforeach
-                        </select>                                                  
-                        @error('student_ids')
-                            {{ $message }}
-                        @enderror
+                        <div class="form-group">
+                            <div><label for="user_id">Choose student</label></div>
+                            <select name='student_ids' multiple="" class="ui search selection dropdown">
+                                <option value=""> Select Multiple students </option>
+                                @foreach ($students as $student)
+                                    <option value="{{ $student->id }}">
+                                        {{ $student->first_name }} {{ $student->last_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('student_ids')
+                                {{ $message }}
+                            @enderror
                         </div>
                     @endif
                     <div class="form-group">
@@ -50,13 +50,9 @@
 
                     <div class="form-group">
                         <label for="time_publish">Publish Time</label>
-                        <div id="time_publish" class='input-group date' ui-jp="datetimepicker"
-                            ui-options="{ defaultDate: '{{ old('time_publish', Carbon\Carbon::now()) }} '}">
-                            <input type='text' class="form-control" name="time_publish" id="time_publish" required />
-                            <span class="input-group-addon">
-                                <span class="fa fa-calendar"></span>
-                            </span>
-                        </div>
+                        <input type='text' class="form-control datetimepicker" name="time_publish" id="time_publish"
+                            required autocomplete="off">
+                        </span>
                         <div class="text-danger">
                             @error('time_publish')
                                 {{ $message }}
@@ -72,16 +68,27 @@
         </div>
     </div>
 
+    <script type="text/javascript">
+        $(".datetimepicker").each(function() {
+            $(this).datetimepicker();
+        });
+    </script>
+
     <script>
         $('.ui.dropdown').dropdown();
     </script>
     @push('css')
         <link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet" />
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" />
     @endpush
 
     @push('js')
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+        <!-- datetimepicker jQuery CDN -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
+        </script>
     @endpush
     <!-- ############ PAGE END-->
 @endsection

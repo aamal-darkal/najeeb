@@ -16,6 +16,9 @@ body {
   outline: 0 !important;
 }
 
+nav a {
+  color: white;
+}
 a {
   color: inherit;
   text-decoration: none;
