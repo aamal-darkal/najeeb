@@ -34,7 +34,7 @@ class StudentController extends Controller
         })
             ->withCount('subjects')
             ->with('user')
-            ->paginate(10);
+            ->paginate(7);
         return view('pages.students.index', compact('students', 'status'));
     }
 
@@ -143,6 +143,30 @@ class StudentController extends Controller
         return view('pages.students.index', compact('students', 'search'));
     }
 
+    public function passwordEdit(){
+        $students = student::get();
+        return view('pages.students.password' , compact('students'));
+    }
+
+
+    public function passwordUpdate(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required',
+            'password' => 'required|min:6'
+        ]);
+        $newPassword = $request->password;
+        $user = User::find($request->user_id);
+        $user->update(['password' => Hash::make($newPassword)]);
+        $student = Student::select('first_name', 'phone')->where('user_id', $user->id)->first();
+
+        $msg = "مرحباً $student->first_name لقد تم تغيير كلمة سر حسابك " . "\n" . " كلمة السر الجديدة : $newPassword";
+        $to = $student->phone;
+
+        (new MessagingHelper)->sendMessage($msg, $to);
+
+        return redirect()->back()->with('success', 'Password changed successfully');
+    }
     public function fetchData(Request $request)
     {
         $searchTerm = $request->input('searchTerm');
@@ -197,7 +221,7 @@ class StudentController extends Controller
                 $this->createUser($student);
             });
         }
-        return redirect()->route('student-requests')->with('success', 'Opertaion done successfuly');
+        return back()->with('success', 'Opertaion done successfuly');
     }
 
     private function createUser($student)
@@ -228,27 +252,9 @@ class StudentController extends Controller
 
     public function resetTokenDate(Request $request)
     {
-        $test = User::find($request->user_id)->update(['token_birth' => null]);
-        return $test;
-        return redirect()->back();
+        User::find($request->user_id)->update(['token_birth' => null]);
+        return back()->with('success', 'token is reset successfully');;
     }
 
-    public function changePass(Request $request)
-    {
-        $request->validate([
-            'user_id' => 'required',
-            'password' => 'required|min:6'
-        ]);
-        $newPassword = $request->password;
-        $user = User::find($request->user_id);
-        $user->update(['password' => Hash::make($newPassword)]);
-        $student = Student::select('first_name', 'phone')->where('user_id', $user->id)->first();
-
-        $msg = "مرحباً $student->first_name لقد تم تغيير كلمة سر حسابك " . "\n" . " كلمة السر الجديدة : $newPassword";
-        $to = $student->phone;
-
-        (new MessagingHelper)->sendMessage($msg, $to);
-
-        return redirect()->back()->with('success', 'Password changed successfully');
-    }
+    
 }

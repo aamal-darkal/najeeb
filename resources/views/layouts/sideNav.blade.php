@@ -73,7 +73,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('change.student.password') }}">
+                                    <a href="{{ route('student.password-edit') }}">
                                         <span class="nav-text">Change password</span>
                                     </a>
                                 </li>

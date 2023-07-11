@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('content')    
+@section('content')
     <!-- ############ PAGE START-->
     <div class="padding">
         <form action="{{ route('search.students') }}" method="post" class="m-b-md">
@@ -24,37 +24,37 @@
                         @csrf
                         <input type="hidden" name="status" id="status" value="">
                         <input type="hidden" name="ids[]" id="ids" value="">
-                        <table class="table table-striped b-t b-b">
+                        <table class="table table-striped text-center">
                             <thead>
                                 <tr>
                                     <th>User name</th>
-                                    <th>First name</th>
-                                    <th>Last name</th>
-                                    <th>Father name</th>
-                                    <th>Phone</th>
-                                    <th>Land line</th>
+                                    <th class="w-25">full name</th>
+                                    {{-- <th>Phone</th> --}}
+                                    {{-- <th>Land line</th> --}}
                                     {{-- <th>Parent phone</th> --}}
-                                    <th>Send</th>
-                                    <th>Assigned subjects</th>
-                                    <th>Status</th>
-                                    <th></th>
-                                    <th></th>
+                                    {{-- <th>Send</th> --}}
+                                    <th class="w-25" ></th>
+                                    {{-- Assigned subjects --}}
+                                    {{-- <th>Status</th> --}}
+                                    {{-- <th>Reset Token Date</th>
+                                    <th>Dis approve</th>
+                                    <th>Delete</th>
+                                    <th>Details</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($students as $student)
                                     <tr>
                                         <td>{{ $student->user ? $student->user->user_name : '' }}</td>
-                                        <td>{{ $student->first_name }}</td>
-                                        <td>{{ $student->last_name }}</td>
-                                        <td>{{ $student->father_name }}</td>
-                                        <td>{{ $student->phone }}</td>
-                                        <td>{{ $student->land_line }}</td>
+                                        <td>{{ $student->first_name }} {{ $student->father_name }} {{ $student->last_name }}
+                                        </td>
+                                        {{-- <td>{{ $student->phone }}</td> --}}
+                                        {{-- <td>{{ $student->land_line }}</td> --}}
                                         {{-- <td>{{ $student->parent_phone }}</td> --}}
-                                        <td>{{ \Carbon\Carbon::create($student->created_at)->diffForHumans() }}</td>
+                                        {{-- <td>{{     \Carbon\Carbon::create($student->created_at)->diffForHumans() }}</td> --}}
 
                                         @if ($student->state == 'current')
-                                            <td class="text-center">
+                                            <td class="text-right">
                                                 <div class="btn-group dropdown">
                                                     <button class="btn white dropdown-toggle"
                                                         data-toggle="dropdown">{{ $student->subjects_count }}</button>
@@ -73,69 +73,49 @@
                                                         </ul>
                                                     </div>
                                                 </div>
-                                            </td>
-                                            <td>
-                                                <span class="label primary" title="Suspended">{{ $student->state }}</span>
-                                            </td>
-                                            <td>
-                                                <form method="post" action="{{ route('reset.token.date') }}">
+                                                <form method="post" action="{{ route('reset.token.date') }}"
+                                                    class="d-inline">
                                                     @csrf
-                                                    <input type="hidden" name="user_id" value="{{ $student->user->id }}">
-                                                    <button type="submit"
-                                                        class="p-0 text-md btn-rounded text-warn border-0 bg-transparent"
+                                                    <input type="hidden" name="user_id" value="{{ $student->user_id }}">
+                                                    <button type="submit" class="btn btn-sm text-warn bg-transparent"
                                                         title="Reset token date">
                                                         <i class="fa fa-refresh"></i>
                                                     </button>
                                                 </form>
-                                            </td>
-
-                                            <td>
-                                                <a href="{{ route('student-details', $student->id) }}"
-                                                    class="p-0 text-md btn-rounded text-primary border-0 bg-transparent"
-                                                    title="packages">
-                                                    <i class="fa fa-book"></i>
-                                                </a>
-                                            <td>
-                                                <button type="submit"
-                                                    class="p-0 text-md btn-rounded text-danger border-0 bg-transparent"
+                                                <span class="text-primary">{{ $student->state }}</span>
+                                                
+                                                <button type="submit" class="btn btn-sm text-danger bg-transparent"
                                                     title="dissaprove"
                                                     onclick="updateStatus('rejected','{{ $student->id }}')">
                                                     <i class="fa fa-ban"></i>
                                                 </button>
-                                            </td>
-                                        @elseif($student->state == 'new')
-                                            <td></td>
-                                            <td>
-                                                <span class="label warn" title="Suspended">{{ $student->state }}</span>
-                                            </td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>
-                                                <button type="submit"
-                                                    class="p-0 text-md btn-rounded text-success border-0 bg-transparent"
+
+                                            @elseif($student->state == 'new')
+                                            <td class="text-right">
+                                                <span class="text-warn" title="Suspended">{{ $student->state }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                <button type="submit" class="btn btn-sm btn-outline-success border-0"
                                                     title="approve" onclick="updateStatus('current',{{ $student->id }})">
                                                     <a>
                                                         <i class="fa fa-check"></i>
                                                     </a>
                                                 </button>
-                                            </td>
-                                        @elseif($student->state == 'rejected')
-                                            <td></td>
-                                            <td><span class="label danger" title="Suspended">{{ $student->state }}</span>
-                                            </td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>
-                                                <button type="submit"
-                                                    class="p-0 text-md btn-rounded text-primary border-0 bg-transparent"
+                                            @elseif($student->state == 'rejected')
+                                            <td class="text-right">
+                                                <span class="text-danger" title="Suspended">{{ $student->state }}</span>
+                                                <button type="submit" class="btn btn-sm btn-outline-primary border-0"
                                                     title="Undo the rejection"
                                                     onclick="updateStatus('current',{{ $student->id }})">
                                                     <i class="fa fa-check"></i>
                                                 </button>
-                                            </td>
                                         @endif
-                                        <td><a href="{{ route('student.delete', ['student' => $student->id]) }}"
-                                                class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a></td>
+                                        <a href="{{ route('student.delete', ['student' => $student->id]) }}"
+                                            class="btn btn-sm btn-outline-danger border-0"><i class="fas fa-trash"></i></a>
+                                        <a href="{{ route('student-details', $student->id) }}"
+                                            class="p-0 text-md btn-rounded text-primary border-0 bg-transparent"
+                                            title="packages">
+                                            <i class="fa fa-book"></i>
+                                        </a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

@@ -2,9 +2,8 @@
 @section('content')
     <!-- ############ PAGE START-->
     <div class="padding">
-        <a class="md-btn md-raised primary text-white" onclick="history.back()"><i
-                class="fas fa-long-arrow-left"></i></a>
-            <h2 class="text-primary d-inline ms-3" >Package</h2>
+        <a class="md-btn md-raised primary text-white" onclick="history.back()"><i class="fas fa-long-arrow-left"></i></a>
+        <h2 class="text-primary d-inline ms-3">Package</h2>
         <div class="row">
 
             <div class="col-xs-6 col-md-4">
@@ -53,8 +52,15 @@
                                             <td>{{ $subject->cost }}</td>
                                             <td>{{ $subject->created_at }}</td>
                                             <td>
-                                                <a href="{{ route('delete.subject', $subject->id) }}"
-                                                    class="md-btn md-raised m-b-sm w-xs danger text-white">Delete</a>
+                                                <form action="{{ route('subject.delete', ['subject' => $subject]) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button class="btn btn-sm md-raised btn-outline-danger border-0"
+                                                        title="delete">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </form>
 
                                             </td>
                                         </tr>

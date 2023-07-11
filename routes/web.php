@@ -42,9 +42,12 @@ Route::post('store-student',[\App\Http\Controllers\Admin\StudentController::clas
 Route::get('student-requests',[\App\Http\Controllers\Admin\StudentController::class,'getRequests'])->name('student-requests');
 Route::get('student-details/{id}',[\App\Http\Controllers\Admin\StudentController::class,'getStudentDetails'])->name('student-details');
 Route::post('change-student-status',[\App\Http\Controllers\Admin\StudentController::class,'changeStatus'])->name('change.students.status');
-Route::view('change-student-password', 'pages.students.change-pass')->name('change.student.password');
-Route::post('update-password',[\App\Http\Controllers\Admin\StudentController::class,'changePass'])->name('update.password');
+
+Route::get('students-password', [StudentController::class , 'passwordEdit'])->name('student.password-edit');
+Route::post('students-password',[\App\Http\Controllers\Admin\StudentController::class,'passwordUpdate'])->name('student.password-update');
+
 Route::post('reset-token-date',[\App\Http\Controllers\Admin\StudentController::class,'resetTokenDate'])->name('reset.token.date');
+
 Route::get('/fetch-data', [\App\Http\Controllers\Admin\StudentController::class,'fetchData'])->name('fetch.data');
 
 Route::get('student/delete/{student}', [StudentController::class, 'delete'])->name('student.delete');;
