@@ -29,15 +29,19 @@
                                 <td>{{ $package->end_date }}</td>
                                 <td class="text-center">{{ $package->subjects_count }}</td>
                                 <td class="text-center">
-                                    <a title="details" class="p-0 text-md btn-rounded text-primary border-0 bg-transparent" href="{{ route('package.show' , ['package_id' => $package->id ]) }}"><i class="fa fa-bars"></i></a>                                    
+                                    <a title="details" class="p-0 text-md btn-rounded text-primary border-0 bg-transparent"
+                                        href="{{ route('package.show', ['package_id' => $package->id]) }}"><i
+                                            class="fa fa-bars"></i></a>
                                 </td>
                                 <td class="text-center">
-                                    <button class="p-0 text-md btn-rounded text-danger border-0 bg-transparent"
-                                        title="delete">
-                                        <a href="{{ route('delete.package', $package->id) }}">
-                                            <i class="fa fa-trash"></i>
-                                        </a>
-                                    </button>
+                                    <form action="{{ route('package.delete', ['package' => $package]) }}" method="POST">
+                                        @csrf
+                                        @method('delete')
+                                        <button class="btn btn-sm btn-outline-danger border-0"
+                                            title="delete">                                           
+                                                <i class="fa fa-trash"></i>                                            
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach

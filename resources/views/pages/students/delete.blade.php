@@ -14,10 +14,10 @@
     </div>
     {{-- orders --}}
     <div class="container" style="overflow: auto">
-        <h4 class="text-primary text-center w-100 my-0"> Orders </h4>
+        <h4 class="primary text-center w-100 my-0"> Orders </h4>
 
         <table class="table bg-white">
-            <thead class="primary">
+            <thead class="text-primary">
                 <tr>
                     <th>amount</th>
                     <th>date</th>
@@ -34,9 +34,9 @@
 
         </table>
         {{-- payments --}}
-        <h4 class="text-primary text-center w-100 my-0"> Payments </h4>
+        <h4 class="primary text-center w-100 my-0"> Payments </h4>
         <table class="table bg-white">
-            <thead class="primary">
+            <thead class="text-primary">
                 <tr>
                     <th>amount</th>
                     <th>bill_number</th>
@@ -62,9 +62,9 @@
             </tbody>
         </table>
         {{-- subjects --}}
-        <h4 class="text-primary text-center w-100 my-0"> Subjects </h4>
+        <h4 class="primary text-center w-100 my-0"> Subjects </h4>
         <table class="table bg-white">
-            <thead class="primary">
+            <thead class="text-primary">
                 <tr>
                     <th>name</th>
                     <th>cost</th>

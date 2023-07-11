@@ -79,16 +79,17 @@
                             <label for="exampleInputEmail1">Pdf file Name</label>
                             <input type="text" class="form-control" placeholder="Enter pdf file name" id="pdf_file_name" name="pdf_file_name">
                         </div> --}}
-                        
+
                         <div class="form-group">
                             <label for="date">Date - <span class="text-primary">Only {{ $allowedDayName }}</span> </label>
                             <div id="date" class='input-group date' ui-jp="datetimepicker"
                                 ui-options="{ 
-                                        defaultDate: '{{ old('date') }} ' ,
                                         daysOfWeekDisabled: {{ $denyDays }},
-                                        format: 'D-M-YYYY'
-                                    }">
-                                <input type='text' class="form-control" name="date" id="date" required />
+                                        format: 'D-M-YYYY',
+                                        allowInputToggle: true 
+                                    }"
+                                    >
+                                <input type='text' class="form-control" name="date" value="{{ old('date') }}" required />
                                 <span class="input-group-addon">
                                     <span class="fa fa-calendar"></span>
                                 </span>
@@ -107,7 +108,22 @@
             </div>
         </div>
 
+
+        @push('css')
+            <link rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" />
+        @endpush
+
         @push('js')
+            <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+            <!-- datetimepicker jQuery CDN -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
+            </script>
+ <script type="text/javascript">
+    $(".datetimepicker").each(function() {
+        $(this).datetimepicker();
+    });
+</script>
             <script>
                 document.getElementById('myForm').addEventListener('submit', function(event) {
                     var fileInput = document.getElementById('pdf_file');

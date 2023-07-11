@@ -44,8 +44,6 @@ class SubjectController extends Controller
         return view('pages.subjects.create-step2',compact('package', 'notAllowedTimes'));
     }
 
-
-
     /**
      * Store a newly created resource in storage.
      */
@@ -81,10 +79,13 @@ class SubjectController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id): RedirectResponse
+    public function destroy(Subject $subject): RedirectResponse
     {
-        $subject = Subject::find($id);
+        if ( ! $subject->lectures->count()) return back()->with('error', 'sorry, we can\'t delete subject that has lecture, you should delete its lectures ');
+        if ( ! $subject->students->count()) return back()->with('error', 'sorry, we can\'t delete subject that subcribed by students, you should choose unsubcribe option before ');
+        if ( ! $subject->orders->count()) return back()->with('error', 'sorry, we can\'t delete subject that ordered by students');
+        /* no fix for order!!*/
         $subject->delete();
-        return redirect()->route('packages');
+        return back()->with('success', 'package deleted successfuly');
     }
 }

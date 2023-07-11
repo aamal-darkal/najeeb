@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePackageRequest;
 use App\Models\Package;
+use App\Models\Subject;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -85,9 +86,14 @@ class PackageController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id): RedirectResponse
+    public function destroy(Package $package): RedirectResponse
     {
-        Package::find($id)->delete();
-        return redirect()->back();
+        $subjectsCount =  $package->subjects->count();
+        if ($subjectsCount > 0)
+            return back()->with('error', 'sorry, we can\'t delete package that has subject, you should delete its subjects first');
+        else {
+            $package->delete();
+            return back()->with('success', 'package deleted successfuly');
+        }
     }
 }

@@ -57,7 +57,7 @@ Route::get('show',[\App\Http\Controllers\Admin\PackageController::class,'show'])
 Route::get('paginated-packages',[\App\Http\Controllers\Admin\PackageController::class,'paginatedIndex'])->name('paginated.packages');
 Route::get('create-package', [\App\Http\Controllers\Admin\PackageController::class,'create'])->name('create-package');
 Route::post('store-package',[\App\Http\Controllers\Admin\PackageController::class,'store'])->name('store-package');
-Route::get('delete-package/{id}',[\App\Http\Controllers\Admin\PackageController::class,'destroy'])->name('delete.package');
+Route::delete('package/{package}',[\App\Http\Controllers\Admin\PackageController::class,'destroy'])->name('package.delete');
 Route::get('edit-package',[\App\Http\Controllers\Admin\PackageController::class,'edit'])->name('packages.edit');
 
 
@@ -67,7 +67,7 @@ Route::get('subject-subscriptions',[\App\Http\Controllers\Admin\SubscriptionCont
 Route::get('create-subject-step1',[\App\Http\Controllers\Admin\SubjectController::class,'create1'])->name('create.subject.step1');
 Route::get('create-subject-step2',[\App\Http\Controllers\Admin\SubjectController::class,'create2'])->name('create.subject.step2');
 Route::post('store-subject',[\App\Http\Controllers\Admin\SubjectController::class,'store'])->name('store-subject');
-Route::get('delete-subject/{id}',[\App\Http\Controllers\Admin\SubjectController::class,'destroy'])->name('delete.subject');
+Route::delete('subject/{subject}',[\App\Http\Controllers\Admin\SubjectController::class,'destroy'])->name('subject.delete');
 
 ///////////////Lecture Routes////////////
 Route::get('lectures/{subjectId?}',[\App\Http\Controllers\Admin\LectureController::class,'index'])->name('lectures');

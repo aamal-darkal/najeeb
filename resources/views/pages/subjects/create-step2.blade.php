@@ -111,7 +111,7 @@
                                                 <div class='input-group date' id='start_time'>
                                                     <input type='text' class="form-control" name="start_times[]"
                                                         id="start_time" value="{{ old('start_time') }}"
-                                                        placeholder="08:00 AM" required pattern="(1[012]|[1-9]):[0-5][0-9] (am|pm|AM|PM)" title="time 12:00PM" />
+                                                        placeholder="08:00 AM" required pattern="(1[012]|[1-9]):[0-5][0-9] (am|pm|AM|PM)" title="time 8:00 AM" />
                                                     <span class="input-group-addon">
                                                         <span class="glyphicon glyphicon-time"></span>
                                                     </span>
@@ -122,7 +122,7 @@
                                                 <div class='input-group date' id='start_time'>
                                                     <input type='text' class="form-control" name="end_times[]"
                                                         id="end_time" value="{{ old('end_time') }}"
-                                                        placeholder="12:00 AM" required pattern="(1[012]|[1-9]):[0-5][0-9] (am|pm|AM|PM)" title="time 12:00PM"/>
+                                                        placeholder="12:00 AM" required pattern="(1[012]|[1-9]):[0-5][0-9] (am|pm|AM|PM)" title="time 8:00 AM"/>
                                                     <span class="input-group-addon">
                                                         <span class="glyphicon glyphicon-time"></span>
                                                     </span>
@@ -191,7 +191,7 @@
                                                     <div class='input-group date' id='start_time'>
                                                         <input type='text' class="form-control" name="start_times[]"
                                                             id="start_time" value="{{ old('start_time') }}"
-                                                            placeholder="8:00 AM" required pattern="(1[012]|[1-9]):[0-5][0-9] (am|pm|AM|PM)" title="time 8:00PM"/>
+                                                            placeholder="8:00 AM" required pattern="(1[012]|[1-9]):[0-5][0-9] (am|pm|AM|PM)" title="time 8:00 AM"/>
                                                         <span class="input-group-addon">
                                                             <span class="glyphicon glyphicon-time"></span>
                                                         </span>
@@ -202,7 +202,7 @@
                                                     <div class='input-group date' id='start_time'>
                                                         <input type='text' class="form-control" name="end_times[]"
                                                             id="end_time" value="{{ old('end_time') }}"
-                                                            placeholder="8:00 AM" required pattern="(1[012]|[1-9]):[0-5][0-9] (am|pm|AM|PM)" title="time 8:00PM"/>
+                                                            placeholder="8:00 AM" required pattern="(1[012]|[1-9]):[0-5][0-9] (am|pm|AM|PM)" title="time 8:00 AM"/>
                                                         <span class="input-group-addon">
                                                             <span class="glyphicon glyphicon-time"></span>
                                                         </span>
@@ -234,7 +234,6 @@
 @endpush
 
     
-@endpush
     <script>
         // $(function() {
         //     $('#start_time').datetimepicker({

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('week_programs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('subject_id')->constrained();
+            $table->foreignId('subject_id')->constrained()->onDelete('cascade');
             $table->enum('day',['Saturday','Sunday','Monday','Tuesday','Wednesday','Thursday','Friday']);
             $table->time('start_time');
             $table->time('end_time');

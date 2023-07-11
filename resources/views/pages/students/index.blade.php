@@ -11,6 +11,7 @@
                 </span>
             </div>
         </form>
+        {{ $students->links() }}
         <div class="box">
             @if (isset($status))
                 <div class="box-header">

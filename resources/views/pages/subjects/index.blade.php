@@ -15,9 +15,6 @@
                             <th>Name</th>
                             <th>Cost</th>
                             <th>Created at</th>
-                            {{-- <th>Day</th>
-                            <th>Starts at</th>
-                            <th>Ends at</th> --}}
                             <th>Assigned students</th>
                             <th class="text-center" style="width:15%">package</th>
                         </tr>
@@ -29,24 +26,22 @@
                                 <td>{{ $subject->name }}</td>
                                 <td>{{ $subject->cost }}</td>
                                 <td>{{ $subject->created_at }}</td>
-                                {{-- <td>{{ $subject->weekProg ? $subject->weekProg->day : 'X' }}</td>
-                                <td>{{ $subject->weekProg ? $subject->weekProg->start_time : 'X' }}</td>
-                                <td>{{ $subject->weekProg ? $subject->weekProg->end_time : 'X' }}</td> --}}
                                 <td class="text-center">{{ $subject->students_count }}</td>
                                 @if ($subject->package)
-                                    <td class="text-center"><span class="label primary pos-rlt" style="font-size: 100%">
-                                            {{ $subject->package->name }}</span>
+                                    <td class="text-center text-primary pos-rlt bold" >
+                                            {{ $subject->package->name }}
                                     </td>
                                 @else
                                     <td></td>
                                 @endif
-                                <td>
-                                    <button class="p-0 text-md btn-rounded text-danger text-md border-0 bg-transparent"
-                                        title="delete">
-                                        <a href="{{ route('delete.subject', $subject->id) }}">
+                                <td class="text-center">
+                                    <form action="{{ route('subject.delete', ['subject' => $subject]) }}" method="POST">
+                                        @csrf
+                                        @method('delete')
+                                        <button class="btn btn-sm btn-outline-danger border-0" title="delete">
                                             <i class="fa fa-trash"></i>
-                                        </a>
-                                    </button>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach

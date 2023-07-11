@@ -21,12 +21,20 @@ class StudentController extends Controller
 
     public function index($status = null)
     {
+
+
+
+        // if ($request->ajax()) {
+        //     $packages = Package::withCount('subjects')->paginate(2);
+        //     return view('pages.packages.index', compact('packages'))->render();
+        // }
+
         $students = Student::when($status, function ($query, $status) {
             return $query->where('state', $status);
         })
             ->withCount('subjects')
             ->with('user')
-            ->get();
+            ->paginate(10);
         return view('pages.students.index', compact('students', 'status'));
     }
 
@@ -112,7 +120,7 @@ class StudentController extends Controller
                 $paymant->delete();
             $order->delete();
         }
-                        
+                            
         $student->delete();
 
         $student->user()->delete();

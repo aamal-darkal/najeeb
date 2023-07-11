@@ -15,7 +15,9 @@ body {
 *:focus {
   outline: 0 !important;
 }
-
+.bold {
+  font-weight: bolder !important;
+}
 nav a {
   color: white;
 }

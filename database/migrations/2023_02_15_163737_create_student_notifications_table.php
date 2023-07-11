@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->foreignId('notification_id')->constrained()->onDelete('cascade');
+            $table->unique(['student_id' , 'notification_id']);
             $table->boolean('seen')->default(false);
         });
     }

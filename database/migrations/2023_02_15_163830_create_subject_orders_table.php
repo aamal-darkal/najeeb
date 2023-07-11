@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('subject_order', function (Blueprint $table) {
+        Schema::create('order_subject', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->foreignId('subject_id')->constrained()->onDelete('cascade');
-            $table->unique('order_id' , 'subject_id');
+            $table->unique(['order_id' , 'subject_id']);
             $table->integer('cost');
         });
     }
