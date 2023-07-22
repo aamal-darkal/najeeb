@@ -35,7 +35,7 @@
                                     <td></td>
                                 @endif
                                 <td class="text-center">
-                                    <form action="{{ route('subject.delete', ['subject' => $subject]) }}" method="POST">
+                                    <form action="{{ route('subjects.destroy', ['subject' => $subject]) }}" method="POST">
                                         @csrf
                                         @method('delete')   
                                         <button class="btn btn-sm btn-outline-danger border-0" title="delete">

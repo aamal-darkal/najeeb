@@ -1,146 +1,185 @@
 @extends('layouts.master')
 @section('content')
     <!-- ############ PAGE START-->
-    <div class="padding">
-        <form action="{{ route('search.students') }}" method="post" class="m-b-md">
-            @csrf
-            <div class="input-group input-group-lg">
+    <div class="p-1">
+        {{-- ***************************** search form *********************** --}}
+        <form action="{{ route('students.search') }}" method="get" class="mb-1">
+            <div class="input-group ">
+                @if (isset($search))                   
+                    <button type="button" class="md-btn md-raised w-md  primary" onclick="location='{{ route('students.index', ['state' => $state]) }}'">
+                        All {{ $state }} students
+                    </button>
+                @endif
+
+                <input type="hidden" name="state" value="{{ $state }}">
                 <input type="text" class="form-control" name="search" placeholder="Type keyword">
-                <span class="input-group-btn">
-                    <button class="btn b-a no-shadow white" type="submit">Search</button>
-                </span>
+                <button class="md-btn md-raised w-sm primary" type="submit">Search</button>
             </div>
         </form>
-        {{ $students->links() }}
-        <div class="box">
-            @if (isset($status))
-                <div class="box-header">
-                    <h2>{{ $status }} Students</h2>
-                </div>
-            @endif
-            <div class="table-responsive">
-                @if ($students->isNotEmpty())
-                    <form method="POST" action="{{ route('change.students.status') }}">
-                        @csrf
-                        <input type="hidden" name="status" id="status" value="">
-                        <input type="hidden" name="ids[]" id="ids" value="">
-                        <table class="table table-striped text-center">
-                            <thead>
-                                <tr>
-                                    <th>User name</th>
-                                    <th class="w-25">full name</th>
-                                    {{-- <th>Phone</th> --}}
-                                    {{-- <th>Land line</th> --}}
-                                    {{-- <th>Parent phone</th> --}}
-                                    {{-- <th>Send</th> --}}
-                                    <th class="w-25" ></th>
-                                    {{-- Assigned subjects --}}
-                                    {{-- <th>Status</th> --}}
-                                    {{-- <th>Reset Token Date</th>
-                                    <th>Dis approve</th>
-                                    <th>Delete</th>
-                                    <th>Details</th> --}}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($students as $student)
-                                    <tr>
-                                        <td>{{ $student->user ? $student->user->user_name : '' }}</td>
-                                        <td>{{ $student->first_name }} {{ $student->father_name }} {{ $student->last_name }}
-                                        </td>
-                                        {{-- <td>{{ $student->phone }}</td> --}}
-                                        {{-- <td>{{ $student->land_line }}</td> --}}
-                                        {{-- <td>{{ $student->parent_phone }}</td> --}}
-                                        {{-- <td>{{     \Carbon\Carbon::create($student->created_at)->diffForHumans() }}</td> --}}
-
-                                        @if ($student->state == 'current')
-                                            <td class="text-right">
-                                                <div class="btn-group dropdown">
-                                                    <button class="btn white dropdown-toggle"
-                                                        data-toggle="dropdown">{{ $student->subjects_count }}</button>
-                                                    <div class="dropdown-menu dropdown-menu-scale">
-                                                        <ul class="timeline">
-                                                            @foreach ($student->subjects as $subject)
-                                                                <li class="tl-item">
-                                                                    <div class="tl-wrap b-primary"
-                                                                        style="margin-left: 10px; padding: 4px 0px 4px 20px">
-                                                                        <div class="tl-content text-center">
-                                                                            {{ $subject->name }}
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
-                                                            @endforeach
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <form method="post" action="{{ route('reset.token.date') }}"
-                                                    class="d-inline">
-                                                    @csrf
-                                                    <input type="hidden" name="user_id" value="{{ $student->user_id }}">
-                                                    <button type="submit" class="btn btn-sm text-warn bg-transparent"
-                                                        title="Reset token date">
-                                                        <i class="fa fa-refresh"></i>
-                                                    </button>
-                                                </form>
-                                                <span class="text-primary">{{ $student->state }}</span>
-                                                
-                                                <button type="submit" class="btn btn-sm text-danger bg-transparent"
-                                                    title="dissaprove"
-                                                    onclick="updateStatus('rejected','{{ $student->id }}')">
-                                                    <i class="fa fa-ban"></i>
-                                                </button>
-
-                                            @elseif($student->state == 'new')
-                                            <td class="text-right">
-                                                <span class="text-warn" title="Suspended">{{ $student->state }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                                <button type="submit" class="btn btn-sm btn-outline-success border-0"
-                                                    title="approve" onclick="updateStatus('current',{{ $student->id }})">
-                                                    <a>
-                                                        <i class="fa fa-check"></i>
-                                                    </a>
-                                                </button>
-                                            @elseif($student->state == 'rejected')
-                                            <td class="text-right">
-                                                <span class="text-danger" title="Suspended">{{ $student->state }}</span>
-                                                <button type="submit" class="btn btn-sm btn-outline-primary border-0"
-                                                    title="Undo the rejection"
-                                                    onclick="updateStatus('current',{{ $student->id }})">
-                                                    <i class="fa fa-check"></i>
-                                                </button>
-                                        @endif
-                                        <a href="{{ route('student.delete', ['student' => $student->id]) }}"
-                                            class="btn btn-sm btn-outline-danger border-0"><i class="fas fa-trash"></i></a>
-                                        <a href="{{ route('student-details', $student->id) }}"
-                                            class="p-0 text-md btn-rounded text-primary border-0 bg-transparent"
-                                            title="packages">
-                                            <i class="fa fa-book"></i>
-                                        </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </form>
-                @else
-                    <div class="container w-75">
-                        <div class="text-center">
-                            <img src="{{ asset('images/defaults/no-data.png') }}" alt="" class="w-50">
-                            @if (isset($status))
-                                <p class="h4 text-primary">There is no {{ $status }} students</p>
-                            @elseif(isset($search))
-                                <p class="h4 text-primary">There is no name such as "{{ $search }}"</p>
-                            @endif
-                        </div>
-                    </div>
-                @endif
+        {{-- ********************************* header ************************* --}}
+        @if (isset($search))
+            <div class="box-header col-m6-6">
+                <h2 class="text-primary"> Search Result for: {{ $search }}</h2>
             </div>
+        @elseif (isset($state))
+            <div class="box-header col-m6-6">
+                <h2 class="text-primary"> Students - {{ $state }}</h2>
+            </div>
+        @endif
+        <div class="col-md-6    ">
+            @if ($students->isNotEmpty())
+                {{ $students->links() }}
+            @endif
         </div>
+    </div>
+    <div class="mt-2">
+        @if ($students->isNotEmpty())
+            <div>
+                @foreach ($errors->all() as $error)
+                    <p> {{ $error }}</p>
+                @endforeach
+            </div>
+            <form method="POST" action="{{ route('students.update-many') }}" onsubmit="return checkSelection()">
+                @csrf
+                <table class="table table-striped text-center table-bordered table-condensed table-responsive-sm">
+                    <thead>
+                        <tr class="l-h-2x primary-light">
+                            <th class="w-96"> <button type="button" class="btn w-xs px-1 py-0 m-0 text-xs _800 r-15"
+                                    id="checkStatus" onclick="checkAllRecords()">Check All</button>
+                            </th>
+                            <th>User name</th>
+                            <th>full name</th>
+                            <th>Phone</th>
+                            <th>start At</th>
+                            <th>Assigned subjects</th>
+                            <th>actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($students as $student)
+                            <tr>
+                                <td class="text-center"><label class="ui-check m-0"><input type="checkbox" name="ids[]"
+                                            value="{{ $student->id }}"><i style="background-color: #f1efef"></i></label>
+                                </td>
+                                <td>{{ $student->user->user_name }}</td>
+                                <td>{{ $student->first_name }} {{ $student->father_name }}
+                                    {{ $student->last_name }}
+                                </td>
+                                <td>{{ $student->phone }}</td>
+                                <td>{{ \Carbon\Carbon::create($student->created_at)->diffForHumans() }}</td>
+
+
+                                <td class="text-center">
+                                    <div class="btn-group dropdown">
+                                        <button class="btn white dropdown-toggle"
+                                            data-toggle="dropdown">{{ $student->subjects_count }}</button>
+                                        <div class="dropdown-menu dropdown-menu-scale">
+                                            <ul class="timeline">
+                                                @foreach ($student->subjects as $subject)
+                                                    <li class="tl-item">
+                                                        <div class="tl-wrap b-primary"
+                                                            style="margin-left: 10px; padding: 4px 0px 4px 20px">
+                                                            <div class="tl-content text-center">
+                                                                {{ $subject->name }}
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    @if ($state == 'current')
+                                        <button type="submit" name="action" value="reset-token"
+                                            class="btn btn-sm text-warn bg-transparent" title="Reset token"
+                                            onclick="document.querySelector('[type=\'checkbox\'][value=\'{{ $student->id }}\']').checked=true">
+                                            <i class="fa fa-refresh"></i>
+                                        </button>
+                                        <button type="submit" name="action" value="ban"
+                                            class="btn btn-sm text-danger bg-transparent" title="ban"
+                                            onclick="document.querySelector('[type=\'checkbox\'][value=\'{{ $student->id }}\']').checked=true">
+                                            <i class="fa fa-ban"></i>
+                                        </button>
+                                    @elseif($state == 'banned')
+                                        <button type="submit" name="action" value="unban"
+                                            class="btn btn-sm text-info bg-transparent" title="unban"
+                                            onclick="document.querySelector('[type=\'checkbox\'][value=\'{{ $student->id }}\']').checked=true">
+                                            <i class="fa fa-unlock"></i>
+                                        </button>
+                                    @endif
+
+                                    <a href="{{ route('students.show', $student) }}"
+                                        class="btn btn-sm text-md text-primary border-0 bg-transparent" title="Details">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-center align-items-center">
+                    @if ($state == 'current')
+                        <button type="submit" name="action" value="reset-token"
+                            class="btn btn-outline-warning btn-xs  _800 w  mx-2 mb-3 r-15">
+                            <i class="fa fa-refresh"></i> Many Reset Token
+                        </button>
+
+                        <button type="submit" name="action" value="ban"
+                            class="btn btn-xs btn-outline-danger w _800 mb-3 r-15">
+                            <i class="fa fa-ban"></i> Many Ban
+                        </button>
+                    @elseif($state == 'banned')
+                        <button type="submit" name="action" value="unban"
+                            class="btn btn-sm btn-ouline-info btn-raise mb-3 r-15"
+                            onclick="document.querySelector('[type=\'checkbox\'][value=\'{{ $student->id }}\']').checked=true">
+                            <i class="fa fa-unlock"></i> Many Unban
+                        </button>
+                    @endif
+
+                </div>
+            </form>
+        @else
+            <div class="container w-75">
+                <div class="text-center">
+                    @if (isset($search))
+                        <p class="h4 text-primary">There is no name such as "{{ $search }}"</p>
+                    @elseif (isset($state))
+                        <p class="h4 text-primary">There is no students</p>
+                    @endif
+                    <img src="{{ asset('images/defaults/no-data.png') }}" alt="" class="w-50">
+                </div>
+            </div>
+        @endif
+    </div>
+    </div>
     </div>
     <!-- ############ PAGE END-->
     <script>
-        function updateStatus(status, id) {
-            document.getElementById("status").value = status;
-            document.getElementById("ids").value = id;
+        function checkSelection() {
+            let anySelected = document.querySelector("input[type='checkbox']:checked");
+            if (!anySelected) {
+                alert("you should select row")
+                return false
+            }
+        }
+
+        function checkAllRecords() {
+            var checkboxes = document.getElementsByName("ids[]");
+            var checkStatus = document.getElementById("checkStatus").innerHTML;
+            if (checkStatus === 'Check All') {
+                for (var i = 0; i < checkboxes.length; i++) {
+                    checkboxes[i].checked = true;
+                }
+                document.getElementById("checkStatus").innerHTML = 'Uncheck All';
+            } else {
+                for (var i = 0; i < checkboxes.length; i++) {
+                    checkboxes[i].checked = false;
+                }
+                document.getElementById("checkStatus").innerHTML = 'Check All';
+
+            }
         }
     </script>
 

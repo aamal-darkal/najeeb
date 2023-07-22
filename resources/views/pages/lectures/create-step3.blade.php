@@ -4,10 +4,10 @@
         <div class="col-xs-12 col-md-8 offset-md-2">
             <div class="wrapper-progressBar">
                 <ul class="progressBar">
-                    <li><a href="{{ route('create.lecture') }}" title="change package"
+                    <li><a href="{{ route('lecture.create') }}" title="change package"
                             class="md-btn md-raised m-b-sm w-sm primary text-white r-15"><i
                                 class="fas fa-long-arrow-left"></i> {{ $package_name }}</a> </li>
-                    <li><a href="{{ route('create.lecture.step2', ['package_name' => $package_name, 'package_id' => $package_id]) }}"
+                    <li><a href="{{ route('lectures.create.step2', ['package_name' => $package_name, 'package_id' => $package_id]) }}"
                             title="change subject" class="md-btn md-raised m-b-sm w-sm primary text-white r-15"><i
                                 class="fas fa-long-arrow-left"></i> {{ $subject_name }}</a> </li>
                     <li class="active text-primary">Create lecture</li>
@@ -28,7 +28,7 @@
                 </div>
                 <div class="box-divider m-0"></div>
                 <div class="box-body">
-                    <form id="myForm" method="POST" action="{{ route('store.lecture') }}" enctype="multipart/form-data">
+                    <form id="myForm" method="POST" action="{{ route('lectures.store') }}" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" value="{{ old('week_program_id', $week_program_id) }}" name="week_program_id">
                         <input type="hidden" value="{{ old('subject_id', $subject_id) }}" name="subject_id">

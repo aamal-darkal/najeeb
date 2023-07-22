@@ -4,57 +4,89 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
-use App\Models\Student;
+use App\Traits\SubcribeTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+
 
 class SubscriptionController extends Controller
 {
+    use SubcribeTrait;
     public function index()
     {
-        $payments = Payment::with('order', 'order.subjects', 'order.student')->get();
+        $payments = Payment::with('order.subjects', 'order.student')->with(['order' =>   function ($q) {
+            return $q->withCount('subjects');
+        }])->get();
         return view('pages.subscriptions.index', compact('payments'));
     }
 
-    public function getSubs()
+    public function edit($status)
     {
-        $currentRoute = Route::currentRouteName();
-        $payments = Payment::with('order', 'order.subjects', 'order.student')
-            ->when($currentRoute == 'subscriptions.approved', function ($q) use ($currentRoute) {
-                return $q->where('state', 'approved');
-            })->when($currentRoute == 'subscriptions.rejected', function ($q) use ($currentRoute) {
-                return $q->where('state', 'rejected');
-            })->when($currentRoute == 'subscriptions.pending', function ($q) use ($currentRoute) {
-                return $q->where('state', 'pending');
-            })->get();
+        $payments = Payment::with('order.subjects', 'order.student')->with(['order' =>   function ($q) {
+            return $q->withCount('subjects');
+        }])->when($status == 'approved', function ($q) {
+            return $q->where('state', 'approved');
+        })->when($status == 'rejected', function ($q) {
+            return $q->where('state', 'rejected');
+        })->when($status == 'pending', function ($q) {
+            return $q->where('state', 'pending');
+        })->get();
 
-
-        if ($currentRoute == 'subscriptions.pending')
-            // return $orders;
-            return view('pages.subscriptions.requests', compact('payments'));
-        //return $orders;
-        return view('pages.subscriptions.index', compact('payments'));
+        return view('pages.subscriptions.edit', compact('payments', 'status'));
     }
 
-    public function changeStatus(Request $request)
+    public function update(Request $request)
     {
         $validated = $request->validate([
-            'status' => 'required',
-            'ids' => 'required'
+            'action' => 'required',
+            'ids' => 'required',
+            'ids.*' => 'exists:payments,id'
         ]);
-        $status = $validated['status'];
+        $action = $validated['action'];
+        $ids = $validated['ids'];
 
-        $payments = payment::with('order')->find($validated['ids']);
-        foreach ($payments as $payment)
-            $payment->update(['state' => $status]);
+        //reject
+        if ($action == 'reject') {
+            $payments = payment::find($ids);
+            foreach ($payments as $payment)
+                $payment->update(['state' => 'rejected']);
 
-        if ($status == 'approved') {
+            //unreject
+        } else if ($action == 'unreject') {
+            $payments = payment::find($ids);
+            foreach ($payments as $payment)
+                $payment->update(['state' => 'pending']);
+
+            //  approve  
+        } else if ($action == 'approve') {
+            $payments = payment::with('order.student.user', 'order.subjects')->find($ids);
             foreach ($payments as $payment) {
+                $payment->update(['state' => 'approved']);
+
+                //create user
+                $student = $payment->order->student;
+                if (!$student->user)
+                    $this->createUser($student);
+
+                //attach subjects
                 $subjects = $payment->order->subjects;
-                $student = Student::find($payment->order->student_id);
                 $student->subjects()->attach($subjects);
             }
+        } else if ($action == 'unapprove') {
+            $payments = payment::with('order.student','order.subjects')->find($ids);
+            foreach ($payments as $payment) {
+                $payment->update(['state' => 'pending']);
+
+                //create user
+                $student = $payment->order->student;
+
+                //attach subjects
+                $subjects = $payment->order->subjects;
+                $student->subjects()->detach($subjects);
+            }
         }
-        return back();
+        return back()->with('success', 'payments updated successfully');
+
     }
+
+    
 }

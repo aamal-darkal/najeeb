@@ -43,7 +43,6 @@
     <div class="app" id="app">
 
         <!-- ############ LAYOUT START-->
-
         @include('layouts.sideNav')
         <!-- content -->
         <div id="content" class="app-content box-shadow-z1" role="main">
@@ -51,7 +50,6 @@
                 @include('layouts.navBar')
             </div>
            
-
             <div ui-view class="app-body" id="view">
                 <div class="col-md-6 offset-md-3 mt-1">
                     @if (session('error'))
@@ -66,7 +64,6 @@
                     @endif
                 </div>
                 @yield('content')
-
             </div>
         </div>
         <!-- / content -->
@@ -80,54 +77,7 @@
             </div>
         </div>
 
-        <!-- theme switcher -->
-        <div id="switcher">
-            <div class="switcher box-color dark-white text-color" id="sw-theme">
-                <a href ui-toggle-class="active" target="#sw-theme" class="box-color dark-white text-color sw-btn">
-                    <i class="fa fa-gear"></i>
-                </a>
-
-                <div class="box-divider"></div>
-                <div class="box-body">
-                    <p class="hidden-md-down">
-                        <label class="md-check m-y-xs" data-target="folded">
-                            <input type="checkbox">
-                            <i class="green"></i>
-                            <span class="hidden-folded">Folded Aside</span>
-                        </label>
-                        <label class="md-check m-y-xs" data-target="boxed">
-                            <input type="checkbox">
-                            <i class="green"></i>
-                            <span class="hidden-folded">Boxed Layout</span>
-                        </label>
-                    </p>
-                    <p>Themes:</p>
-                    <div data-target="bg" class="row no-gutter text-u-c text-center _600 clearfix">
-                        <label class="p-a col-sm-6 light pointer m-0">
-                            <input type="radio" name="theme" value="" hidden>
-                            Light
-                        </label>
-                        <label class="p-a col-sm-6 grey pointer m-0">
-                            <input type="radio" name="theme" value="grey" hidden>
-                            Grey
-                        </label>
-                        <label class="p-a col-sm-6 dark pointer m-0">
-                            <input type="radio" name="theme" value="dark" hidden>
-                            Dark
-                        </label>
-                        <label class="p-a col-sm-6 black pointer m-0">
-                            <input type="radio" name="theme" value="black" hidden>
-                            Black
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <!-- / -->
-
         <!-- ############ LAYOUT END-->
-
     </div>
 
     <!-- jQuery -->

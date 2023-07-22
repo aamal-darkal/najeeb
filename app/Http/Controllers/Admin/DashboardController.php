@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Lecture;
 use App\Models\Package;
 use App\Models\Student;
-use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {

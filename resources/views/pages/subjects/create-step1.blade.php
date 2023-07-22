@@ -23,16 +23,6 @@
                 </div>
                 <div class="table-responsive">
                     <table
-{{--                        ui-jp="dataTable" ui-options="{--}}
-{{--          sAjaxSource: 'api/datatable.json',--}}
-{{--          aoColumns: [--}}
-{{--            { mData: 'engine' },--}}
-{{--            { mData: 'browser' },--}}
-{{--            { mData: 'platform' },--}}
-{{--            { mData: 'version' },--}}
-{{--            { mData: 'grade' }--}}
-{{--          ]--}}
-{{--        }" --}}
                         class="table table-striped b-t b-b">
                         <thead>
                         <tr>
@@ -53,7 +43,7 @@
                                 <td>{{$package->end_date}}</td>
                                 <td class="text-center">{{$package->subjects_count}}</td>
                                 <td class="text-center">
-                                    <form method="get" action="{{route('create.subject.step2')}}">
+                                    <form method="get" action="{{route('subjects.create.step2')}}">
                                         @csrf
                                         <input type="hidden" name="package_id" value="{{$package->id}}">
                                         <input type="hidden" name="package_name" value="{{$package->name}}">

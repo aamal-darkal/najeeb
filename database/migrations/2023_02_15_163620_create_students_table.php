@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('first_name' , 50);
             $table->string('last_name' , 50);
-            $table->foreignId('user_id')->nullable()->constrained();
+            $table->string('father_name' , 50);            
             $table->char('phone',10)->unique();
             $table->char('land_line',10)->nullable();
             $table->char('parent_phone',10)->nullable();
-            $table->string('governorate' ,50); //should lookup table &*&*&*
-            $table->string('father_name' , 50);
-            $table->enum('state',['new','current','rejected','past'])->default('new');
+            $table->enum('governorate' ,['دمشق' ,'ريف دمشق' , 'حلب','حمص' ,'اللاذقية' , 'حماه'  ,'طرطوس', 'الرقة' ,'ديرالزور', 'السويداء' , 'الحسكة' , 'درعا' , 'إدلب' , 'القنيطرة'])->default('دمشق'); 
+            $table->enum('state',['new','current','rejected','past','banned'])->default('new');
+            $table->foreignId('user_id')->nullable()->constrained();            
             $table->timestamps();
         });
     }

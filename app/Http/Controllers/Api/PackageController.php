@@ -35,7 +35,7 @@ class PackageController extends Controller
                 );
             }
         , 'subjects.lectures' => function($q) {
-            return $q->where('date' , '<=' , now());
+            return $q->where('date' , '<=' , now())->orderBy('date' ,'desc');
         }
         , 'subjects.lectures.pdfFiles'])->get();
             

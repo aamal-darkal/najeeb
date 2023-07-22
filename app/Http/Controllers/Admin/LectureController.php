@@ -27,7 +27,7 @@ class LectureController extends Controller
         // return $lectures;
         $lectures->map(function ($lecture) {
             $lecture['color'] = $this->rndRGBColorCode(200);
-            $lecture['url'] = route('lecture.show', $lecture->id);
+            $lecture['url'] = route('lectures.show', $lecture->id);
             return $lecture;
         });
 
@@ -47,9 +47,8 @@ class LectureController extends Controller
         return 'rgb(' . rand($min, $max) . ',' . rand($min, $max) . ',' . rand($min, $max) . ')'; #using the inbuilt random function 
     }
 
-    public function show($id)
+    public function show(Lecture $lecture)
     {
-        $lecture = Lecture::with('pdfFiles')->find($id);
         return view('pages.lectures.show', compact('lecture'));
     }
     public function create()
@@ -113,9 +112,9 @@ class LectureController extends Controller
         return redirect()->route('lectures')->with('success' , 'Lecture Saved successfuly');
     }
 
-    public function destroy($id)
+    public function destroy($lecture)
     {
-        Lecture::find($id)->delete();
+        $lecture->delete();
         return redirect()->route('lectures');
     }
 }

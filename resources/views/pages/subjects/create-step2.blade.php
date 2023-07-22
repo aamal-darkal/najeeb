@@ -135,7 +135,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <form role="form" method="POST" id="myForm" action="{{ route('store-subject') }}">
+                                <form role="form" method="POST" id="myForm" action="{{ route('subjects.store') }}">
                                     @csrf
                                     <input type="hidden" value="{{ $package->id }}" name="package_id">
                                     <div class="form-group">

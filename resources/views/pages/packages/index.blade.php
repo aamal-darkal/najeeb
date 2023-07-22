@@ -30,11 +30,11 @@
                                 <td class="text-center">{{ $package->subjects_count }}</td>
                                 <td class="text-center">
                                     <a title="details" class="p-0 text-md btn-rounded text-primary border-0 bg-transparent"
-                                        href="{{ route('package.show', ['package_id' => $package->id]) }}"><i
+                                        href="{{ route('packages.show', ['package' => $package]) }}"><i
                                             class="fa fa-bars"></i></a>
                                 </td>
                                 <td class="text-center">
-                                    <form action="{{ route('package.delete', ['package' => $package]) }}" method="POST">
+                                    <form action="{{ route('packages.destroy', ['package' => $package]) }}" method="POST">
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-sm btn-outline-danger border-0"

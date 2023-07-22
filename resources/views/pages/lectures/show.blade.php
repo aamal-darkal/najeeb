@@ -8,7 +8,7 @@
             <div class="col">
                 <div class="box p-a">
                     <div class="pull-right h4 m-b-xs">
-                        <a href="{{ route('delete.lecture', $lecture->id) }}"><i class="fa fa-trash text-danger"></i></a>
+                        <a href="{{ route('lectures.destroy', $lecture) }}"><i class="fa fa-trash text-danger"></i></a>
                     </div>
                     <div class="text-center text-md m-b h-2x _800">{{ $lecture->name }}</div>
                     <p class="text-center _800">Date : {{ $lecture->date }}</p>

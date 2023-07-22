@@ -11,7 +11,9 @@ body {
   background-color: #f0f0f0;
   -webkit-font-smoothing: antialiased;
 }
-
+.app {
+  width: 100% !important;
+}
 *:focus {
   outline: 0 !important;
 }
@@ -1566,19 +1568,6 @@ a.list-group-item.hover {
   border-color: rgba(120, 130, 140, 0.045) !important;
 }
 
-.table>tbody>tr>td,
-.table>tbody>tr>th,
-.table>tfoot>tr>td,
-.table>tfoot>tr>th {
-  padding-left: 16px;
-  padding-right: 16px;
-  border-color: rgba(120, 130, 140, 0.045);
-}
-
-.table>thead>tr>th {
-  padding: 10px 16px;
-  border-color: rgba(120, 130, 140, 0.045);
-}
 
 .table-condensed thead>tr>th,
 .table-condensed tbody>tr>th,
@@ -1586,12 +1575,9 @@ a.list-group-item.hover {
 .table-condensed thead>tr>td,
 .table-condensed tbody>tr>td,
 .table-condensed tfoot>tr>td {
-  padding: 5px;
+  padding: 2px;
 }
 
-.table-bordered {
-  border-color: rgba(120, 130, 140, 0.045);
-}
 
 .table-striped>tbody>tr:nth-child(odd) {
   background-color: rgba(0, 0, 0, 0.025);
@@ -2214,9 +2200,10 @@ html {
 }
 
 body {
-  height: auto;
+  height: fit-content !important;
   min-height: 100%;
   position: relative;
+  background-color: #f9f9f9 !important;
 }
 
 .app-aside {
@@ -2700,6 +2687,7 @@ body {
 .navside .nav li a:hover,
 .navside .nav li a:focus {
   background-color: rgba(0, 0, 0, 0.065);
+  color: white
 }
 
 .navside .nav li.active {
@@ -4167,6 +4155,9 @@ div.input-group>.select2-container>.selection {
 
 .primary .bg {
   background-color: #0cc2aa;
+}
+.primary-light{
+  background-color: #aae2dca6 !important;
 }
 
 .accent {
@@ -5770,7 +5761,7 @@ a.text-blue:hover {
 }
 
 .w-xs {
-  width: 90px;
+  width: 70px;
 }
 
 .w-sm {
@@ -5778,7 +5769,7 @@ a.text-blue:hover {
 }
 
 .w {
-  width: 180px;
+  width: 140px;
 }
 
 .w-md {
@@ -5804,7 +5795,12 @@ a.text-blue:hover {
 .w-auto {
   width: auto;
 }
-
+.w-10r {
+  width: 10%;
+}
+.w-15r {
+  width: 15%;
+}
 .h-auto {
   height: auto;
 }

@@ -3,7 +3,7 @@
     <!-- ############ PAGE START-->
     <div class="padding">
         <a class="md-btn md-raised primary text-white" onclick="history.back()"><i class="fas fa-long-arrow-left"></i></a>
-        <h2 class="text-primary d-inline ms-3">Package</h2>
+        <h2 class="text-primary d-inline ml-2">Package</h2>
         <div class="row">
 
             <div class="col-xs-6 col-md-4">
@@ -15,7 +15,7 @@
                     </div>
                     <div class="p-a">
                         <div class="pull-right text-muted m-b-xs">
-                            <a href="{{ route('packages.edit') }}"><i class="fa fa-edit"></i></a>
+                            <a href="{{ route('packages.edit' , $package) }}"><i class="fa fa-edit"></i></a>
                         </div>
                         <div class="text-center text-md m-b h-2x _800">{{ $package->name }}</div>
                         <p class="text-center _800">Starts at : {{ $package->start_date }}</p>
@@ -52,9 +52,9 @@
                                             <td>{{ $subject->cost }}</td>
                                             <td>{{ $subject->created_at }}</td>
                                             <td>
-                                                <form action="{{ route('subject.delete', ['subject' => $subject]) }}"
+                                                <form action="{{ route('subjects.destroy', ['subject' => $subject]) }}"
                                                     method="POST">
-                                                    @csrf
+                                                    @csrf   
                                                     @method('delete')
                                                     <button class="btn btn-sm md-raised btn-outline-danger border-0"
                                                         title="delete">

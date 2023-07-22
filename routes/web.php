@@ -1,7 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\LectureController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Admin\SubjectController;
+use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,77 +22,51 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-
-//Route::get('/dashboard', function () {
-//    return view('dashboard');
-//})->middleware(['auth', 'verified'])->name('dashboard');
+require __DIR__ . '/auth.php';
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    /***************************************  profile *********************************/
+    Route::resource('profile' , ProfileController::class)->only('edit','update');
+
+    /***************************************  dashboard *********************************/
+    Route::get('/', [DashboardController::class, 'home'])->name('dashboard');
+
+    /***************************************  Students *********************************/
+    Route::controller(StudentController::class)->group(function () {
+        Route::get('students-password/{student}', 'passwordEdit')->name('students.password-edit');
+        Route::post('students-password/{student}', 'subcribeCreate')->name('students.password-update');
+        Route::get('students-subcribe/{student}', 'subcribeEdit')->name('students.subcribe-edit');
+        Route::post('students-subcribe/{student}', 'subcribeUpdate')->name('students.subcribe-update');
+        Route::post('student/update-many/',  'updateMany')->name('students.update-many');
+        Route::get('students-search', 'search')->name('students.search');
+    });
+    Route::resource('students', StudentController::class);
+
+    /***************************************  Packages *********************************/
+    Route::get('paginated-packages', [PackageController::class, 'paginatedIndex'])->name('paginated.packages');
+    Route::resource('packages', PackageController::class);
+
+
+    /***************************************  Subjects *********************************/
+    Route::controller(SubjectController::class)->group(function () {
+        Route::get('subjects/create-step2',  'create2')->name('subjects.create.step2');
+    });
+    Route::resource('subjects', SubjectController::class);
+
+    /***************************************  lectures *********************************/
+    Route::controller(LectureController::class)->group(function () {
+        Route::get('lectures/create-step2',  'create2')->name('lectures.create.step2');
+        Route::get('lectures/create-step3',  'create3')->name('lectures.create.step3');
+    });
+    Route::resource('lectures', LectureController::class);
+
+    /***************************************  notification *********************************/
+    Route::resource('notifications', NotificationController::class)->only('create', 'store');
+
+    /***************************************  Subscription *********************************/
+    Route::controller(SubscriptionController::class)->group(function () {
+        Route::get('subscriptions', 'index')->name('subscriptions.index');
+        Route::get('subscriptions/edit/{status}', 'edit')->name('subscriptions.edit');
+        Route::post('subscriptions/update', 'update')->name('subscriptions.update');
+    });
 });
-
-require __DIR__.'/auth.php';
-Route::middleware('auth')->group(function () {
-    Route::get('/', [\App\Http\Controllers\Admin\DashboardController::class, 'home'])->name('dashboard');
-    Route::get('dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'home'])->name('dashboard');
-});
-///////////////Student Routes////////////
-Route::get('students/{status?}/{search?}',[\App\Http\Controllers\Admin\StudentController::class,'index'])->name('students');
-Route::post('searched-students',[\App\Http\Controllers\Admin\StudentController::class,'search'])->name('search.students');
-// Route::view('add-student','pages.students.create')->name('add.student');
-Route::get('add-student',[\App\Http\Controllers\Admin\StudentController::class,'create'])->name('add.student');
-Route::post('store-student',[\App\Http\Controllers\Admin\StudentController::class,'store'])->name('store.student');
-Route::get('student-requests',[\App\Http\Controllers\Admin\StudentController::class,'getRequests'])->name('student-requests');
-Route::get('student-details/{id}',[\App\Http\Controllers\Admin\StudentController::class,'getStudentDetails'])->name('student-details');
-Route::post('change-student-status',[\App\Http\Controllers\Admin\StudentController::class,'changeStatus'])->name('change.students.status');
-
-Route::get('students-password', [StudentController::class , 'passwordEdit'])->name('student.password-edit');
-Route::post('students-password',[\App\Http\Controllers\Admin\StudentController::class,'passwordUpdate'])->name('student.password-update');
-
-Route::post('reset-token-date',[\App\Http\Controllers\Admin\StudentController::class,'resetTokenDate'])->name('reset.token.date');
-
-Route::get('/fetch-data', [\App\Http\Controllers\Admin\StudentController::class,'fetchData'])->name('fetch.data');
-
-Route::get('student/delete/{student}', [StudentController::class, 'delete'])->name('student.delete');;
-Route::delete('student/{student}', [StudentController::class,'destroy'])->name('student.destroy');
-
-
-///////////////Package Routes////////////
-Route::get('packages',[\App\Http\Controllers\Admin\PackageController::class,'index'])->name('packages');
-Route::get('show',[\App\Http\Controllers\Admin\PackageController::class,'show'])->name('package.show');
-Route::get('paginated-packages',[\App\Http\Controllers\Admin\PackageController::class,'paginatedIndex'])->name('paginated.packages');
-Route::get('create-package', [\App\Http\Controllers\Admin\PackageController::class,'create'])->name('create-package');
-Route::post('store-package',[\App\Http\Controllers\Admin\PackageController::class,'store'])->name('store-package');
-Route::delete('package/{package}',[\App\Http\Controllers\Admin\PackageController::class,'destroy'])->name('package.delete');
-Route::get('edit-package',[\App\Http\Controllers\Admin\PackageController::class,'edit'])->name('packages.edit');
-
-
-///////////////Subject Routes////////////
-Route::get('subjects',[\App\Http\Controllers\Admin\SubjectController::class,'index'])->name('subjects');
-Route::get('subject-subscriptions',[\App\Http\Controllers\Admin\SubscriptionController::class,'getSubscribedStudents'])->name('subject.subscriptions');
-Route::get('create-subject-step1',[\App\Http\Controllers\Admin\SubjectController::class,'create1'])->name('create.subject.step1');
-Route::get('create-subject-step2',[\App\Http\Controllers\Admin\SubjectController::class,'create2'])->name('create.subject.step2');
-Route::post('store-subject',[\App\Http\Controllers\Admin\SubjectController::class,'store'])->name('store-subject');
-Route::delete('subject/{subject}',[\App\Http\Controllers\Admin\SubjectController::class,'destroy'])->name('subject.delete');
-
-///////////////Lecture Routes////////////
-Route::get('lectures/{subjectId?}',[\App\Http\Controllers\Admin\LectureController::class,'index'])->name('lectures');
-Route::get('lecture/{id}',[\App\Http\Controllers\Admin\LectureController::class,'show'])->name('lecture.show');
-Route::get('create-lecture',[\App\Http\Controllers\Admin\LectureController::class,'create'])->name('create.lecture');
-Route::get('create-lecture-step2',[\App\Http\Controllers\Admin\LectureController::class,'create2'])->name('create.lecture.step2');
-Route::get('create-lecture-step3',[\App\Http\Controllers\Admin\LectureController::class,'create3'])->name('create.lecture.step3');
-Route::post('store-lecture',[\App\Http\Controllers\Admin\LectureController::class,'store'])->name('store.lecture');
-Route::get('delete-lecture/{id}',[\App\Http\Controllers\Admin\LectureController::class,'destroy'])->name('delete.lecture');
-
-///////////////Notification Routes////////////
-Route::resource('notification' , NotificationController::class  )->only('create' , 'store');
-
-///////////////Subscription Routes////////////
-Route::get('subscriptions',[\App\Http\Controllers\Admin\SubscriptionController::class,'index'])->name('subscriptions');
-Route::get('subscriptions/approved',[\App\Http\Controllers\Admin\SubscriptionController::class,'getSubs'])->name('subscriptions.approved');
-Route::get('subscriptions/rejected',[\App\Http\Controllers\Admin\SubscriptionController::class,'getSubs'])->name('subscriptions.rejected');
-Route::get('subscriptions/pending',[\App\Http\Controllers\Admin\SubscriptionController::class,'getSubs'])->name('subscriptions.pending');
-Route::post('change-subscriptions-status',[\App\Http\Controllers\Admin\SubscriptionController::class,'changeStatus'])->name('change.subscriptions.status');
-

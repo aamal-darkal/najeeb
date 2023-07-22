@@ -3,10 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Student;
-use Carbon\Carbon;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class StudentsTableSeeder extends Seeder
 {
@@ -26,7 +23,7 @@ class StudentsTableSeeder extends Seeder
                 'land_line' => '8823568',
                 'father_name' => 'dad1',
                 'parent_phone' => '0937731517',
-                'governorate' => 'damascus'
+                'governorate' => 1
 
             ],
             2=>
@@ -38,7 +35,7 @@ class StudentsTableSeeder extends Seeder
                 'land_line' => '9965874',
                 'father_name' => 'dad2',
                 'parent_phone' => '0935896587',
-                'governorate' => 'damascus'
+                'governorate' => 2
             ],
             3 =>
             [
@@ -49,8 +46,7 @@ class StudentsTableSeeder extends Seeder
                 'land_line' => '7758622',
                 'father_name' => 'dad3',
                 'parent_phone' => '0963269856',
-                'governorate' => 'damascus'
-
+                'governorate' => 1
             ],
         ];
         foreach ($students as $student)

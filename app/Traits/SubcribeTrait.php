@@ -2,9 +2,13 @@
 
 namespace App\Traits;
 
+use App\Http\Helpers\MessagingHelper;
 use App\Models\Subject;
+use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 trait SubcribeTrait
 {
@@ -51,5 +55,31 @@ trait SubcribeTrait
             'msg' => $message,
             'subjects' => $subjects
         ];
+    }
+
+
+    private function createUser($student)
+    {
+        //get username
+        $usedUserName = true;
+        while ($usedUserName) {
+            $code = rand(111, 999);
+            $userName = $student->first_name . '_' . $student->last_name . '_' . $code;
+            $usedUserName = User::where('user_name', $userName)->exists();
+        }
+        $usedUserName = true;
+        $password = Str::random(8);
+
+        $user = $student->user()->create([
+            'user_name' =>  $userName,
+            'password' => Hash::make($password),
+        ]);
+
+        //change user state
+        $student->update(['state' => 'current', 'user_id' => $user->id]);
+        $msg = "مرحباً " . $student->first_name . " لقد تم تأكيد طلبكم لقد أصبح لديك حساب في تطبيق نجيب \n أسم المستخدم: " . $userName . " و كلمة السر : " . $password;
+        $to = $student->phone;
+        (new MessagingHelper)->sendMessage($msg, $to);
+        event(new Registered($user));
     }
 }

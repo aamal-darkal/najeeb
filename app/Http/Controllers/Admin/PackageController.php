@@ -9,6 +9,7 @@ use App\Models\Subject;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Session;
 
 class PackageController extends Controller
 {
@@ -54,16 +55,15 @@ class PackageController extends Controller
             $filename = 'no-image.png';
         $package->image = $filename;
         $package->save();
-
-        return redirect()->route('packages');
+        // return redirect()->route('packages');
+        return redirect()->route('packages')->with('success', 'package created successfuly');;
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Request $request)
+    public function show(Package $package)
     {
-        $package = Package::with('subjects')->find($request->package_id);
         return view('pages.packages.show', compact('package'));
     }
 

@@ -35,36 +35,36 @@
             <div class="h3 _700 m-y">
                 {{$statistics['lectures']}}
                 <span class="pull-right">
-				<i class="fa text fa-file-video-o " style="font-size: 2rem"></i>
+				<i class="fa fa-file-video" style="font-size: 2rem"></i>
 			</span>
             </div>
         </div>
     </div>
 </div>
-{{--<div class="row no-gutter primary">--}}
-{{--    <div class="col-md-8">--}}
-{{--        <div class="row no-gutter">--}}
-{{--            <div class="col-sm-6">--}}
-{{--                <div class="p-a-md p-r-0">--}}
-{{--                    <h6 class="m-b-sm">Sales Overview</h6>--}}
-{{--                    <p class="text-sm">--}}
-{{--                        <i class="fa fa-caret-down text-warn"></i> <span class="text-muted">Min:</span> $39,050--}}
-{{--                        <i class="fa fa-caret-up text-success m-l-sm"></i> <span class="text-muted">Max:</span> $78,560--}}
-{{--                    </p>--}}
-{{--                    <div class="list no-padding">--}}
-{{--                        <div class="list-item">--}}
-{{--                            <div class="list-left">--}}
-{{--                                <div class="progress progress-xs w-64 m-y-sm">--}}
-{{--                                    <div class="progress-bar dark-white" style="width: 45%"></div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                            <div class="list-body">--}}
-{{--                                Google advertise network--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                        <div class="list-item">--}}
-{{--                            <div class="list-left">--}}
-{{--                                <div class="progress progress-xs w-64 m-y-sm">--}}
+{{-- <div class="row no-gutter primary">
+   <div class="col-md-8">
+       <div class="row no-gutter">
+           <div class="col-sm-6">
+               <div class="p-a-md p-r-0">
+                   <h6 class="m-b-sm">Sales Overview</h6>
+                   <p class="text-sm">
+                       <i class="fa fa-caret-down text-warn"></i> <span class="text-muted">Min:</span> $39,050
+                       <i class="fa fa-caret-up text-success m-l-sm"></i> <span class="text-muted">Max:</span> $78,560
+                   </p>
+                  <div class="list no-padding">
+                       <div class="list-item">
+                           <div class="list-left">
+                               <div class="progress progress-xs w-64 m-y-sm">
+                                   <div class="progress-bar dark-white" style="width: 45%"></div>
+                               </div>
+                           </div>
+                           <div class="list-body">
+                               Google advertise network
+                           </div>
+                       </div>
+                       <div class="list-item">
+                           <div class="list-left">
+                               <div class="progress progress-xs w-64 m-y-sm"> --}}
 {{--                                    <div class="progress-bar dark-white" style="width: 25%"></div>--}}
 {{--                                </div>--}}
 {{--                            </div>--}}
@@ -313,7 +313,7 @@
 {{--            </ul>--}}
 {{--        </div>--}}
 {{--    </div>--}}
-{{--</div>--}}
+</div>
 
 <!-- ############ PAGE END-->
 @endsection

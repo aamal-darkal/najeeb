@@ -9,7 +9,7 @@
                 </div>
 
                 <div class="box-divider"></div>
-                <form role="form" method="POST" action="{{ route('notification.store') }}" class="container mt-2">
+                <form role="form" method="POST" action="{{ route('notifications.store') }}" class="container mt-2">
                     @csrf
                     @if ($search)
                         <div class="form-group">
@@ -58,7 +58,6 @@
                             @enderror
                         </div>
                     </div>
-
 
 
                     <button type="submit" class="btn white m-b m-t primary">Submit</button>

@@ -5,62 +5,83 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\MessagingHelper;
 use App\Http\Requests\StoreStudentRequest;
+use App\Http\Requests\UpdateStudentRequest;
 use App\Models\Package;
 use App\Models\Student;
-use App\Models\User;
 use App\Models\PaymentMethod;
 use App\Models\Subject;
+use App\Traits\SubcribeTrait;
 use Carbon\Carbon;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class StudentController extends Controller
 {
 
-    public function index($status = null)
+    use SubcribeTrait;
+
+    public function index(Request $request)
     {
+        $state = $request->input('state', 'current');
 
+        $students = Student::where('state', $state)
+            ->with('user')
+            ->with('subjects')
+            ->withCount('subjects')
+            ->with('user')
+            ->paginate(8);
 
+        return view('pages.students.index', compact('students', 'state'));
 
         // if ($request->ajax()) {
         //     $packages = Package::withCount('subjects')->paginate(2);
         //     return view('pages.packages.index', compact('packages'))->render();
-        // }
+        // }       
+    }
 
-        $students = Student::when($status, function ($query, $status) {
-            return $query->where('state', $status);
-        })
-            ->withCount('subjects')
+    public function search(Request $request)
+    {
+        $state = $request->input('state', 'current');
+        $search = $request->input('search') ?? '';
+
+        $students = Student::where('state', $state)
+            ->where(function ($q) use ($search) {
+                return $q->where('first_name', 'LIKE', "%$search%")
+                    ->orWhere('last_name', 'LIKE', "%$search%");
+            })
             ->with('user')
-            ->paginate(7);
-        return view('pages.students.index', compact('students', 'status'));
+            ->with('subjects')
+            ->withCount('subjects')
+            ->paginate(8);
+
+        return view('pages.students.index', compact('students', 'state', 'search'));
     }
 
     function create()
     {
         $paymentMethods = PaymentMethod::get();
         $subjects = Subject::with('package')->get();
-        $packages = Package::get();
+        $packages = Package::with('subjects')->get();
         return view('pages.students.create', compact('paymentMethods', 'subjects', 'packages'));
     }
 
+    /**
+     * store new student with all details (order  , order-subect, payment , student-subject)
+     *
+     * @param StoreStudentRequest $request
+     * @return void
+     */
     public function store(StoreStudentRequest $request)
     {
-        $subjectsIds =  $request->subjects_ids;
-        $amount =  $request->amount;
-        $bill_number =  $request->bill_number;
-        $payment_method_id =  $request->payment_method_id;
+        $validated = $request->validated();
+        $subjectsIds =  $validated['subjects_ids'];
+        $amount =  $validated['amount'];
+        $bill_number =  $validated['bill_number'];
+        $payment_method_id =  $validated['payment_method_id'];
 
         $subjects = Subject::find($subjectsIds);
 
-        if (!$subjects)
-            return back()->with('', 'These subjects does not exist')->withInput();
-
-        $totalCost = $subjects->sum('cost');
-
-        if ($totalCost > $amount)
+        if ($amount < $subjects->sum('cost'))
             return back()->with('error', 'the amount you paid is less than the cost')->withInput();
 
 
@@ -91,19 +112,13 @@ class StudentController extends Controller
 
         $this->createUser($student);
 
-        return redirect()->route('students')->with('success', 'Student was registered successfully');
+        return redirect()->route('students.index')->with('success', 'Student was registered successfully');
     }
 
-    /**
-     * Show the form for removing the specified resource.
-     * 
-     * @param  \App\Models\Domain  $domain
-     * @return \Illuminate\Http\Response
-     */
-    public function delete(Student $student)
+    public function show(Student $student)
     {
-        $student = Student::with('user', 'orders.payments.paymentMethod', 'subjects.package')->withCount('user', 'orders', 'subjects')->find($student->id);
-        return view('pages.students.delete', compact('student'));
+        $student = Student::withCount('user', 'orders', 'subjects')->find($student->id);
+        return view('pages.students.show', compact('student'));
     }
 
     /**
@@ -114,147 +129,159 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        
+
         foreach ($student->orders as $order) {
             foreach ($order->payments as $paymant)
                 $paymant->delete();
             $order->delete();
         }
-                            
+
         $student->delete();
 
         $student->user()->delete();
-        
-        return redirect()->route('students')->with('success', "student deleted successfully");
+
+        return redirect()->route('students.index')->with('success', "student deleted successfully");
     }
 
-    //****************************** functions for get info */
-
-    public function search(Request $request)
+    /**
+     * update many student
+     * either thier state or token of thier account
+     *
+     * @param Request $request
+     * @return void
+     */
+    function updateMany(Request $request)
     {
-        $search = $request->search;
-        $students = Student::when($search, function ($query) use ($search) {
-            return $query->whereHas('user', function ($query) use ($search) {
-                return $query->where('user_name', 'LIKE', "%$search%")->orWhere('last_name', 'LIKE', "%$search%");
-            });
-        })
-            ->withCount('subjects')->with('subjects')->paginate(10);
-
-        return view('pages.students.index', compact('students', 'search'));
-    }
-
-    public function passwordEdit(){
-        $students = student::get();
-        return view('pages.students.password' , compact('students'));
-    }
-
-
-    public function passwordUpdate(Request $request)
-    {
-        $request->validate([
-            'user_id' => 'required',
-            'password' => 'required|min:6'
+        $validated = $request->validate([
+            'action' => 'required',
+            'ids' => 'required',
+            'ids.*' => 'sometimes|exists:students,id'
         ]);
-        $newPassword = $request->password;
-        $user = User::find($request->user_id);
-        $user->update(['password' => Hash::make($newPassword)]);
-        $student = Student::select('first_name', 'phone')->where('user_id', $user->id)->first();
+
+        // reset token of students
+        if ($validated['action'] == 'reset-token') {
+            $students = Student::with('user')->find($validated['ids']);
+            foreach ($students as $student)
+                $student->user->update(['token_birth' => null]);
+            return back()->with('success', 'Studnet\'s token is reset successfully');;
+
+            // ban students
+        } else if (($validated['action'] == 'ban')) {
+            $students = Student::find($validated['ids']);
+            foreach ($students as $student)
+                $student->update(['state' => 'banned']);
+            return back()->with('success', 'Student is banned successfully');;
+        } else if (($validated['action'] == 'unban')) {
+            $students = Student::find($validated['ids']);
+            foreach ($students as $student)
+                $student->update(['state' => 'current']);
+            return back()->with('success', 'Student is ubanned successfully');;
+        }
+    }
+
+    /**
+     * show edit view
+     *
+     * @param Student $student
+     * @return void
+     */
+    public function edit(Student $student)
+    {
+        return view('pages.students.edit', compact('student'));
+    }
+
+    /**
+     * update student
+     *
+     * @param UpdateStudentRequest $request
+     * @param Student $student
+     * @return void
+     */
+    public function update(UpdateStudentRequest $request, Student $student)
+    {
+        $validated = $request->validated();
+        $student->user->update(['user_name' => $validated['user_name']]);
+        $student->update($validated);
+
+        return redirect()->route('students.show', $student)->with('success', 'Data updated successfully');
+    }
+
+    //************ password change  ***************/
+
+    public function passwordEdit(Student $student)
+    {
+        return view('pages.students.password', compact('student'));
+    }
+
+    public function passwordUpdate(Request $request, Student $student)
+    {
+        $validated = $request->validate([
+            'password' => 'required|min:6',
+        ]);
+        $newPassword = $validated['password'];
+        $student->user->update(['password' => Hash::make($newPassword)]);
 
         $msg = "مرحباً $student->first_name لقد تم تغيير كلمة سر حسابك " . "\n" . " كلمة السر الجديدة : $newPassword";
         $to = $student->phone;
 
         (new MessagingHelper)->sendMessage($msg, $to);
 
-        return redirect()->back()->with('success', 'Password changed successfully');
+        return redirect()->route('students.show', $student)->with('success', 'Password changed successfully');
     }
-    public function fetchData(Request $request)
-    {
-        $searchTerm = $request->input('searchTerm');
-        $items = User::select('id', 'user_name')->has('student')->where('user_name', 'LIKE', "%$searchTerm%")->get();
+    //************ subcribe ***************/
 
-        return response()->json($items);
-    }
-
-    public function getRequests()
+    public function subcribeEdit(Student $student)
     {
-        $requests = Student::where('state', 'new')->latest()->get();
-        return view('pages.students.requests', compact('requests'));
+        $paymentMethods = PaymentMethod::get();
+        $subjects = Subject::with('package')->get();
+        $packages = Package::with('subjects')->get();
+        return view('pages.students.subcribe', compact('paymentMethods', 'subjects', 'packages', 'student'));
     }
 
-
-    public function getStudentDetails($id)
+    public function subcribeUpdate(Request $request, Student $student)
     {
-        $student = Student::with('subjects.package', 'lecturesAttended')->withCount('subjects', 'lecturesAttended')->find($id);
-        return view('pages.students.details', compact('student'));
-    }
-    //********************** tasks for student */
-    public function rejectStudent($id)
-    {
-        Student::find($id)->update(['state' => 'rejected']);
+        $request->validate(
+            [
+                'subjects_ids' => ['required', 'array'],
+                'subjects_ids.*' => ['required', 'exists:subjects,id'],
+                'amount' => ['required', 'integer'],
+                'bill_number' => ['nullable', 'digits_between:1,20'],
+                'payment_method_id' => ['nullable', 'exists:App\Models\PaymentMethod,id'],
+            ]
+        );
+        $validated = $request->all(); /**need review */
+        $subjectsIds =  $validated['subjects_ids'];
+        $amount =  $validated['amount'];
+        $bill_number =  $validated['bill_number'];
+        $payment_method_id =  $validated['payment_method_id'];
 
-        return redirect()->back();
-    }
-    /**
-     * approve or reject student
-     *
-     * @param Request $request
-     * @return void
-     */
-    public function changeStatus(Request $request)
-    {
-        $validated = $request->validate([
-            'status' => 'required|in:new,current,rejected',
-            'ids' => 'required'
-        ]);
-        $status = $validated['status'];
-        if (is_int($validated['ids']))
-            $validated['ids'] = array($validated['ids']);
-        $students = Student::whereIn('id', $validated['ids'])->get();
+        $subjects = Subject::find($subjectsIds);
 
-        if ($status == 'rejected') {
-            $students->each(function ($student) {
-                $student->update(['state' => 'rejected']);
-            });
-        } else {
-            //accepted
-            $students->each(function ($student) {
-                $this->createUser($student);
-            });
+        if ($amount < $subjects->sum('cost'))
+            return back()->with('error', 'the amount you paid is less than the cost')->withInput();
+
+
+        $order = $student->orders()->create(
+            [
+                'amount' => $amount,
+            ]
+        );
+
+        foreach ($subjects as $subject) {
+            $order->subjects()->attach($subject->id, ['cost' => $subject->cost]);
         }
-        return back()->with('success', 'Opertaion done successfuly');
-    }
-
-    private function createUser($student)
-    {
-        //get username
-        $usedUserName = true;
-        while ($usedUserName) {
-            $code = rand(111, 999);
-            $userName = $student->first_name . '_' . $student->last_name . '_' . $code;
-            $usedUserName = User::where('user_name', $userName)->exists();
-        }
-        $usedUserName = true;
-        $password = Str::random(8);
-
-        $user = $student->user()->create([
-            'user_name' =>  $userName,
-            'password' => Hash::make($password),
+        $order->payments()->create([
+            'bill_number' => $bill_number,
+            'amount' => $amount,
+            'payment_method_id' => $payment_method_id,
+            'start_duration_date' => $subjects->first()->package->start_date,
+            'payment_date' => Carbon::now(), //should be given by app
+            'state' => 'approved'
         ]);
 
-        //change user status
-        $student->update(['state' => 'current', 'user_id' => $user->id]);
-        $msg = "مرحباً " . $student->first_name . " لقد تم تأكيد طلبكم لقد أصبح لديك حساب في تطبيق نجيب \n أسم المستخدم: " . $userName . " و كلمة السر : " . $password;
-        $to = $student->phone;
-        (new MessagingHelper)->sendMessage($msg, $to);
-        event(new Registered($user));
+        $student->subjects()->attach($subjectsIds);
+
+
+        return redirect()->route('students.show', $student)->with('success', 'Student subcribe successfully');
     }
-
-
-    public function resetTokenDate(Request $request)
-    {
-        User::find($request->user_id)->update(['token_birth' => null]);
-        return back()->with('success', 'token is reset successfully');;
-    }
-
-    
 }

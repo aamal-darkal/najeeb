@@ -17,7 +17,7 @@ class UsersTableSeeder extends Seeder
     {
         $admin = [
             'user_name' => 'Admin',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('najFor@llStudents'),
             'role' => 'admin',
             'token_birth' => Carbon::now(),
             'remember_token' => null,

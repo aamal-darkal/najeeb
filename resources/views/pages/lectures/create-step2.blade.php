@@ -4,7 +4,7 @@
         <div class="col-xs-12 col-md-8 offset-md-2">
             <div class="wrapper-progressBar">
                 <ul class="progressBar">
-                    <li><a href="{{ route('create.lecture') }}" title="change package" class="md-btn md-raised m-b-sm w-sm primary text-white r-15" ><i class="fas fa-long-arrow-left"></i> {{ $package_name }}</a>    </li>
+                    <li><a href="{{ route('lectures.create') }}" title="change package" class="md-btn md-raised m-b-sm w-sm primary text-white r-15" ><i class="fas fa-long-arrow-left"></i> {{ $package_name }}</a>    </li>
                     <li class="active">Choose subject</li>
                     <li>Create lecture</li>
                 </ul>
@@ -40,7 +40,7 @@
                                         <td>{{ $subject->cost }}</td>
                                         <td>
 
-                                            <form method="get" action="{{ route('create.lecture.step3') }}">
+                                            <form method="get" action="{{ route('lectures.create.step3') }}">
                                                 <select name="week_program_id" id="" class="form-control">
                                                     @foreach ($subject->weekProgs as $weekProg)
                                                         <option value="{{ $weekProg->id }}">{{ $weekProg->day }} -

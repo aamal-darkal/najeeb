@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('order_id')->constrained()->onDetete('cascade');
             $table->foreignId('payment_method_id')->constrained();
-            $table->string('bill_number',20);
+            $table->string('bill_number',20)->nullable();
             $table->integer('amount' );
             $table->string('start_duration_date');
             $table->enum('state',['pending','rejected','approved'])->default('pending');

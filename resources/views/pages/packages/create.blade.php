@@ -10,7 +10,7 @@
                     </div>
                     <div class="box-divider m-0"></div>
                     <div class="box-body">
-                        <form role="form" method="POST" action="{{ route('store-package') }}" enctype="multipart/form-data">
+                        <form role="form" method="POST" action="{{ route('packages.store') }}" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Name</label>

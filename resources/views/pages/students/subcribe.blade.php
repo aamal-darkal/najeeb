@@ -4,7 +4,13 @@
     <div class="padding">
         <div class="box col-md-6 offset-md-3">
             <div class="box-header">
-                <h2 class="text-primary text-2x">Add new Student</h2>
+                <h2 class="text-primary text-2x"> Subcribe  {{ $student->first_name }} {{ $student->father_name }}
+                    {{ $student->last_name }}</h2>
+            </div>
+            <div>
+                @foreach ($errors->all() as $error)
+                    {{ $error }}
+                @endforeach
             </div>
             <div class="box-divider m-0"></div>
             <div class="box-body">
@@ -35,100 +41,9 @@
                 </div>  
                 {{-- end of template --}}
 
-                <form role="form" method="POST" action="{{ route('students.store') }}">
+                <form role="form" method="POST" action="{{ route('students.subcribe-update' , $student) }}">
                     @csrf
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col">
-                                <label for="first_name">First name</label>
-                                <input type="text" id="first_name" class="form-control" placeholder="Enter First name"
-                                    name="first_name" value="{{ old('first_name') }}" required max="50">
-
-                                <div class="text-danger">
-                                    @error('first_name')
-                                        {{ $message }}
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="col">
-                                <label for="last_name">Last name</label>
-                                <input type="text" id="last_name" class="form-control" placeholder="Enter Last name"
-                                    name="last_name" value="{{ old('last_name') }}" required max="50">
-                                <div class="text-danger">
-                                    @error('last_name')
-                                        {{ $message }}
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col">
-                                <label for="father_name">Father name</label>
-                                <input type="text" id="father_name" class="form-control" placeholder="Enter Father name"
-                                    name="father_name" value="{{ old('father_name') }}" required max="50">
-                                <div class="text-danger">
-                                    @error('father_name')
-                                        {{ $message }}
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col">
-                                <label for="governorate">Governorate</label>
-                                <select name="governorate" id="governorate" 
-                                class="form-control mt-2 ui search selection dropdown">
-                                    <option hidden selected value="">Enter governorate</option>
-                                    <option value="دمشق" @selected(old('governorate') == 'دمشق')>دمشق</option>
-                                    <option value="ريف دمشق" @selected(old('governorate') == 'ريف دمشق')>ريف دمشق</option>
-                                    <option value="حلب" @selected(old('governorate') == 'حلب')>حلب</option>
-                                    <option value="حمص" @selected(old('governorate') == 'حمص')>حمص</option>
-                                    <option value="اللاذقية" @selected(old('governorate') == 'اللاذقية')>اللاذقية</option>
-                                    <option value="حماه" @selected(old('governorate') == 'حماه')>حماه</option>
-                                    <option value="طرطوس" @selected(old('governorate') == 'طرطوس')>طرطوس</option>
-                                    <option value="الرقة" @selected(old('governorate') == 'الرقة')>الرقة</option>
-                                    <option value="ديرالزور" @selected(old('governorate') == 'ديرالزور')>ديرالزور</option>
-                                    <option value="السويداء" @selected(old('governorate') == 'السويداء')>السويداء</option>
-                                    <option value="الحسكة" @selected(old('governorate') == 'الحسكة')>الحسكة</option>
-                                    <option value="درعا" @selected(old('governorate') == 'درعا')>درعا</option>
-                                    <option value="إدلب" @selected(old('governorate') == 'إدلب')>إدلب</option>
-                                    <option value="القنيطرة" @selected(old('governorate') == 'القنيطرة')>القنيطرة</option>
-                                </select>
-                                <div class="text-danger">
-                                    @error('governorate')
-                                        {{ $message }}
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col">
-                                <label for="phone">Phone</label>
-                                <input type="text" class="form-control" placeholder="Enter Phone Number" name="phone"
-                                    value="{{ old('phone') }}" required minlength="10" maxlength="10" pattern="[0-9]{7,10}" title="enter valid phone">
-                                <div class="text-danger">
-                                    @error('phone')
-                                        {{ $message }}
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col">
-                                <label for="parent_phone">Parent phone</label>
-                                <input type="text" id="parent_phone" class="form-control"
-                                    placeholder="Enter parent phone" name="parent_phone" value="{{ old('parent_phone') }}"
-                                     minlength="10" maxlength="10" pattern="[0-9]{10}" title="enter valid phone">
-                                <div class="text-danger">
-                                    @error('parent_phone')
-                                        {{ $message }}
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
         {{-- ********************************* subjects ************************ --}}
 
                     <div class="form-group">
@@ -175,7 +90,7 @@
                             <div class="col-md-3 text-secondary py-2">
                                 <label for="sum-subject">sum of subject</label>
                             </div>
-                            <div class="col-md-3"><input id="sum-subject" type="text" value=0 class="form-control w-sm" disabled>
+                            <div class="col-md-3"><input id="sum-subject" type="text" value=0 class="form-control" disabled>
                             </div>
                         </div>
                     </div>
@@ -192,27 +107,16 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col">
-                                <label for="land_line">Land line</label>
-                                <input type="text" id="land_line" class="form-control"
-                                    placeholder="Enter land line number" name="land_line" value="{{ old('land_line') }}"
-                                     minlength="7" maxlength="10" pattern="[0-9]{7,10}" title="enter valid phone">
-                                <div class="text-danger">
-                                    @error('land_line')
-                                        {{ $message }}
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
+                          
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group p-2">
                         <div class="row">
                             <div class="col">
                                 <label for="bill_number">bill_number</label>
                                 <input type="text" id="bill_number" class="form-control"
                                     placeholder="Enter bill Number" name="bill_number" value="{{ old('bill_number') }}"
-                                        pattern="[0-9]{1-20}" maxlength="20">
+                                        pattern="[0-9]{1,20}" maxlength="20">
                                 <div class="text-danger">
                                     @error('bill_number')
                                         {{ $message }}
@@ -236,7 +140,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn primary m-b">Add Student</button>
+                    <button type="submit" class="btn primary m-b">Subcribes</button>
                 </form>
             </div>
         </div>

@@ -22,7 +22,7 @@ class SubjectController extends Controller
         return view('pages.subjects.index',compact('subjects'));
     }
 
-    public function create1()
+    public function create()
     {
         $packages = Package::with('subjects')->withCount('subjects')->get();
         return view('pages.subjects.create-step1',compact('packages'));
@@ -34,13 +34,7 @@ class SubjectController extends Controller
     public function create2(Request $request)
     {
         $package = Package::with('subjects','subjects.weekProgs')->find($request->package_id);
-        $notAllowedTimes = [];
-        foreach ($package->subjects as $subject)
-        {
-            // array_push($notAllowedTimes , [Carbon::parse($subject->weekProg->start_time)->format('g'), Carbon::parse($subject->weekProg->end_time)->format('g')]);
-            // $notAllowedTimes[] =  [$subject->weekProg->day,Carbon::parse($subject->weekProg->start_time)->format('g:i A'), Carbon::parse($subject->weekProg->end_time)->format('g:i A') ];
-        }
-        // return $notAllowedTimes;
+        $notAllowedTimes = [];        
         return view('pages.subjects.create-step2',compact('package', 'notAllowedTimes'));
     }
 

@@ -5,20 +5,22 @@
     <div class="padding">
         <div class="box">
             <div class="box-header">
-                <h2>Subscriptions</h2>
+                <h2 class="text-primary">Subscriptions - All</h2>
             </div>
-            <div class="table-responsive">
+            <div>
                 @if ($payments->isNotEmpty())
                     @csrf
                     <table class="table table-striped b-t b-b">
                         <thead>
                             <tr>
                                 <th></th>
+                                <th>Student</th>
                                 <th>Bill number</th>
                                 <th>Payed amount</th>
                                 <th>Ordered at</th>
                                 <th>Status</th>
-                                <th>Orderd by</th>
+                                <th>subjects</th>
+
                                 <th></th>
                             </tr>
                         </thead>
@@ -26,9 +28,12 @@
                             @foreach ($payments as $payment)
                                 <tr>
                                     <td></td>
+                                    <td>{{ $payment->order->student->first_name }}
+                                        {{ $payment->order->student->father_name }}
+                                        {{ $payment->order->student->last_name }}</td>
                                     <td>{{ $payment->bill_number }}</td>
                                     <td>{{ $payment->amount }}</td>
-                                    <td>{{ $payment->payment_date }}</td>
+                                    <td>{{ \Carbon\Carbon::create($payment->payment_date)->diffForHumans() }}</td>
                                     @if ($payment->state == 'approved')
                                         <td><span class="label success" title="approved">{{ $payment->state }}</span>
                                         </td>
@@ -40,20 +45,35 @@
                                         </td>
                                     @endif
                                     <td>
-                                        <a class="md-btn md-raised w-100 primary"
-                                            href="{{ route('student-details', $payment->order->student->id) }}">{{ $payment->order->student->first_name . ' ' . $payment->order->student->last_name }}</a>
+                                        <div class="btn-group dropdown">
+                                            <button class="btn white dropdown-toggle"
+                                                data-toggle="dropdown">{{ $payment->order->subjects_count }}</button>
+                                            <div class="dropdown-menu dropdown-menu-scale">
+                                                <ul class="timeline">
+                                                    @foreach ($payment->order->subjects as $subject)
+                                                        <li class="tl-item">
+                                                            <div class="tl-wrap b-primary"
+                                                                style="margin-left: 10px; padding: 4px 0px 4px 20px">
+                                                                <div class="tl-content text-center">
+                                                                    {{ $subject->name }}
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </td>
+                                    <td></td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 @else
-                    <div class="container w-75">
-                        <div class="text-center">
-                            <img src="{{ asset('images/defaults/no-data.png') }}" alt="" class="w-50">
+                    <div class="container w-75 text-center">
+                        <img src="{{ asset('images/defaults/no-data.png') }}" alt="" class="w-50">
 
-                            <p class="h4 text-primary">There is no subscriptions</p>
-                        </div>
+                        <p class="h4 text-primary">There is no pending subscriptions</p>
                     </div>
                 @endif
             </div>

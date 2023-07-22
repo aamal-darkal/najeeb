@@ -44,11 +44,11 @@
                                         <td class="text-center">{{ $package->subjects_count }}</td>
                                         <td class="text-center">
                                             <a class="md-btn md-raised m-b-sm w-sm primary text-white r-15" 
-                                                href="{{ route('package.show', ['package_id' => $package->id]) }}">Details</a>
+                                                href="{{ route('packages.show', ['package' => $package]) }}">Details</a>
                                         </td>
                                         <td class="text-center">
                                             <a class="md-btn md-raised m-b-sm w-xs primary text-white r-15"
-                                                href="{{ route('create.lecture.step2', ['package_id' => $package->id, 'package_name' => $package->name]) }}"><i
+                                                href="{{ route('lectures.create.step2', ['package_id' => $package->id, 'package_name' => $package->name]) }}"><i
                                                     class="fas fa-long-arrow-right"></i></a>
                                         </td>
                                     </tr>
