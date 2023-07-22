@@ -11,7 +11,8 @@
     <div class="container text-center py-3 ">
         <a href="{{ route('students.password-edit', $student) }}" class="md-btn md-raised w-sm accent py-1"> edit password</a>
         <a href="{{ route('students.edit', $student) }}" class="md-btn md-raised w-sm py-1 primary">Edit data</a>
-        <a href="{{ route('students.subcribe-edit' , $student) }}" class="md-btn md-raised w-sm py-1 info">subcribe</a>
+        <a href="{{ route('students.subcribe-edit', $student) }}" class="md-btn md-raised w-sm py-1 info">subcribe</a>
+        <a href="{{ route('students.notification-create', $student) }}" class="md-btn md-raised w-sm py-1 warn">notify</a>
         <form action="{{ route('students.destroy', ['student' => $student]) }}" class="d-inline" method="post"
             onsubmit="return confirm('delete student ?')">
             @csrf
@@ -58,10 +59,10 @@
     </div>
 
     {{-- subjects --}}
-    @if ($student->subjects_count)
+    @if ($student->subjects->count())
         <div class="container col-md-8 mt-5">
-            <h5 class="text-primary text-center w-100 my-0"> Subjects </h5>
-            <table class="table table-bordered table-condensed">
+            <h5 class="text-primary w-100 my-0"> Subjects </h5>
+            <table class="table table-bordered table-condensed bg-white">
                 <thead class="dker text-dark">
                     <tr>
                         <th>name</th>
@@ -83,10 +84,10 @@
     @endif
 
     {{-- orders --}}
-    @if ($student->orders_count)
+    @if ($student->orders->count())
         <div class="container col-md-8 mt-5">
-            <h5 class="text-primary text-center w-100 my-0"> Orders </h5>
-            <table class="table table-bordered table-condensed">
+            <h5 class="text-primary w-100 my-0"> Orders </h5>
+            <table class="table table-bordered table-condensed bg-white">
 
                 <thead class="dker text-dark">
                     <tr>
@@ -107,8 +108,8 @@
 
         {{-- payments --}}
         <div class="container col-md-8 my-5">
-            <h5 class="text-primary text-center w-100 my-0"> Payments </h5>
-            <table class="table table-bordered table-condensed">
+            <h5 class="text-primary w-100 my-0"> Payments </h5>
+            <table class="table table-bordered table-condensed bg-white">
                 <thead class="dker text-dark">
                     <tr>
                         <th>amount</th>
@@ -136,6 +137,33 @@
             </table>
         </div>
     @endif
+
+    @if ($student->notifications->count())
+        <div class="container col-md-8 mt-5">
+            <h5 class="text-primary w-100 my-0"> Notications </h5>
+            <table class="table table-bordered table-condensed bg-white">
+                <thead class="dker text-dark">
+                    <tr>
+                        <th>title</th>
+                        <th>description</th>
+                        <th>time_publish</th>
+                        <th>seen</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($student->notifications as $notification)
+                        <tr>
+                            <td>{{ $notification->title }}</td>
+                            <td>{{ $notification->description }}</td>
+                            <td>{{ $notification->time_publish }}</td>
+                            <td>{{ $notification->pivot->seen }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+
     <br>
     <br>
     <br>

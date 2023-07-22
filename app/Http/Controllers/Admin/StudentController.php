@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\MessagingHelper;
+use App\Http\Helpers\NotificationHelper;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
+use App\Models\Notification;
 use App\Models\Package;
 use App\Models\Student;
 use App\Models\PaymentMethod;
@@ -117,7 +119,6 @@ class StudentController extends Controller
 
     public function show(Student $student)
     {
-        $student = Student::withCount('user', 'orders', 'subjects')->find($student->id);
         return view('pages.students.show', compact('student'));
     }
 
@@ -206,13 +207,24 @@ class StudentController extends Controller
         return redirect()->route('students.show', $student)->with('success', 'Data updated successfully');
     }
 
-    //************ password change  ***************/
-
+    //****************************** password change  **************************************/
+    /**
+     * show input for password
+     *
+     * @param Student $student
+     * @return void
+     */
     public function passwordEdit(Student $student)
     {
         return view('pages.students.password', compact('student'));
     }
-
+    /**
+     * saved Entered password
+     *
+     * @param Request $request
+     * @param Student $student
+     * @return void
+     */
     public function passwordUpdate(Request $request, Student $student)
     {
         $validated = $request->validate([
@@ -228,7 +240,46 @@ class StudentController extends Controller
 
         return redirect()->route('students.show', $student)->with('success', 'Password changed successfully');
     }
-    //************ subcribe ***************/
+    //****************************** send notication change  **************************************/
+    /**
+     * show input for password
+     *
+     * @param Student $student
+     * @return void
+     */
+    public function noticationCreate(Student $student)
+    {
+        return view('pages.students.notifcation', compact('student'));
+    }
+    /**
+     * saved Entered password
+     *
+     * @param Request $request
+     * @param Student $student
+     * @return void
+     */
+    public function noticationStore(Request $request, Student $student)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:25',
+            'description' => 'required|string|max:255',
+            'time_publish' => 'required|date',
+        ]);
+        $validated['time_publish'] = Carbon::parse($validated['time_publish'])->format('Y-m-d H:i');
+        $validated['created_at'] = now();
+        
+        $notification = Notification::create($validated);
+        
+        $student->notifications()->attach($notification);
+        
+        $token = $student->user->fcm_token;
+
+        NotificationHelper::sendNotification( $notification , $token );
+        
+        return redirect()->route('students.show' , $student)->with('success', 'Notification has been sent successfully');
+
+    }
+    //************************************** subcribe *****************************************/
 
     public function subcribeEdit(Student $student)
     {
@@ -240,7 +291,7 @@ class StudentController extends Controller
 
     public function subcribeUpdate(Request $request, Student $student)
     {
-        $request->validate(
+        $validated = $request->validate(
             [
                 'subjects_ids' => ['required', 'array'],
                 'subjects_ids.*' => ['required', 'exists:subjects,id'],
@@ -249,7 +300,6 @@ class StudentController extends Controller
                 'payment_method_id' => ['nullable', 'exists:App\Models\PaymentMethod,id'],
             ]
         );
-        $validated = $request->all(); /**need review */
         $subjectsIds =  $validated['subjects_ids'];
         $amount =  $validated['amount'];
         $bill_number =  $validated['bill_number'];

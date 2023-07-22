@@ -35,8 +35,6 @@ class NotificationController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->all();
-        // return $validated;
         $validated = $request->validate([
             'student_ids' => 'sometimes|array',
             'student_ids.*' => 'sometimes|exists:students,id',
