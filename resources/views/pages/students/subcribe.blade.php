@@ -4,7 +4,9 @@
     <div class="padding">
         <div class="box col-md-6 offset-md-3">
             <div class="box-header">
-                <h2 class="text-primary text-2x"> Subcribe  {{ $student->first_name }} {{ $student->father_name }}
+                <a class="md-btn md-raised primary text-white m-0"
+                    href="{{ route('students.show', $student) }}"><i class="fas fa-long-arrow-left"></i></a>
+                <h2 class="text-primary text-2x d-inline ml-2"> Subcribe  {{ $student->first_name }} {{ $student->father_name }}
                     {{ $student->last_name }}</h2>
             </div>
             <div>
@@ -41,7 +43,7 @@
                 </div>  
                 {{-- end of template --}}
 
-                <form role="form" method="POST" action="{{ route('students.subcribe-update' , $student) }}">
+                <form role="form" method="POST" action="{{ route('students.subcribe-store' , $student) }}">
                     @csrf
                     
         {{-- ********************************* subjects ************************ --}}

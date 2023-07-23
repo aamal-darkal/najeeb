@@ -4,7 +4,7 @@
         <div class="col-xs-12 col-md-8 offset-md-2">
             <div class="wrapper-progressBar">
                 <ul class="progressBar">
-                    <li><a href="{{ route('lecture.create') }}" title="change package"
+                    <li><a href="{{ route('lectures.create') }}" title="change package"
                             class="md-btn md-raised m-b-sm w-sm primary text-white r-15"><i
                                 class="fas fa-long-arrow-left"></i> {{ $package_name }}</a> </li>
                     <li><a href="{{ route('lectures.create.step2', ['package_name' => $package_name, 'package_id' => $package_id]) }}"

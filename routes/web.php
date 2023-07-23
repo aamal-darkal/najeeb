@@ -34,11 +34,11 @@ Route::middleware('auth')->group(function () {
     /***************************************  Students *********************************/
     Route::controller(StudentController::class)->group(function () {
         Route::get('students-password/{student}', 'passwordEdit')->name('students.password-edit');
-        Route::post('students-password/{student}', 'subcribeCreate')->name('students.password-update');
+        Route::post('students-password/{student}', 'passwordUpdate')->name('students.password-update');
         Route::get('students-notification/{student}', 'noticationCreate')->name('students.notification-create');
         Route::post('students-notification/{student}', 'noticationStore')->name('students.notification-store');
-        Route::get('students-subcribe/{student}', 'subcribeEdit')->name('students.subcribe-edit');
-        Route::post('students-subcribe/{student}', 'subcribeUpdate')->name('students.subcribe-update');
+        Route::get('students-subcribe/{student}', 'subcribeCreate')->name('students.subcribe-create');
+        Route::post('students-subcribe/{student}', 'subcribeStore')->name('students.subcribe-store');
         Route::post('student/update-many/',  'updateMany')->name('students.update-many');
         Route::get('students-search', 'search')->name('students.search');
     });

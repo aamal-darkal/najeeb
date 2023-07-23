@@ -4,9 +4,11 @@
     <div class="container padding">
         <div style="margin-left: 20%; margin-right: 20%">
             <div class="box">
-                <div class="box-header text-primary text-xl">
-                    <h2>Send notification to {{ $student->first_name }} {{ $student->father_name }}
-                        {{ $student->last_name }}</h2>
+                <div class="box-header">
+                    <a class="md-btn md-raised primary text-white m-0"
+                    href="{{ route('students.show', $student) }}"><i class="fas fa-long-arrow-left"></i></a>
+                    <h2 class="text-primary text-2x d-inline ml-2">Send notification to {{ $student->first_name }} {{ $student->father_name }}
+                        {{ $student->last_name }}</h2>                        
                 </div>
 
                 <div class="box-divider"></div>

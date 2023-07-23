@@ -2,16 +2,16 @@
 @section('content')
 
     <div class="box-header p-1 pl-3">
-        <a class="md-btn md-raised primary text-white m-0" onclick="history.back()"><i class="fas fa-long-arrow-left"></i></a>
+        <a class="md-btn md-raised primary text-white m-0" onclick="location={{ route('students.index') }}"><i class="fas fa-long-arrow-left"></i></a>
 
-        <h2 class="text-primary d-inline ml-2"> Student info: {{ $student->first_name }} {{ $student->father_name }}
+        <h2 class="text-primary d-inline ml-2 text-2x"> Student info: {{ $student->first_name }} {{ $student->father_name }}
             {{ $student->last_name }} </h2>
     </div>
 
     <div class="container text-center py-3 ">
         <a href="{{ route('students.password-edit', $student) }}" class="md-btn md-raised w-sm accent py-1"> edit password</a>
         <a href="{{ route('students.edit', $student) }}" class="md-btn md-raised w-sm py-1 primary">Edit data</a>
-        <a href="{{ route('students.subcribe-edit', $student) }}" class="md-btn md-raised w-sm py-1 info">subcribe</a>
+        <a href="{{ route('students.subcribe-create', $student) }}" class="md-btn md-raised w-sm py-1 info">subcribe</a>
         <a href="{{ route('students.notification-create', $student) }}" class="md-btn md-raised w-sm py-1 warn">notify</a>
         <form action="{{ route('students.destroy', ['student' => $student]) }}" class="d-inline" method="post"
             onsubmit="return confirm('delete student ?')">

@@ -71,12 +71,12 @@
                                                 Reject</button>
                                         @elseif ($status == 'approved')
                                             <button type="submit" name="action" value="unapprove"
-                                                class="md-btn md-raised w-xs btn-outline-danger p-0 "
+                                                class="md-btn md-raised w-sm btn-outline-danger p-0"
                                                 onclick="document.querySelector('[type=\'checkbox\'][value=\'{{ $payment->id }}\']').checked=true">
                                                 Unapprove</button>
-                                        @elseif ($status == 'rejected')
+                                        @elseif ($status == 'rejected') 
                                             <button type="submit" name="action" value="unreject"
-                                                class="md-btn md-raised w-xs btn-outline-success p-0"
+                                                class="md-btn md-raised w-sm btn-outline-success p-0"
                                                 onclick="document.querySelector('[type=\'checkbox\'][value=\'{{ $payment->id }}\']').checked=true">
                                                 Unreject</button>
                                         @endif

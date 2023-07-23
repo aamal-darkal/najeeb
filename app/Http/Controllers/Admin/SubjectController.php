@@ -51,7 +51,7 @@ class SubjectController extends Controller
             $subject->weekProgs()->create(['day' => $day ,'start_time' => $start_time,'end_time' => $end_time]);
         }             
 
-        return redirect()->route('subjects');
+        return redirect()->route('subjects.index');
     }
 
     /**

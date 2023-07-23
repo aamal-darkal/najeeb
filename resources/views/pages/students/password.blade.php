@@ -8,14 +8,16 @@
 
         <div class="box col-md-6 offset-md-3">
             <div class="box-header">
-                <h2 class="text-primary"> Change Password</h2>
+                <a class="md-btn md-raised primary text-white m-0"
+                    href="{{ route('students.show', $student) }}"><i class="fas fa-long-arrow-left"></i></a>
+                <h2 class="text-primary text-2x d-inline ml-2"> Change Password</h2>
             </div>
             <div class="box-divider m-0"></div>
 
             <div class="box-body p-5">
 
-                <form role="form" method="POST" action="{{ route('students.password-update' , $student) }}"> 
-                    @csrf                       
+                <form role="form" method="POST" action="{{ route('students.password-update', $student) }}">
+                    @csrf
                     <div class="form-group">
                         <label for="password">New Password</label>
                         <input type="text" class="form-control" placeholder="Enter new password" name="password"

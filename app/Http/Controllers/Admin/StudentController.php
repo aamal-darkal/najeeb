@@ -281,7 +281,7 @@ class StudentController extends Controller
     }
     //************************************** subcribe *****************************************/
 
-    public function subcribeEdit(Student $student)
+    public function subcribeCreate(Student $student)
     {
         $paymentMethods = PaymentMethod::get();
         $subjects = Subject::with('package')->get();
@@ -289,7 +289,7 @@ class StudentController extends Controller
         return view('pages.students.subcribe', compact('paymentMethods', 'subjects', 'packages', 'student'));
     }
 
-    public function subcribeUpdate(Request $request, Student $student)
+    public function subcribeStore(Request $request, Student $student)
     {
         $validated = $request->validate(
             [
@@ -333,5 +333,39 @@ class StudentController extends Controller
 
 
         return redirect()->route('students.show', $student)->with('success', 'Student subcribe successfully');
+    }
+    public function subcribeDestroy(Request $request, Student $student)
+    {
+        // $validated = $request->validate(
+        //     [
+        //         'subject_id' => ['required', 'exists:subjects,id'],
+        //     ]
+        // );
+        // $subjectId =  $validated['subject_id'];
+
+
+        // $order = $student->orders()->create(
+        //     [
+        //         'amount' => $amount,
+        //     ]
+        // );
+        
+        // $cost = $order->subjects()->attach($subject->id, ['cost' => $subject->cost]);
+        
+        //     $order->subjects()->attach($subject->id, ['cost' => $subject->cost]);
+        // }
+        // $order->payments()->create([
+        //     'bill_number' => $bill_number,
+        //     'amount' => $amount,
+        //     'payment_method_id' => $payment_method_id,
+        //     'start_duration_date' => $subjects->first()->package->start_date,
+        //     'payment_date' => Carbon::now(), //should be given by app
+        //     'state' => 'approved'
+        // ]);
+
+        // $student->subjects()->attach($subjectsIds);
+
+
+        // return redirect()->route('students.show', $student)->with('success', 'Student subcribe successfully');
     }
 }

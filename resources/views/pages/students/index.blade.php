@@ -132,7 +132,7 @@
                         </button>
                     @elseif($state == 'banned')
                         <button type="submit" name="action" value="unban"
-                            class="btn btn-sm btn-ouline-info btn-raise mb-3 r-15"
+                            class="btn btn-sm text-info btn-raise mb-3 r-15"
                             onclick="document.querySelector('[type=\'checkbox\'][value=\'{{ $student->id }}\']').checked=true">
                             <i class="fa fa-unlock"></i> Many Unban
                         </button>

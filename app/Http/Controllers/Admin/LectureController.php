@@ -9,7 +9,6 @@ use App\Models\Lecture;
 use App\Models\Notification;
 use App\Models\Package;
 use App\Models\Subject;
-use App\Models\Week_program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -109,12 +108,12 @@ class LectureController extends Controller
         $notification = Notification::create(['title' => 'New Lecture', 'description' => "$lecture->name at $lecture->date", 'time_publish' => $validated['date'] , 'created_at'  => now()]);
 
         NotificationHelper::broadcastLectureNotification($validated['subject_id'], $notification );
-        return redirect()->route('lectures')->with('success' , 'Lecture Saved successfuly');
+        return redirect()->route('lectures.index')->with('success' , 'Lecture Saved successfuly');
     }
 
     public function destroy($lecture)
     {
         $lecture->delete();
-        return redirect()->route('lectures');
-    }
+        return redirect()->route('lectures.index');
+    }   
 }

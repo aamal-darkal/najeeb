@@ -4,7 +4,9 @@
     <div class="padding">
         <div class="box col-md-6 offset-md-3">
             <div class="box-header">
-                <h2 class="text-primary text-2x">Edit Student Data</h2>
+                <a class="md-btn md-raised primary text-white m-0"
+                    href="{{ route('students.show', $student) }}"><i class="fas fa-long-arrow-left"></i></a>
+                <h2 class="text-primary text-2x d-inline ml-2">Edit Student Data</h2>
             </div>
             <div class="box-divider m-0"></div>
             <div class="box-body">
