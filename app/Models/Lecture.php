@@ -20,7 +20,7 @@ class Lecture extends Model
 
     public function pdfFiles()
     {
-        return $this->hasMany(pdfFile::class);
+        return $this->hasMany(PdfFile::class);
     }
 
     public function students()
