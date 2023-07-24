@@ -9,7 +9,7 @@
                 <div class="box p-a">
                     <div class="pull-right h4 m-b-xs">
                         <form action="{{ route('lectures.destroy', $lecture) }}"  method="POST"
-                            onsubmit="return alert('Delete lecture {{ $lecture->name }} ?')">
+                            onsubmit="return confirm('Delete lecture {{ $lecture->name }} ?')">
                             @csrf
                             @method('delete')
                             <button class="btn btn-outline-danger border-0"><i class="fa fa-trash text-danger"></i></button>
@@ -49,7 +49,7 @@
                                                     <i class="fa fa-download text-primary "></i></a></td>
                                             <td class="h4">
                                                 <form action="{{ route('lectures.destroy-pdf', $pdfFile) }}" method="POST"
-                                                    onsubmit="return alert('Delete file {{ $pdfFile->pdf_link }} ?')">
+                                                    onsubmit="return confirm('Delete file {{ $pdfFile->pdf_link }} ?')">
                                                     @csrf
                                                     @method('delete')
                                                     <button class="btn btn-outline-danger border-0"><i
