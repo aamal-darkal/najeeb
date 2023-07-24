@@ -131,7 +131,7 @@ class LectureController extends Controller
      * @param [type] $pdfFile
      * @return void
      */
-    public function destroyPdf(pdfFile $pdfFile)
+    public function destroyPdf(PdfFile $pdfFile)
     {
         $link_pdf = $pdfFile->link_pdf;
         $pdfFile->delete();
