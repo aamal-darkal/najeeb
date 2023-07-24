@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Week_program;
+use App\Models\WeekProgram;
 use Carbon\Carbon;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class WeekProgTableSeeder extends Seeder
@@ -72,7 +71,7 @@ class WeekProgTableSeeder extends Seeder
         ];
 
         foreach ($programs as $program) {
-            Week_program::create($program);
+            WeekProgram::create($program);
         }
     }
 }

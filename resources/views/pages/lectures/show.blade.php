@@ -8,7 +8,12 @@
             <div class="col">
                 <div class="box p-a">
                     <div class="pull-right h4 m-b-xs">
-                        <a href="{{ route('lectures.destroy', $lecture) }}"><i class="fa fa-trash text-danger"></i></a>
+                        <form action="{{ route('lectures.destroy', $lecture) }}"  method="POST"
+                            onsubmit="return alert('Delete lecture {{ $lecture->name }} ?')">
+                            @csrf
+                            @method('delete')
+                            <button class="btn btn-outline-danger border-0"><i class="fa fa-trash text-danger"></i></button>
+                        </form>
                     </div>
                     <div class="text-center text-md m-b h-2x _800">{{ $lecture->name }}</div>
                     <p class="text-center _800">Date : {{ $lecture->date }}</p>
@@ -37,15 +42,19 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($lecture->pdfFiles as $file)
+                                    @foreach ($lecture->pdfFiles as $pdfFile)
                                         <tr>
-                                            <td class="text-left">{{ $file->pdf_link }}</td>
-                                            <td class="h4"><a href="{{ asset($file->pdf_link) }}" download>
+                                            <td class="text-left">{{ $pdfFile->pdf_link }}</td>
+                                            <td class="h4"><a href="{{ asset($pdfFile->pdf_link) }}" download>
                                                     <i class="fa fa-download text-primary "></i></a></td>
                                             <td class="h4">
-
-                                                <a href="{{ route('delete.subject', $file->id) }}" class=" m-b-sm w-xs"><i
-                                                        class="fa fa-trash text-danger"></i></a>
+                                                <form action="{{ route('lectures.destroy-pdf', $pdfFile) }}" method="POST"
+                                                    onsubmit="return alert('Delete file {{ $pdfFile->pdf_link }} ?')">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button class="btn btn-outline-danger border-0"><i
+                                                            class="fa fa-trash text-danger"></i></button>
+                                                </form>
 
                                             </td>
                                         </tr>

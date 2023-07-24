@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
         Route::post('students-notification/{student}', 'noticationStore')->name('students.notification-store');
         Route::get('students-subcribe/{student}', 'subcribeCreate')->name('students.subcribe-create');
         Route::post('students-subcribe/{student}', 'subcribeStore')->name('students.subcribe-store');
+        Route::delete('students-subcribe/{student}', 'subcribeDestroy')->name('students.subcribe-destroy');
         Route::post('student/update-many/',  'updateMany')->name('students.update-many');
         Route::get('students-search', 'search')->name('students.search');
     });
@@ -59,6 +60,7 @@ Route::middleware('auth')->group(function () {
     Route::controller(LectureController::class)->group(function () {
         Route::get('lectures/create-step2',  'create2')->name('lectures.create.step2');
         Route::get('lectures/create-step3',  'create3')->name('lectures.create.step3');
+        Route::delete('lectures/destroy-pdf/{pdfFile}',  'destroyPdf')->name('lectures.destroy-pdf');
     });
     Route::resource('lectures', LectureController::class);
 

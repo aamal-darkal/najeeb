@@ -1,8 +1,9 @@
 @extends('layouts.master')
 @section('content')
 
-    <div class="box-header p-1 pl-3">
-        <a class="md-btn md-raised primary text-white m-0" onclick="location={{ route('students.index') }}"><i class="fas fa-long-arrow-left"></i></a>
+    <div class="box-header p-1 pl-3 col-md-8 mx-auto">
+        <a class="md-btn md-raised primary text-white m-0" onclick="location={{ route('students.index') }}"><i
+                class="fas fa-long-arrow-left"></i></a>
 
         <h2 class="text-primary d-inline ml-2 text-2x"> Student info: {{ $student->first_name }} {{ $student->father_name }}
             {{ $student->last_name }} </h2>
@@ -68,6 +69,9 @@
                         <th>name</th>
                         <th>cost</th>
                         <th>package</th>
+                        <th>subcription date</th>
+                        <th>Attendence rate </th>
+                        <th>action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -76,6 +80,16 @@
                             <td>{{ $subject->name }}</td>
                             <td>{{ $subject->cost }}</td>
                             <td>{{ $subject->package->name }}</td>
+                            <td>{{ \Carbon\Carbon::create($subject->pivot->created_at)->diffForHumans() }}</td>
+                            <td> under working</td>
+                            <td class="text-center">
+                                <form action="{{ route('students.subcribe-destroy', $student) }}" method="post">
+                                    @csrf
+                                    @method('delete')
+                                    <input type="hidden" name="subject_id" value="{{ $subject->id }}">
+                                    <button class="md-btn md-raised btn-outline-primary p-0 w-sm">unsubcribe</button>
+                                </form>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

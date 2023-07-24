@@ -267,17 +267,16 @@ class StudentController extends Controller
         ]);
         $validated['time_publish'] = Carbon::parse($validated['time_publish'])->format('Y-m-d H:i');
         $validated['created_at'] = now();
-        
+
         $notification = Notification::create($validated);
-        
+
         $student->notifications()->attach($notification);
-        
+
         $token = $student->user->fcm_token;
 
-        NotificationHelper::sendNotification( $notification , $token );
-        
-        return redirect()->route('students.show' , $student)->with('success', 'Notification has been sent successfully');
+        NotificationHelper::sendNotification($notification, $token);
 
+        return redirect()->route('students.show', $student)->with('success', 'Notification has been sent successfully');
     }
     //************************************** subcribe *****************************************/
 
@@ -295,77 +294,71 @@ class StudentController extends Controller
             [
                 'subjects_ids' => ['required', 'array'],
                 'subjects_ids.*' => ['required', 'exists:subjects,id'],
-                'amount' => ['required', 'integer'],
-                'bill_number' => ['nullable', 'digits_between:1,20'],
-                'payment_method_id' => ['nullable', 'exists:App\Models\PaymentMethod,id'],
+                'amount' => ['sometimes', 'integer'],
+                'bill_number' => ['sometimes', 'digits_between:1,20'],
+                'payment_method_id' => ['sometimes', 'exists:App\Models\PaymentMethod,id'],
             ]
         );
         $subjectsIds =  $validated['subjects_ids'];
-        $amount =  $validated['amount'];
-        $bill_number =  $validated['bill_number'];
-        $payment_method_id =  $validated['payment_method_id'];
-
         $subjects = Subject::find($subjectsIds);
 
-        if ($amount < $subjects->sum('cost'))
-            return back()->with('error', 'the amount you paid is less than the cost')->withInput();
+        $preSubcribed = $student->subjects()->wherePivotIn('subject_id', $subjectsIds)->get();
 
-
-        $order = $student->orders()->create(
-            [
-                'amount' => $amount,
-            ]
-        );
-
-        foreach ($subjects as $subject) {
-            $order->subjects()->attach($subject->id, ['cost' => $subject->cost]);
+        if ($preSubcribed) {
+            $subList = '';
+            foreach ($preSubcribed  as  $sub) {
+                $subList .= "$sub->name ";
+            }
+            return back()->with('error', "$subList subcribed before")->withInput();
         }
-        $order->payments()->create([
-            'bill_number' => $bill_number,
-            'amount' => $amount,
-            'payment_method_id' => $payment_method_id,
-            'start_duration_date' => $subjects->first()->package->start_date,
-            'payment_date' => Carbon::now(), //should be given by app
-            'state' => 'approved'
-        ]);
+
+        if (isset($validated['bill_number'])) {
+
+            $amount =  $validated['amount'];
+            $bill_number =  $validated['bill_number'];
+            $payment_method_id =  $validated['payment_method_id'];
+
+
+            if ($amount < $subjects->sum('cost'))
+                return back()->with('error', 'the amount you paid is less than the cost')->withInput();
+
+
+            $order = $student->orders()->create(
+                [
+                    'amount' => $amount,
+                ]
+            );
+
+            foreach ($subjects as $subject) {
+                $order->subjects()->attach($subject->id, ['cost' => $subject->cost]);
+            }
+            $order->payments()->create([
+                'bill_number' => $bill_number,
+                'amount' => $amount,
+                'payment_method_id' => $payment_method_id,
+                'start_duration_date' => $subjects->first()->package->start_date,
+                'payment_date' => Carbon::now(), //should be given by app
+                'state' => 'approved'
+            ]);
+        }
 
         $student->subjects()->attach($subjectsIds);
 
-
         return redirect()->route('students.show', $student)->with('success', 'Student subcribe successfully');
     }
+
     public function subcribeDestroy(Request $request, Student $student)
     {
-        // $validated = $request->validate(
-        //     [
-        //         'subject_id' => ['required', 'exists:subjects,id'],
-        //     ]
-        // );
-        // $subjectId =  $validated['subject_id'];
+        $validated = $request->validate(
+            [
+                'subject_id' => ['required', 'exists:subjects,id'],
+            ]
+        );
+        $subjectId =  $validated['subject_id'];
+
+        $student->subjects()->detach($subjectId);
 
 
-        // $order = $student->orders()->create(
-        //     [
-        //         'amount' => $amount,
-        //     ]
-        // );
-        
-        // $cost = $order->subjects()->attach($subject->id, ['cost' => $subject->cost]);
-        
-        //     $order->subjects()->attach($subject->id, ['cost' => $subject->cost]);
-        // }
-        // $order->payments()->create([
-        //     'bill_number' => $bill_number,
-        //     'amount' => $amount,
-        //     'payment_method_id' => $payment_method_id,
-        //     'start_duration_date' => $subjects->first()->package->start_date,
-        //     'payment_date' => Carbon::now(), //should be given by app
-        //     'state' => 'approved'
-        // ]);
-
-        // $student->subjects()->attach($subjectsIds);
-
-
-        // return redirect()->route('students.show', $student)->with('success', 'Student subcribe successfully');
+        return back()->with('success', 'Student unsubcribe successfully');
     }
 }

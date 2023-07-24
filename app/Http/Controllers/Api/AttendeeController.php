@@ -7,27 +7,25 @@ use App\Http\Helpers\ResponseHelper;
 use App\Models\Attendee;
 use App\Models\Student;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AttendeeController extends Controller
 {
-    public function attend($id)
+    public function attend($lecture_id)
     {
-        $studentLectures = Student::where('user_id',Auth::id())->whereHas('lecturesAttended', function ($q) use ($id)
+        $student = Student::where('user_id',Auth::id())->first();
+        $lecture = $student->lectures()->wherePivot('lecture_id' , $lecture_id)->first();
+        
+        if ($lecture)
         {
-            return $q->where('lecture_id', $id);
-        })->with('lecturesAttended')->first();
-        if ($studentLectures)
-        {
-            $lectures = $studentLectures->lecturesAttended->first() ;
-            $lectures->pivot->update(['views' => $lectures->pivot->views + 1]);
-            $lectures->save();
+            $lecture->pivot->update(['views' => $lecture->pivot->views + 1])    ;
+            $lecture->save();
         }
-        else
-            $lectures = Student::where('user_id',Auth::id())->first()->lecturesAttended()->attach($id,['date' => Carbon::now() , 'views' =>1]);
+        else {
+            $student->lectures()->attach($lecture_id,['date' => Carbon::now() , 'views' =>1]);
+            $lecture = $student->lectures()->wherePivot('lecture_id' , $lecture_id)->first();
+        }
 
-        return ResponseHelper::success($lectures, 'lecture has been viewed');
-
+        return ResponseHelper::success($lecture, 'lecture has been viewed');
     }
 }

@@ -21,11 +21,11 @@ class Subject extends Model
     }
     public function students()
     {
-        return $this->belongsToMany(Student::class,'student_subject');
+        return $this->belongsToMany(Student::class)->withTimestamps();
     }
     public function weekProgs()
     {
-        return $this->hasMany(Week_program::class);
+        return $this->hasMany(WeekProgram::class);
     }
     public function lectures()
     {

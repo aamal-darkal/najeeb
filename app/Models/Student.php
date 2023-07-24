@@ -28,12 +28,12 @@ class Student extends Model
 
     public function subjects()
     {
-        return $this->belongsToMany(Subject::class);
+        return $this->belongsToMany(Subject::class)->withTimestamps();
     }
 
-    public function lecturesAttended()
+    public function lectures()
     {
-        return $this->belongsToMany(Lecture::class,'attendees')->withPivot(['date','views']);
+        return $this->belongsToMany(Lecture::class)->withPivot(['date','views']);
     }
 
     public function orders()

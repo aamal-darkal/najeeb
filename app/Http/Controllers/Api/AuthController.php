@@ -85,4 +85,12 @@ class AuthController extends Controller
             ->get();
         return  PaymentResource::collection($payments);
     }
+
+
+    public function resetTokenDate() {
+        $userId = Auth::id();
+        User::find($userId)->update(['token_birth' => null]);
+        return ['success' => 'Token birth is reset successfuly'];
+
+    }
 }

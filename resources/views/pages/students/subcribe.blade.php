@@ -4,9 +4,10 @@
     <div class="padding">
         <div class="box col-md-6 offset-md-3">
             <div class="box-header">
-                <a class="md-btn md-raised primary text-white m-0"
-                    href="{{ route('students.show', $student) }}"><i class="fas fa-long-arrow-left"></i></a>
-                <h2 class="text-primary text-2x d-inline ml-2"> Subcribe  {{ $student->first_name }} {{ $student->father_name }}
+                <a class="md-btn md-raised primary text-white m-0" href="{{ route('students.show', $student) }}"><i
+                        class="fas fa-long-arrow-left"></i></a>
+                <h2 class="text-primary text-2x d-inline ml-2"> Subcribe {{ $student->first_name }}
+                    {{ $student->father_name }}
                     {{ $student->last_name }}</h2>
             </div>
             <div>
@@ -40,13 +41,13 @@
                             </option>
                         @endforeach
                     </select>
-                </div>  
+                </div>
                 {{-- end of template --}}
 
-                <form role="form" method="POST" action="{{ route('students.subcribe-store' , $student) }}">
+                <form role="form" method="POST" action="{{ route('students.subcribe-store', $student) }}">
                     @csrf
-                    
-        {{-- ********************************* subjects ************************ --}}
+
+                    {{-- ********************************* subjects ************************ --}}
 
                     <div class="form-group">
                         <div class="row">
@@ -62,9 +63,9 @@
                                             {{ $package->name }}
                                         </option>
                                     @endforeach
-                                </select>                               
+                                </select>
                             </div>
-                            
+
                             <div class="col">
                                 <label for="subjects">subjects</label>
                                 <select id='subjects' onchange="addSubject(this)"
@@ -92,33 +93,34 @@
                             <div class="col-md-3 text-secondary py-2">
                                 <label for="sum-subject">sum of subject</label>
                             </div>
-                            <div class="col-md-3"><input id="sum-subject" type="text" value=0 class="form-control" disabled>
+                            <div class="col-md-3"><input id="sum-subject" type="text" value=0 class="form-control"
+                                    disabled>
                             </div>
                         </div>
                     </div>
-                    {{--********************* end of subjects ****************************--}}
-                    <div class="form-group">
+                    {{-- ********************* end of subjects **************************** --}}
+                    <input class='my-2' type="checkbox" onchange="changePaymentState(this)"> <span class="text-primary text-md _800">Without payment</span>
+                    <div class="form-group p-2">
                         <div class="row">
                             <div class="col">
                                 <label for="amount">amount</label>
-                                <input type="number" class="form-control" placeholder="Enter amount" name="amount"
-                                    id="amount" value="{{ old('amount') }}" required>
+                                <input type="number" data-payment class="form-control" placeholder="Enter amount"
+                                    name="amount" id="amount" value="{{ old('amount') }}" required>
                                 <div class="text-danger">
                                     @error('amount')
                                         {{ $message }}
                                     @enderror
                                 </div>
                             </div>
-                          
+                        </div>
                     </div>
-
                     <div class="form-group p-2">
                         <div class="row">
                             <div class="col">
                                 <label for="bill_number">bill_number</label>
-                                <input type="text" id="bill_number" class="form-control"
+                                <input type="text" data-payment id="bill_number" class="form-control"
                                     placeholder="Enter bill Number" name="bill_number" value="{{ old('bill_number') }}"
-                                        pattern="[0-9]{1,20}" maxlength="20">
+                                    pattern="[0-9]{1,20}" maxlength="20" required>
                                 <div class="text-danger">
                                     @error('bill_number')
                                         {{ $message }}
@@ -127,7 +129,8 @@
                             </div>
                             <div class="col">
                                 <label for="payment_method">payment method</label>
-                                <select name="payment_method_id" id="payment_method" class="form-control" required>
+                                <select data-payment name="payment_method_id" id="payment_method" class="form-control"
+                                    required>
                                     <option hidden selected value="">Enter Payment Method</option>
                                     @foreach ($paymentMethods as $paymentMethod)
                                         <option value="{{ $paymentMethod->id }}" @selected($paymentMethod->id == old('payment_method_id'))>
@@ -206,6 +209,15 @@
                 document.getElementById("sum-subject").value = Number(document.getElementById("sum-subject").value) - Number(
                     subjectCost)
                 inp.parentNode.remove();
+            }
+
+            function changePaymentState(checkInp) {
+                let paymentFields = document.querySelectorAll('[data-payment]')
+                for (paymentField of paymentFields)
+                    if (checkInp.checked)
+                        paymentField.disabled = true
+                else
+                    paymentField.disabled = false
             }
         </script>
 

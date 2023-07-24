@@ -75,10 +75,8 @@ class SubjectController extends Controller
      */
     public function destroy(Subject $subject)    
     {
-        if ( $subject->lectures->count()) return back()->with('error', 'sorry, we can\'t delete subject that has lecture, you should delete its lectures ');
-        if ( $subject->students->count()) return back()->with('error', 'sorry, we can\'t delete subject that subcribed by students, you should choose unsubcribe option before ');
-        if ( $subject->orders->count()) return back()->with('error', 'sorry, we can\'t delete subject that ordered by students');
-        /* no fix for order!!*/
+        if ( $subject->lectures->count()) return back()->with('error', 'sorry, we can\'t delete subject that has lecture, you should delete its lectures first ');
+        if ( $subject->students->count()) return back()->with('error', 'sorry, we can\'t delete subject that subcribed by students first, you should unsubcribe students first ');
         $subject->delete();
         return back()->with('success', 'package deleted successfuly');
     }

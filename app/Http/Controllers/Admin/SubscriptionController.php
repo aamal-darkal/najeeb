@@ -44,49 +44,58 @@ class SubscriptionController extends Controller
         $action = $validated['action'];
         $ids = $validated['ids'];
 
-        //reject
+
+        // ********************* reject **************************
         if ($action == 'reject') {
             $payments = payment::find($ids);
             foreach ($payments as $payment)
                 $payment->update(['state' => 'rejected']);
 
-            //unreject
+            // ********************* unreject **************************            
         } else if ($action == 'unreject') {
             $payments = payment::find($ids);
             foreach ($payments as $payment)
                 $payment->update(['state' => 'pending']);
 
-            //  approve  
+            // ********************* approve **************************
         } else if ($action == 'approve') {
             $payments = payment::with('order.student.user', 'order.subjects')->find($ids);
-            foreach ($payments as $payment) {
-                $payment->update(['state' => 'approved']);
 
-                //create user
+            foreach ($payments as $payment) {
                 $student = $payment->order->student;
+                $subjectsIds = $payment->order->subjects->pluck('id');
+                $preSubcribed = $student->subjects()->wherePivotIn('subject_id', $subjectsIds)->get();
+                //check if they pre subcribed
+                if ($preSubcribed) {
+                    $subList = '';
+                    foreach ($preSubcribed  as  $sub) {
+                        $subList .= "$sub->name ";
+                    }
+                    return back()->with('error', "$subList subcribed before")->withInput();
+                }
+
+                $payment->update(['state' => 'approved']);
+                
+                //attach subject to student
+                $student->subjects()->attach($subjectsIds);
+
+                //create user if is not exists
                 if (!$student->user)
                     $this->createUser($student);
-
-                //attach subjects
-                $subjects = $payment->order->subjects;
-                $student->subjects()->attach($subjects);
             }
+            // ********************* unapprove **************************
         } else if ($action == 'unapprove') {
-            $payments = payment::with('order.student','order.subjects')->find($ids);
+            $payments = payment::with('order.student', 'order.subjects')->find($ids);
             foreach ($payments as $payment) {
                 $payment->update(['state' => 'pending']);
 
-                //create user
                 $student = $payment->order->student;
 
-                //attach subjects
+                //dettach subjects from student
                 $subjects = $payment->order->subjects;
                 $student->subjects()->detach($subjects);
             }
         }
         return back()->with('success', 'payments updated successfully');
-
     }
-
-    
 }

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Week_program extends Model
+class WeekProgram extends Model
 {
     use HasFactory;
 
@@ -24,6 +24,6 @@ class Week_program extends Model
 
     public function lecture()
     {
-        return $this->hasOne(Lecture::class,'week_program_id');
+        return $this->hasOne(Lecture::class);
     }
 }

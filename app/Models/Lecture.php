@@ -20,12 +20,12 @@ class Lecture extends Model
 
     public function pdfFiles()
     {
-        return $this->hasMany(pdf_file::class);
+        return $this->hasMany(pdfFile::class);
     }
 
-    public function lecturesAttended()
+    public function students()
     {
-        return $this->belongsToMany(Student::class,'attendees')->withPivot(['date','views']);
+        return $this->belongsToMany(Student::class)->withPivot(['date','views']);
     }
     public function weekProg()
     {
