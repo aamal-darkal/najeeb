@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class pdfFile extends Model
+class PdfFile extends Model
 {
     use HasFactory;
 
