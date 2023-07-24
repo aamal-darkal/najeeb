@@ -36,8 +36,8 @@ class NotificationController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'student_ids' => 'sometimes|array',
-            'student_ids.*' => 'sometimes|exists:students,id',
+            // 'student_ids' => 'sometimes|array',
+            // 'student_ids.*' => 'sometimes|exists:students,id',
             'title' => 'required|string|max:25',
             'description' => 'required|string|max:255',
             'time_publish' => 'required|date',
@@ -48,14 +48,14 @@ class NotificationController extends Controller
         $notification = Notification::create($validated);
         // $studentIds = [];
         $tokens = [];
-        if(empty($validated['student_ids'])) {
+        // if(empty($validated['student_ids'])) {
             $students = Student::where('state' , 'current')->get() ;
             $studentIds =  $students->pluck('id');
-        }
-        else {
-            $students = Student::wherein('id', $validated['student_ids'])->get() ;
-            $studentIds = $validated['student_ids'];
-        }
+        // }
+        // else {
+        //     $students = Student::wherein('id', $validated['student_ids'])->get() ;
+        //     $studentIds = $validated['student_ids'];
+        // }
         
         foreach ($students as $student)
             $student->notifications()->attach($notification->id);

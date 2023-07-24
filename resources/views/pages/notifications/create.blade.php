@@ -11,7 +11,7 @@
                 <div class="box-divider"></div>
                 <form role="form" method="POST" action="{{ route('notifications.store') }}" class="container mt-2">
                     @csrf
-                    @if ($search)
+                    {{-- @if ($search)
                         <div class="form-group">
                             <div><label for="user_id">Choose student</label></div>
                             <select name='student_ids[]' multiple="" class="ui search selection dropdown">
@@ -26,7 +26,7 @@
                                 {{ $message }}
                             @enderror
                         </div>
-                    @endif
+                    @endif --}}
                     <div class="form-group">
                         <label for="title">Title</label>
                         <input type="text" class="form-control" placeholder="Enter notification title" id="title"

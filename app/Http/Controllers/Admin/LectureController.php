@@ -8,7 +8,7 @@ use App\Http\Requests\StoreLectureRequest;
 use App\Models\Lecture;
 use App\Models\Notification;
 use App\Models\Package;
-use App\Models\pdfFile;
+use App\Models\PdfFile;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;

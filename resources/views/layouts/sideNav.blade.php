@@ -204,12 +204,7 @@
                                     <a href="{{ route('notifications.create') }}">
                                         <span class="nav-text">Broadcast</span>
                                     </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('notifications.create', ['search' => true]) }}">
-                                        <span class="nav-text">Send</span>
-                                    </a>
-                                </li>
+                                </li>                                
                             </ul>
                         </li>
                     @endif
