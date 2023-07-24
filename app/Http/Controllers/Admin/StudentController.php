@@ -304,7 +304,7 @@ class StudentController extends Controller
 
         $preSubcribed = $student->subjects()->wherePivotIn('subject_id', $subjectsIds)->get();
 
-        if ($preSubcribed) {
+        if ($preSubcribed->first()) {
             $subList = '';
             foreach ($preSubcribed  as  $sub) {
                 $subList .= "$sub->name ";

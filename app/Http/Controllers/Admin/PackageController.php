@@ -56,7 +56,7 @@ class PackageController extends Controller
         $package->image = $filename;
         $package->save();
         // return redirect()->route('packages');
-        return redirect()->route('packages')->with('success', 'package created successfuly');;
+        return redirect()->route('packages.index')->with('success', 'package created successfuly');;
     }
 
     /**

@@ -73,4 +73,11 @@ Route::middleware('auth')->group(function () {
         Route::get('subscriptions/edit/{status}', 'edit')->name('subscriptions.edit');
         Route::post('subscriptions/update', 'update')->name('subscriptions.update');
     });
+    Route::get('generate', function (){
+        \Illuminate\Support\Facades\Artisan::call('storage:link');
+        return 'ok';
+    });
 });
+
+
+
