@@ -5,11 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePackageRequest;
 use App\Models\Package;
-use App\Models\Subject;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Session;
+use Illuminate\View\View;
 
 class PackageController extends Controller
 {
@@ -70,17 +68,24 @@ class PackageController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id): Response
+    public function edit(Package $package): View    
     {
-        //
+        return view('pages.packages.edit' , compact('package'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): RedirectResponse
+    public function update(Request $request, Package $package): RedirectResponse
     {
-        //
+        $validated = $request->validate(  [
+            'name' => 'required',
+            'image' => 'sometimes|image|mimes:jpeg,gif,png,jpg',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
+        ]);
+        $package->update($validated);
+        return redirect()->route('packages.index')->with('success', 'package updated successfuly');;
     }
 
     /**

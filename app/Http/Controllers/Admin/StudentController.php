@@ -25,15 +25,34 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         $state = $request->input('state', 'current');
-
+        $package = $request->input('package');
+        $subject =  $request->input('subject');
         $students = Student::where('state', $state)
             ->with('user')
             ->with('subjects')
             ->withCount('subjects')
             ->with('user')
-            ->paginate(8);
+            ->when(
+                $package,
+                function ($q) use ($package) {
+                    return $q->wherehas('subjects', function ($q) use ($package) {
+                        return $q->where('package_id', $package);
+                    });
+                }
+            )
+            ->when($subject, function ($q) use ($subject) {
+                return $q->wherehas('subjects', function ($q) use ($subject) {
+                    return $q->where('subject_id', $subject);
+                });
+            })->paginate(8);
+        if ($package)
+            $package = Package::find($package);
+        if ($subject)
+            $subject = Subject::find($subject);
+        $group = $package ? $package->name : ($subject ? $subject->name : 'All');
 
-        return view('pages.students.index', compact('students', 'state'));
+
+        return view('pages.students.index', compact('students', 'state', 'group'));
 
         // if ($request->ajax()) {
         //     $packages = Package::withCount('subjects')->paginate(2);
@@ -44,8 +63,8 @@ class StudentController extends Controller
     public function search(Request $request)
     {
         $state = $request->input('state', 'current');
-        $search = $request->input('search') ?? '';
-
+        $search = $request->input('search',  '');
+        $group = $request->input('group',  'all');
         $students = Student::where('state', $state)
             ->where(function ($q) use ($search) {
                 return $q->where('first_name', 'LIKE', "%$search%")
@@ -56,7 +75,7 @@ class StudentController extends Controller
             ->withCount('subjects')
             ->paginate(8);
 
-        return view('pages.students.index', compact('students', 'state', 'search'));
+        return view('pages.students.index', compact('students', 'state', 'search', 'group'));
     }
 
     function create()

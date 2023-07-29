@@ -10,12 +10,23 @@ use App\Models\Notification;
 use App\Models\Package;
 use App\Models\PdfFile;
 use App\Models\Subject;
+use App\Models\WeekProgram;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class LectureController extends Controller
 {
+
+    // public function index1(Request $request)
+    // {
+    //     $subject = $request->subject;
+    //     $subjects = Subject::when($subject , function($q) use ($subject) {
+    //         return $q->where('id' , $subject);
+    //     })->with('package','weekProgs')->withCount('students')->get();
+    //     return view('pages.subjects.index',compact('subjects'));
+    // }
+
     public function index($subjectId = null)
     {
         $lectures = Lecture::join('week_programs', 'lectures.week_program_id', '=', 'week_programs.id')
@@ -54,30 +65,16 @@ class LectureController extends Controller
     {
         return view('pages.lectures.show', compact('lecture'));
     }
-    public function create()
-    {
-        $packages = Package::with('subjects')->withCount('subjects')->get();
-        return view('pages.lectures.create-step1', compact('packages'));
-    }
-    //step2
-    public function create2(Request $request)
-    {
-        $package_id =  $request->package_id;
-        $package_name = $request->package_name;
-        $subjects = Subject::where('package_id', $package_id)->with('weekProgs')->get();
-        // return $subjects;
-        return view('pages.lectures.create-step2', compact('subjects', 'package_name', 'package_id'));
-    }
-    //step3
-    public function create3(Request $request)
-    {
-        $package_id =  $request->package_id;
-        $package_name = $request->package_name;
-        $subject_name = $request->subject_name;
-        $week_program_id = $request->week_program_id;
-        $subject_id = $request->subject_id;
 
-        //get denied days
+
+    public function create(Request $request)
+    {
+        $week_program_id = $request->week_program_id;
+        $week_program = WeekProgram::find($week_program_id);
+        $subject_id = $request->subject_id;
+        $subject = Subject::find($week_program->subject_id);
+
+        // get denied days
         $allowedDates = DB::select('select day+0 as dayNum , day from week_programs where id= ?', [$week_program_id]);
         $allowedDay = $allowedDates[0]->dayNum - 2;
         $allowedDayName = $allowedDates[0]->day;
@@ -89,7 +86,7 @@ class LectureController extends Controller
         $denyDays = substr($denyDays, 0, -1);
         $denyDays .= "]";
 
-        return view('pages.lectures.create-step3', compact('package_name', 'package_id', 'subject_name', 'subject_id', 'week_program_id', 'denyDays', 'allowedDayName'));
+        return view('pages.lectures.create', compact( 'subject', 'week_program_id','denyDays' ,'allowedDayName'));
     }
 
     public function store(StoreLectureRequest $request)
@@ -122,7 +119,7 @@ class LectureController extends Controller
     {
         $lecture->delete();
         //!!!!!!!!!!!!!!!! delete files
-        return redirect()->route('lectures.index');
+        return back()->with('success', 'file deleted successfuly');
     }
 
     /**

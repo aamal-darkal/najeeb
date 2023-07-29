@@ -6,15 +6,7 @@
         <h2 class="text-primary d-inline ms-3 mb-2">Lecture</h2>
         <div class="row">
             <div class="col">
-                <div class="box p-a">
-                    <div class="pull-right h4 m-b-xs">
-                        <form action="{{ route('lectures.destroy', $lecture) }}"  method="POST"
-                            onsubmit="return confirm('Delete lecture {{ $lecture->name }} ?')">
-                            @csrf
-                            @method('delete')
-                            <button class="btn btn-outline-danger border-0"><i class="fa fa-trash text-danger"></i></button>
-                        </form>
-                    </div>
+                <div class="box p-a">                    
                     <div class="text-center text-md m-b h-2x _800">{{ $lecture->name }}</div>
                     <p class="text-center _800">Date : {{ $lecture->date }}</p>
                     <p class="text-center _800">Duration : {{ $lecture->duration }}</p>

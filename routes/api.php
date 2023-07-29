@@ -54,6 +54,6 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 
-Route::get('test/{p}', function ($p) {
+Route::get('test/{p}', function ($p) {  
     return Hash::make($p);
 });

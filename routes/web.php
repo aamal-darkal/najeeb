@@ -50,16 +50,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('packages', PackageController::class);
 
 
-    /***************************************  Subjects *********************************/
-    Route::controller(SubjectController::class)->group(function () {
-        Route::get('subjects/create-step2',  'create2')->name('subjects.create.step2');
-    });
+    /***************************************  Subjects *********************************/    
     Route::resource('subjects', SubjectController::class);
 
     /***************************************  lectures *********************************/
-    Route::controller(LectureController::class)->group(function () {
-        Route::get('lectures/create-step2',  'create2')->name('lectures.create.step2');
-        Route::get('lectures/create-step3',  'create3')->name('lectures.create.step3');
+    Route::controller(LectureController::class)->group(function () {        
         Route::delete('lectures/destroy-pdf/{pdfFile}',  'destroyPdf')->name('lectures.destroy-pdf');
     });
     Route::resource('lectures', LectureController::class);

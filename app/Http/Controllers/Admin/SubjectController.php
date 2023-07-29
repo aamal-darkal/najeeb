@@ -22,21 +22,18 @@ class SubjectController extends Controller
         return view('pages.subjects.index',compact('subjects'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        $packages = Package::with('subjects')->withCount('subjects')->get();
-        return view('pages.subjects.create-step1',compact('packages'));
+        $request->validate([
+            'package' => 'required|exists:packages,id'
+        ]);
+        $package = Package::find( $request->package);
+        
+        // return view('pages.subjects.create-step1',compact('packages'));
+        // notAllowedTimes**************!!!!
+        return view('pages.subjects.create',compact('package'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create2(Request $request)
-    {
-        $package = Package::with('subjects','subjects.weekProgs')->find($request->package_id);
-        $notAllowedTimes = [];        
-        return view('pages.subjects.create-step2',compact('package', 'notAllowedTimes'));
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -51,7 +48,7 @@ class SubjectController extends Controller
             $subject->weekProgs()->create(['day' => $day ,'start_time' => $start_time,'end_time' => $end_time]);
         }             
 
-        return redirect()->route('subjects.index');
+        return redirect()->route('package.show' , ['packages' => $subject->package_id]);
     }
 
     /**
@@ -68,6 +65,13 @@ class SubjectController extends Controller
     public function update(Request $request, string $id): RedirectResponse
     {
         //
+    }
+    /**
+     *
+     */
+    public function show(Subject $subject)
+    {
+        return view('pages.subjects.show' , compact('subject'));
     }
 
     /**

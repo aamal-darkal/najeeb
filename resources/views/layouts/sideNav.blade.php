@@ -79,12 +79,7 @@
                                     <a href="{{ route('packages.index') }}">
                                         <span class="nav-text">All Packages</span>
                                     </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('packages.create') }}">
-                                        <span class="nav-text">Add Package</span>
-                                    </a>
-                                </li>
+                                </li>                                
                             </ul>
                         </li>
                     @endif
@@ -106,12 +101,7 @@
                                     <a href="{{ route('subjects.index') }}">
                                         <span class="nav-text">All subjects</span>
                                     </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('subjects.create') }}">
-                                        <span class="nav-text">Add subject</span>
-                                    </a>
-                                </li>
+                                </li>                               
                             </ul>
                         </li>
                     @endif
@@ -134,12 +124,7 @@
                                     <a href="{{ route('lectures.index') }}">
                                         <span class="nav-text">All lectures</span>
                                     </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('lectures.create') }}">
-                                        <span class="nav-text">Add lecture</span>
-                                    </a>
-                                </li>
+                                </li>                            
                             </ul>
                         </li>
                     @endif

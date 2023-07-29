@@ -29,7 +29,7 @@ class Lecture extends Model
     }
     public function weekProg()
     {
-        return $this->belongsTo(Week_program::class,'week_program_id');
+        return $this->belongsTo(WeekProgram::class,'week_program_id');
     }
     public function subject()
     {

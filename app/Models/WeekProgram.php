@@ -24,6 +24,6 @@ class WeekProgram extends Model
 
     public function lecture()
     {
-        return $this->hasOne(Lecture::class);
+        return $this->hasMany(Lecture::class);
     }
 }

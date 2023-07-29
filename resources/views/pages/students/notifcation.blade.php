@@ -2,7 +2,7 @@
 @section('content')
     <!-- ############ PAGE START-->
     <div class="container padding">
-        <div style="margin-left: 20%; margin-right: 20%">
+        <div class="box col-md-6 offset-md-3">  
             <div class="box">
                 <div class="box-header">
                     <a class="md-btn md-raised primary text-white m-0"

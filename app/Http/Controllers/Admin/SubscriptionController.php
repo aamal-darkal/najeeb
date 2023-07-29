@@ -66,7 +66,7 @@ class SubscriptionController extends Controller
                 $subjectsIds = $payment->order->subjects->pluck('id');
                 $preSubcribed = $student->subjects()->wherePivotIn('subject_id', $subjectsIds)->get();
                 //check if they pre subcribed
-                if ($preSubcribed) {
+                if ($preSubcribed->first()) {
                     $subList = '';
                     foreach ($preSubcribed  as  $sub) {
                         $subList .= "$sub->name ";
