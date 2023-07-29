@@ -63,7 +63,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($subject->lectures as $lecture)
+                                    @foreach ($lectures as $lecture)
                                         <tr>
                                             <td>{{ $lecture->name }}</td>
                                             <td>{{ $lecture->date }}</td>

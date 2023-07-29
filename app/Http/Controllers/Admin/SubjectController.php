@@ -71,7 +71,8 @@ class SubjectController extends Controller
      */
     public function show(Subject $subject)
     {
-        return view('pages.subjects.show' , compact('subject'));
+        $lectures = $subject->lectures()->orderby('date' ,'desc')->get();
+        return view('pages.subjects.show' , compact('subject','lectures' ));
     }
 
     /**
