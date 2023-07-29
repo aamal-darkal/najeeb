@@ -1,19 +1,14 @@
 @extends('layouts.master')
 @section('content')
     {{-- **************** Subject's Lectures **************** --}}
-    {{-- **************** for package **************** --}}
     <div class="container-fluid">
-
         <div class="row text-center p-1">
             <div class="col-md-2 p-1">
                 <a href={{ route('packages.show', $subject->package) }} title="{{ $subject->package->name }} subjects"
                     class="md-btn md-raised mt-2 mb-2 w-md primary text-white r-15"><i class="fas fa-long-arrow-left"></i>
                     {{ $subject->package->name }} subjects
-                </a>
-                <div class="box-header text-primary">
-                    <h2 class="d-inline ml-2"> {{ $subject->name }} Subject</h2>
-                </div>
-                <div class="p-2 primary-light b-a b-primary b-2x text-left">
+                </a>                
+                <div class="p-2 primary-light b-a b-primary b-2x text-left mt-3 ">
                     <div class="text-center">
                         <img src="{{ asset('storage/images/packages/' . $subject->package->image) }}"
                             alt={{ asset('storage/images/packges/' . $subject->package->image) }} width="100%">
@@ -76,18 +71,14 @@
                                             <td class="w-sm">{{ $lecture->weekProg->day }} <br />
                                                 [{{ date('h:i', strtotime($lecture->weekProg->start_time)) . '-' . date('h:i', strtotime($lecture->weekProg->end_time)) }}]
                                             </td>
-                                            <td class="w-sm">
-                                                <a title="lectures" class="md-btn md-raised primary text-white w-sm r-15"
-                                                    href="{{ route('lectures.show', ['lecture' => $lecture]) }}"> pdf
-                                                    files <i class="fas fa-long-arrow-right"></i></a>
-                                            </td>
-                                            <td>
+                                            <td class="">
                                                 <a class="btn btn-sm btn-outline-info border-0" title="edit"
                                                     onclick="alert('under working')"
                                                     href="{{ route('lectures.edit', $lecture) }}">
                                                     <i class="fa fa-edit"></i></a>
                                                 <form action="{{ route('lectures.destroy', ['lecture' => $lecture]) }}"
                                                     method="POST"
+                                                    class="inline"
                                                     onsubmit="return confirm('Delete {{ $lecture->name }} Lecture?')">
                                                     @csrf
                                                     @method('delete')
@@ -96,6 +87,12 @@
                                                     </button>
                                                 </form>
                                             </td>
+                                            <td class="w-sm">
+                                                <a title="lectures" class="md-btn md-raised primary text-white w-sm r-15"
+                                                    href="{{ route('lectures.show', ['lecture' => $lecture]) }}"> pdf
+                                                    files <i class="fas fa-long-arrow-right"></i></a>
+                                            </td>
+                                            
                                         </tr>
                                     @endforeach
                                 </tbody>

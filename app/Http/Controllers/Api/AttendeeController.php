@@ -17,7 +17,7 @@ class AttendeeController extends Controller
         $lecture = $student->lectures()->wherePivot('lecture_id' , $lecture_id)->first();
         
         if ($lecture)
-        {
+        {   
             $lecture->pivot->update(['views' => $lecture->pivot->views + 1])    ;
             $lecture->save();
         }

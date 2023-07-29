@@ -7,8 +7,7 @@
                 <a href="{{ route('packages.index') }}" title="All packages"
                     class="md-btn md-raised m-b-sm w-md primary text-white r-15 mt-3"><i class="fas fa-long-arrow-left"></i>
                     &nbsp;&nbsp; All packages</a>
-                <div class="p-2 primary-light b-a b-primary b-2x text-left text-md">
-
+                <div class="p-2 primary-light b-a b-primary b-2x text-left text-md mt-1">
                     <div class="text-center">
                         <img src="{{ asset('storage/images/packages/' . $package->image) }}"
                             alt={{ asset('storage/images/packges/' . $package->image) }} width="100%">
