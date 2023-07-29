@@ -5751,7 +5751,7 @@ a.text-blue:hover {
 }
 
 .w-xxs {
-  width: 60px;
+  width: 60px !important;
 } 
 
 .w-xs {

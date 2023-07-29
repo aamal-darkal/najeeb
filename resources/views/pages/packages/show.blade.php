@@ -31,58 +31,72 @@
                 <div class="box-header text-primary">
                     <h2 class="d-inline ml-2">{{ $package->name }}’s subjects ({{ $package->subjects->count() }})</h2>
                 </div>
-                <div class="table-reponivev box p-2">
-                    <a class="md-btn md-raised primary text-white w-md m-3"
-                        href="{{ route('subjects.create', ['package' => $package->id]) }}"> Add subject
-                        &nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-plus-square fa-lg"></i></a>
-                    <table class="table table-striped b-a b-2x">
-                        <thead class="dker text-primary">
-                            <tr>
-                                <th>Subject Name</th>
-                                <th>Subject Cost</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($package->subjects as $subject)
+                <div class="box">
+                    <div class="table-responsive p-2">
+                        <a class="md-btn md-raised primary text-white w-md m-3"
+                            href="{{ route('subjects.create', ['package' => $package->id]) }}"> Add subject
+                            &nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-plus-square fa-lg"></i></a>
+                        <table class="table table-striped b-a b-2x">
+                            <thead class="dker text-primary">
                                 <tr>
-                                    <td>{{ $subject->name }}</td>
-                                    <td>{{ $subject->cost }}</td>
-                                    <td>
-                                        <a class="btn btn-sm btn-outline-success border-0" title="students"
-                                            href="{{ route('students.index', ['subject' => $subject]) }}">
-                                            <i class="fa fa-users"></i></a>
-                                        <a class="btn btn-sm btn-outline-warning border-0" title="notify"
-                                            href="{{ route('notifications.create', ['subject' => $subject]) }}">
-                                            <i class="fa fa-bell"></i></a>
-                                        <a class="btn btn-sm btn-outline-info border-0" title="edit"
-                                            onclick="alert('under working')" href="{{ route('subjects.edit', $subject) }}">
-                                            <i class="fa fa-edit"></i></a>
-                                        <form action="{{ route('subjects.destroy', ['subject' => $subject]) }}"
-                                            method="POST" class="d-inline pl-1"
-                                            onsubmit="return confirm('Delete {{ $subject->name }} Subject?')">
-                                            @csrf
-                                            @method('delete')
-                                            <button class="btn btn-outline-danger border-0" title="delete">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                    <td class="text-center w-sm">
-                                        <a title="Lectures" class="md-btn md-raised primary text-white w-sm r-15"
-                                            href="{{ route('subjects.show', ['subject' => $subject]) }}"> Lectures <i
-                                                class="fas fa-long-arrow-right"></i></a>
-                                    </td>
-
+                                    <th>Subject Name</th>
+                                    <th>Subject Cost</th>
+                                    <th></th>
+                                    <th></th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($package->subjects as $subject)
+                                    <tr>
+                                        <td>{{ $subject->name }}</td>
+                                        <td>{{ $subject->cost }}</td>
+                                        <td>
+                                            <a class="btn btn-sm btn-outline-success border-0" title="students"
+                                                href="{{ route('students.index', ['subject' => $subject]) }}">
+                                                <i class="fa fa-users"></i></a>
+                                            <a class="btn btn-sm btn-outline-warning border-0" title="notify"
+                                                href="{{ route('notifications.create', ['subject' => $subject]) }}">
+                                                <i class="fa fa-bell"></i></a>
+                                            <a class="btn btn-sm btn-outline-info border-0" title="edit"
+                                                onclick="alert('under working')"
+                                                href="{{ route('subjects.edit', $subject) }}">
+                                                <i class="fa fa-edit"></i></a>
+                                            <form action="{{ route('subjects.destroy', ['subject' => $subject]) }}"
+                                                method="POST" class="d-inline pl-1"
+                                                onsubmit="return confirm('Delete {{ $subject->name }} Subject?')">
+                                                @csrf
+                                                @method('delete')
+                                                <button class="btn btn-outline-danger border-0" title="delete">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                        <td class="text-center">
+                                            <a title="Lectures" class="md-btn md-raised primary text-white w-sm r-15"
+                                                href="{{ route('subjects.show', ['subject' => $subject]) }}"> Lectures <i
+                                                    class="fas fa-long-arrow-right"></i></a>
+                                        </td>
+
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
 
     <script>
         const startTime = document.getElementById('start_time');
