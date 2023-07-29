@@ -45,6 +45,7 @@
                                                 {{ date('h:i', strtotime($weekProg->end_time)) }}</option>
                                         @endforeach
                                     </select>
+                                    <br>
                                     <button class="md-btn md-raised primary text-white w-md ml-2 mt-2"> Add
                                         Lecture &nbsp;&nbsp;&nbsp; <i class="fas fa-plus-square fa-lg"></i> </button>
                                 </div>
@@ -67,7 +68,7 @@
                                         <tr>
                                             <td>{{ $lecture->name }}</td>
                                             <td>{{ $lecture->date }}</td>
-                                            <td>{{ $lecture->video_link }}</td>
+                                            <td><a class="text-primary" href="{{ $lecture->video_link }}">   {{ $lecture->video_link }}</a></td>
                                             <td class="w-sm">{{ $lecture->weekProg->day }} <br />
                                                 [{{ date('h:i', strtotime($lecture->weekProg->start_time)) . '-' . date('h:i', strtotime($lecture->weekProg->end_time)) }}]
                                             </td>
