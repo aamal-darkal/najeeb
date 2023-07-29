@@ -5,24 +5,24 @@
         <div class="row text-center align-items-start">
             <div class="col-md-2 p-1">
                 <a href="{{ route('packages.index') }}" title="All packages"
-                    class="md-btn md-raised m-b-sm w-md primary text-white r-15 mt-3"><i class="fas fa-long-arrow-left"></i>
-                    &nbsp;&nbsp; All packages</a>
-                <div class="p-2  b-a b-primary b-2x text-left text-md mt-1">
+                    class="md-btn md-raised m-b-sm primary text-white r-15 mt-3 w-135"><i class="fas fa-long-arrow-left"></i>
+                     All packages</a>
+                <div class="p-2 b-a b-primary b-2x text-left mt-1">
                     <div class="text-center">
                         <img src="{{ asset('storage/images/packages/' . $package->image) }}"
                             alt={{ asset('storage/images/packges/' . $package->image) }} width="100%">
                     </div>
-                    <div class="p-2 text-center">
+                    <div class="p-2 text-center text">
                         <div class="field-value">
-                            <div class="text-primary text-md _800">package Name: </div>
+                            <div class="text-primary text _800">package Name: </div>
                             {{ $package->name }}
                         </div>
                         <div class="field-value">
-                            <div class="text-primary text-md _800">Starts at: </div>
+                            <div class="text-primary text _800">Starts at: </div>
                             {{ $package->start_date }}
                         </div>
                         <div class="field-value ">
-                            <div class="text-primary text-md _800">Ends at: </div>
+                            <div class="text-primary text _800">Ends at: </div>
                             {{ $package->end_date }}
                         </div>
                     </div>
