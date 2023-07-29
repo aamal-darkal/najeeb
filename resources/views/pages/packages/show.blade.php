@@ -7,22 +7,22 @@
                 <a href="{{ route('packages.index') }}" title="All packages"
                     class="md-btn md-raised m-b-sm w-md primary text-white r-15 mt-3"><i class="fas fa-long-arrow-left"></i>
                     &nbsp;&nbsp; All packages</a>
-                <div class="p-2 primary-light b-a b-primary b-2x text-left text-md mt-1">
+                <div class="p-2  b-a b-primary b-2x text-left text-md mt-1">
                     <div class="text-center">
                         <img src="{{ asset('storage/images/packages/' . $package->image) }}"
                             alt={{ asset('storage/images/packges/' . $package->image) }} width="100%">
                     </div>
-                    <div class="p-2 text-center _800">
+                    <div class="p-2 text-center">
                         <div class="field-value">
-                            <div class="text-primary">package Name: </div>
+                            <div class="text-primary text-md _800">package Name: </div>
                             {{ $package->name }}
                         </div>
                         <div class="field-value">
-                            <div class="text-primary">Starts at: </div>
+                            <div class="text-primary text-md _800">Starts at: </div>
                             {{ $package->start_date }}
                         </div>
-                        <div class="field-value">
-                            <div class="text-primary">Ends at: </div>
+                        <div class="field-value ">
+                            <div class="text-primary text-md _800">Ends at: </div>
                             {{ $package->end_date }}
                         </div>
                     </div>

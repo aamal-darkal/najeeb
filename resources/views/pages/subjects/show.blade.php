@@ -14,15 +14,15 @@
                             alt={{ asset('storage/images/packges/' . $subject->package->image) }} width="100%">
                     </div>
 
-                    <div class="text-md text-center _800">
-                        <div class="text-primary text-md">
+                    <div class="text-md text-center text-sm">
+                        <div class="text-primary text-md _800">
                             {{ $subject->package->name }} </div>
                         {{ $subject->package->start_date }} <br>
                         {{ $subject->package->end_date }}
-                        <div class="text-primary text-md">
+                        <div class="text-primary text-md _800">
                             {{ $subject->name }}
                         </div>
-                    </div>
+                    </div>  
                 </div>
             </div>
             {{-- **************** for lectures **************** --}}
