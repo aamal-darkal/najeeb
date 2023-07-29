@@ -2,7 +2,7 @@
 @section('content')
 {{-- ***************************  packages ************************** --}}
     <div class="padding">
-        <div class="box col-md-8 offset-md-2">
+        <div class="box col-md-10 offset-md-1">
 
             <div class="box-header text-primary d-flex justify-content-between">
                 <h2>All Packages</h2>

@@ -2,40 +2,34 @@
 @section('content')
     {{-- ***************************  package's subjects ************************** --}}
     <div class="container-fluid">
-        <a href="{{ route('packages.index') }}" title="All packages"
-            class="md-btn md-raised m-b-sm w-md primary text-white r-15 mt-3"><i class="fas fa-long-arrow-left"></i>
-            &nbsp;&nbsp; All packages</a>
-        <div class="row text-center">
-            <div class="col-md-5 p-1">
-                <div class="text-primary box-header">
-                    <h2 class="d-inline ml-2"> {{ $package->name }} package</h2>
-                </div>
-                <div class="table-reponsive">
-                    <table class="table table-responive text-center b-a b-a b-3x b-primary">
-                        <thead>
-                            <tr class="text-primary dker">
-                                <th>package image</th>
-                                <th>package Name</th>
-                                <th>Starts at</th>
-                                <th>Ends at</th>
-                                <th>Subj count</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="primary-light text-primary _800">
-                                <td><img class="w-xxs m-0" src="{{ asset('storage/images/packages/' . $package->image) }}"
-                                        alt={{ asset('storage/images/packges/' . $package->image) }}>
-                                </td>
-                                <td class="v-m">{{ $package->name }}</td>
-                                <td class="v-m">{{ $package->start_date }}</td>
-                                <td class="v-m">{{ $package->end_date }}</td>
-                                <td class="v-m w-xxs">{{ $package->subjects->count() }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+        <div class="row text-center align-items-start">
+            <div class="col-md-2 p-1">
+                <a href="{{ route('packages.index') }}" title="All packages"
+                    class="md-btn md-raised m-b-sm w-md primary text-white r-15 mt-3"><i class="fas fa-long-arrow-left"></i>
+                    &nbsp;&nbsp; All packages</a>
+                <div class="p-2 primary-light b-a b-primary b-2x text-left text-md">
+
+                    <div class="text-center">
+                        <img src="{{ asset('storage/images/packages/' . $package->image) }}"
+                            alt={{ asset('storage/images/packges/' . $package->image) }} width="100%">
+                    </div>
+                    <div class="p-2 text-center _800">
+                        <div class="field-value">
+                            <div class="text-primary">package Name: </div>
+                            {{ $package->name }}
+                        </div>
+                        <div class="field-value">
+                            <div class="text-primary">Starts at: </div>
+                            {{ $package->start_date }}
+                        </div>
+                        <div class="field-value">
+                            <div class="text-primary">Ends at: </div>
+                            {{ $package->end_date }}
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-7">
+            <div class="col-md-10 ">
                 <div class="box-header text-primary">
                     <h2 class="d-inline ml-2">{{ $package->name }}’s subjects ({{ $package->subjects->count() }})</h2>
                 </div>
