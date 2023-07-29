@@ -13,16 +13,16 @@
                         <img src="{{ asset('storage/images/packages/' . $package->image) }}"
                             alt={{ asset('storage/images/packges/' . $package->image) }} width="100%" height="150px">
                     </div>
-                    <div class="p-2 text">
-                        <div class="field-value">
+                    <div class="p-2 text mt-1">
+                        <div>
                             <div class="text-primary text _800">package Name: </div>
                             {{ $package->name }}
                         </div>
-                        <div class="field-value">
+                        <div>
                             <div class="text-primary text _800">Starts at: </div>
                             {{ $package->start_date }}
                         </div>
-                        <div class="field-value ">
+                        <div>
                             <div class="text-primary text _800">Ends at: </div>
                             {{ $package->end_date }}
                         </div>

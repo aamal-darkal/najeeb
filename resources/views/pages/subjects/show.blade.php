@@ -31,7 +31,7 @@
                     <div class="box-header text-primary ">
                         <h2 class="d-inline ml-2">{{ $subject->name }}’s lectures ({{ $subject->lectures->count() }})</h2>
                     </div>
-                    <div class="row box p-3 b-a  b-2x">
+                    <div class="row box p-3 b-a">
                         <div class="col-md-7  mx-auto">
                             <form method="get" action="{{ route('lectures.create') }}">
                                 <div class="b-a b-3x  p-2  ">
