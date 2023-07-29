@@ -31,10 +31,10 @@
                     <div class="box-header text-primary ">
                         <h2 class="d-inline ml-2">{{ $subject->name }}’s lectures ({{ $subject->lectures->count() }})</h2>
                     </div>
-                    <div class="row box p-3 b-a b-primary b-2x">
+                    <div class="row box p-3 b-a  b-2x">
                         <div class="col-md-7  mx-auto">
                             <form method="get" action="{{ route('lectures.create') }}">
-                                <div class="b-a b-3x b-primary p-2  ">
+                                <div class="b-a b-3x  p-2  ">
                                     <div class="text-primary position-relative z-1 bg-white w-md mx-auto text-lg"
                                         style="bottom:20px">Adding lecture </div>
                                     <div class="text-md">Choose Time then Add lecture</div>
