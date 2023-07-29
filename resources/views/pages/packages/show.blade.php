@@ -19,10 +19,10 @@
                             {{ $package->name }}
                         </div>
                         <div class="text-primary text _800">Starts at:
-                            <span class="text-dark _100 text-sm" >{{ $package->start_date }}</span>
+                            <div class="text-dark _100 " >{{ $package->start_date }}</div>
                         </div>
                         <div class="text-primary text _800">Ends at:
-                            <span class="text-dark _100 text-sm">{{ $package->end_date }}</span>
+                            <div class="text-dark _100 ">{{ $package->end_date }}</div>
                         </div>
                     </div>
                 </div>
