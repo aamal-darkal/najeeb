@@ -5,7 +5,7 @@
         <div class="row text-center p-1">
             <div class="col-md-2 p-1">
                 <a href={{ route('packages.show', $subject->package) }} title="{{ $subject->package->name }} subjects"
-                    class="md-btn md-raised mt-2 mb-2 p-1 primary text-white r-15"><i class="fas fa-long-arrow-left"></i>
+                    class="md-btn md-raised mt-1 mb-2 p-1 primary text-white r-15"><i class="fas fa-long-arrow-left"></i>
                     {{ $subject->package->name }} subjects
                 </a>                
                 <div class="p-2 primary-light b-a b-primary b-2x text-left mt-3 ">

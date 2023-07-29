@@ -3,16 +3,17 @@
     {{-- ***************************  package's subjects ************************** --}}
     <div class="container-fluid">
         <div class="row text-center align-items-start">
-            <div class="col-md-2 p-1">
+            <div class="col-md-2 ">
                 <a href="{{ route('packages.index') }}" title="All packages"
                     class="md-btn md-raised m-b-sm primary text-white r-15 mt-3 w-135"><i class="fas fa-long-arrow-left"></i>
-                     All packages</a>
-                <div class="p-2 b-a b-primary b-2x text-left mt-1">
-                    <div class="text-center">
+                      All packages</a>
+
+                <div class="p-2 b-a b-primary b-2x text-center">
+                    <div>
                         <img src="{{ asset('storage/images/packages/' . $package->image) }}"
                             alt={{ asset('storage/images/packges/' . $package->image) }} width="100%">
                     </div>
-                    <div class="p-2 text-center text">
+                    <div class="p-2 text">
                         <div class="field-value">
                             <div class="text-primary text _800">package Name: </div>
                             {{ $package->name }}
