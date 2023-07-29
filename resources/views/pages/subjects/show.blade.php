@@ -8,18 +8,18 @@
                     class="md-btn md-raised mt-1 mb-2 p-1 primary text-white r-15"><i class="fas fa-long-arrow-left"></i>
                     {{ $subject->package->name }} subjects
                 </a>                
-                <div class="p-2 primary-light b-a b-primary b-2x text-left mt-3 ">
-                    <div class="text-center">
+                <div class="p-2 primary-light b-a b-primary b-2x mt-3 ">
+                    <div>
                         <img src="{{ asset('storage/images/packages/' . $subject->package->image) }}"
-                            alt={{ asset('storage/images/packges/' . $subject->package->image) }} width="100%">
+                            alt={{ asset('storage/images/packges/' . $subject->package->image) }} width="100%" height="150">
                     </div>
 
-                    <div class="text-md text-center text-sm">
-                        <div class="text-primary text-md _800">
+                    <div class="text-md">
+                        <div class="text-primary  _800">
                             {{ $subject->package->name }} </div>
                         {{ $subject->package->start_date }} <br>
                         {{ $subject->package->end_date }}
-                        <div class="text-primary text-md _800">
+                        <div class="text-primary  _800">
                             {{ $subject->name }}
                         </div>
                     </div>  

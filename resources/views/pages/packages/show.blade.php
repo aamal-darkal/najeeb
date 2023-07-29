@@ -11,7 +11,7 @@
                 <div class="p-2 b-a b-primary b-2x text-center">
                     <div>
                         <img src="{{ asset('storage/images/packages/' . $package->image) }}"
-                            alt={{ asset('storage/images/packges/' . $package->image) }} width="100%">
+                            alt={{ asset('storage/images/packges/' . $package->image) }} width="100%" height="150px">
                     </div>
                     <div class="p-2 text">
                         <div class="field-value">
