@@ -6,25 +6,23 @@
             <div class="col-md-2 ">
                 <a href="{{ route('packages.index') }}" title="All packages"
                     class="md-btn md-raised m-b-sm primary text-white r-15 mt-3 w-135"><i class="fas fa-long-arrow-left"></i>
-                      All packages</a>
+                    All packages</a>
 
-                <div class="p-2 b-a b-primary b-2x text-center">
+                <div class="p-2 b-a b-primary b-2x text-center bg-white ">
                     <div>
                         <img src="{{ asset('storage/images/packages/' . $package->image) }}"
-                            alt={{ asset('storage/images/packges/' . $package->image) }} width="100%" height="150px">
+                            alt={{ asset('storage/images/packges/' . $package->image) }} width="100%" height="130px">
                     </div>
                     <div class="p-2 text mt-1">
-                        <div>
-                            <div class="text-primary text _800">package Name: </div>
+                        <div class=" _800">
+                            <div class="text-primary">package Name: </div>
                             {{ $package->name }}
                         </div>
-                        <div>
-                            <div class="text-primary text _800">Starts at: </div>
-                            {{ $package->start_date }}
+                        <div class="text-primary text _800">Starts at:
+                            <span class="text-dark _100">{{ $package->start_date }}</span>
                         </div>
-                        <div>
-                            <div class="text-primary text _800">Ends at: </div>
-                            {{ $package->end_date }}
+                        <div class="text-primary text _800">Ends at:
+                            <span class="text-dark _100">{{ $package->end_date }}</span>
                         </div>
                     </div>
                 </div>

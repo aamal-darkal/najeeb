@@ -11,10 +11,10 @@
                 <div class="p-2 primary-light b-a b-primary b-2x mt-3 ">
                     <div>
                         <img src="{{ asset('storage/images/packages/' . $subject->package->image) }}"
-                            alt={{ asset('storage/images/packges/' . $subject->package->image) }} width="100%" height="150">
+                            alt={{ asset('storage/images/packges/' . $subject->package->image) }} width="100%" height="130">
                     </div>
 
-                    <div class="text-md">
+                    <div class="text-md mt-1">
                         <div class="text-primary  _800">
                             {{ $subject->package->name }} </div>
                         {{ $subject->package->start_date }} <br>
@@ -30,7 +30,7 @@
                 <div class="container box-header">
                     <div class="box-header text-primary ">
                         <h2 class="d-inline ml-2">{{ $subject->name }}’s lectures ({{ $subject->lectures->count() }})</h2>
-                    </div>
+                    </div>  
                     <div class="row box p-3 b-a">
                         <div class="col-md-7  mx-auto">
                             <form method="get" action="{{ route('lectures.create') }}">
