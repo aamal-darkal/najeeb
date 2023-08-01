@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AttendeeController;
+use App\Http\Controllers\Api\AttendenceController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\LectureController;
 use App\Http\Controllers\Api\NotificationController;
@@ -39,7 +40,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('lecture/{id}',  'show');
     });
 
-    Route::get('attend/{lecture_id}', [AttendeeController::class, 'attend']);
+
+    // Route::get('attend/{lecture_id}', [AttendeeController::class, 'attend']);
+    Route::controller(AttendenceController::class)->group(function () {
+        Route::get('getTodayAttendences ', 'getTodayAttendences');
+        Route::post('setAttendence/{lecture_id}',  'setAttendence');
+    });
+
     Route::post('class_order_create', [SubjectController::class, 'subscribe']);
 });
 

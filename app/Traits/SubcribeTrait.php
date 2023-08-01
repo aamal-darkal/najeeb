@@ -58,7 +58,7 @@ trait SubcribeTrait
     }
     private function generatePassword($n)
     {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
+        $characters = '123456789abcdefghijklmnopqrstuvwxyz';
         $randomString = '';
 
         for ($i = 0; $i < $n; $i++) {
