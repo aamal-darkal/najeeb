@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
+use App\Http\Helpers\SettingsHelper;
 use App\Http\Resources\PackagesResource;
 use App\Models\Package;
 use App\Models\Student;
@@ -20,7 +21,16 @@ class PackageController extends Controller
     public function getMySubjects()
     {
 
-        $studentId = Student::select('id')->where('user_id', Auth::id())->first()->id;
+        $student = Student::select('id', 'state')->where('user_id', Auth::id())->first();
+        if ($student->state != 'current') {
+            $refMobile = SettingsHelper::getSetting('reference_phone') ;
+            return response()->json(
+                [
+                    'message' => "لا يمكنك المتابعة حاليا يرجى الاتصال على الرقم $refMobile "
+                ]
+            );
+        }
+        $studentId = $student->id;
         $packages = Package::whereHas('subjects', function ($query) use ($studentId) {
             return $query->whereHas('students', function ($query) use ($studentId) {
                 return $query->where('student_id', $studentId);
@@ -33,12 +43,11 @@ class PackageController extends Controller
                         return $query->where('student_id', $studentId);
                     }
                 );
-            }
-        , 'subjects.lectures' => function($q) {
-            return $q->where('date' , '<=' , now())->orderBy('date' ,'desc');
-        }
-        , 'subjects.lectures.pdfFiles'])->get();
-            
+            }, 'subjects.lectures' => function ($q) {
+                return $q->where('date', '<=', now())->orderBy('date', 'desc');
+            }, 'subjects.lectures.pdfFiles'
+        ])->get();
+
         if ($packages) {
             $data = ['my_classes' => PackagesResource::collection($packages)];
             return ResponseHelper::success($data, 'Your packages');
@@ -56,7 +65,7 @@ class PackageController extends Controller
         $packages = Package::with('subjects.lectures.pdfFiles')->get();
         $studentId = Student::select('id')->where('user_id', Auth::id())->first()->id;
         //get ids of student subjects
-        $studentSubjectsIds = Subject::select('id')->whereHas('students', function($q) use($studentId) {
+        $studentSubjectsIds = Subject::select('id')->whereHas('students', function ($q) use ($studentId) {
             $q->where('student_id', $studentId);
         })->pluck('id')->toArray();
 

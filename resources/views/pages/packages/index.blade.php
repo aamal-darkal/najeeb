@@ -32,7 +32,7 @@
                                 <td class="w-md">
                                     <a class="btn btn-sm btn-outline-success border-0" title="students" href="{{ route('students.index',  ['package' => $package]  ) }}">
                                         <i class="fa fa-users"></i></a>
-                                    <a class="btn btn-sm btn-outline-warning border-0" title="students" href="{{ route('notifications.create', [ 'package' => $package]) }}">
+                                    <a class="btn btn-sm btn-outline-warning border-0" title="notify" href="{{ route('notifications.create', [ 'package' => $package]) }}">
                                         <i class="fa fa-bell"></i></a>
                                     <a class="btn btn-sm btn-outline-info border-0" title="edit" href="{{ route('packages.edit', $package) }}">
                                         <i class="fa fa-edit"></i></a>

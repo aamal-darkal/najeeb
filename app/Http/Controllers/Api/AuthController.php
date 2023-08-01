@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\ResponseHelper;
+use App\Http\Helpers\SettingsHelper;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Resources\PaymentResource;
 use App\Http\Resources\UserInfoResource;
@@ -50,9 +51,10 @@ class AuthController extends Controller
         }
 
         $user = User::where('user_name', $request['user_name'])->firstOrFail();
-        if ($user->token_birth && Carbon::make($user->token_birth)->diffInDays(Carbon::now()) <= 30)
+        $banPeriod = SettingsHelper::getSetting('min_count_days_before_relogin');
+        if ($user->token_birth && Carbon::make($user->token_birth)->diffInDays(Carbon::now()) <= $banPeriod)
             return response()->json([
-                'message' => 'لا يمكن تسجبل الدخول أكثر من مرةخلال 30 بوم'
+                'message' => "لا يمكن تسجبل الدخول أكثر من مرةخلال $banPeriod بوم"
             ], 401);
 
         $user->update(['fcm_token' => $request->fcm_token, 'token_birth' => Carbon::now()]);

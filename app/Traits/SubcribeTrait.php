@@ -56,7 +56,18 @@ trait SubcribeTrait
             'subjects' => $subjects
         ];
     }
+    private function generatePassword($n)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
+        $randomString = '';
 
+        for ($i = 0; $i < $n; $i++) {
+            $index = rand(0, strlen($characters) - 1);
+            $randomString .= $characters[$index];
+        }
+
+        return $randomString;
+    }
 
     private function createUser($student)
     {
@@ -64,15 +75,16 @@ trait SubcribeTrait
         $usedUserName = true;
         while ($usedUserName) {
             $code = rand(111, 999);
-            $userName = $student->first_name . '_' . $student->last_name . '_' . $code;
+            $userName = $student->first_name . '-' . $student->last_name . '-' . $code;
             $usedUserName = User::where('user_name', $userName)->exists();
         }
         $usedUserName = true;
-        $password = Str::random(8);
+        $password = $this->generatePassword(8);
 
         $user = $student->user()->create([
             'user_name' =>  $userName,
-            'password' => Hash::make($password),
+            // 'password' => Hash::make($password),
+            'password' => $password,
         ]);
 
         //change user state

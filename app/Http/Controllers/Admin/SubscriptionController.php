@@ -72,7 +72,7 @@ class SubscriptionController extends Controller
                         $subList .= "$sub->name ";
                     }
                     return back()->with('error', "$subList subcribed before")->withInput();
-                }
+                }   
 
                 $payment->update(['state' => 'approved']);
                 

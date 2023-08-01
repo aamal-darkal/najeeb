@@ -166,7 +166,7 @@
             @endif
         </div>
     </div>
-    <!-- ############ PAGE END-->
+    
     <script>
         function checkSelection() {
             let anySelected = document.querySelector("input[type='checkbox']:checked");

@@ -75,7 +75,7 @@
                                             <td class="">
                                                 <a class="btn btn-sm btn-outline-info border-0" title="edit"
                                                     onclick="alert('under working')"
-                                                    href="{{ route('lectures.edit', $lecture) }}">
+                                                    href="{{ route('lectures.edit', $lecture) }}" target="_blank">
                                                     <i class="fa fa-edit"></i></a>
                                                 <form action="{{ route('lectures.destroy', ['lecture' => $lecture]) }}"
                                                     method="POST"
