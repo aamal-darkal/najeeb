@@ -16,7 +16,7 @@ class AttendenceController extends Controller
         $lecture = $student->lectures()->wherePivot('lecture_id', $lecture_id)->first();
 
         if ($lecture) {
-            $lecture->pivot->update(['views' => $lecture->pivot->views + 1]);
+            $lecture->pivot->update(['views' => $lecture->pivot->views + 1 , 'date' => Carbon::now() ]);
             $lecture->save();
         } else {
             $student->lectures()->attach($lecture_id, ['date' => Carbon::now(), 'views' => 1]);
@@ -33,11 +33,9 @@ class AttendenceController extends Controller
         $todayAttencesRec = $student->lectures()->wherePivot('date', Carbon::now()->format('Y-m-d'));
         if ($todayAttencesRec) {
             $todaylectureCount = $todayAttencesRec->count();
-            $todayViewsSum = $todayAttencesRec->sum('views');
             return ResponseHelper::success(
                 [
-                    'lectureCount' => $todaylectureCount,
-                    'sumOfViews' => $todayViewsSum
+                    $todaylectureCount,
                 ],
                 'count of lectures has been viewed today'
             );
