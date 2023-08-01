@@ -83,8 +83,7 @@ trait SubcribeTrait
 
         $user = $student->user()->create([
             'user_name' =>  $userName,
-            // 'password' => Hash::make($password),
-            'password' => $password,
+            'password' => Hash::make($password),
         ]);
 
         //change user state
