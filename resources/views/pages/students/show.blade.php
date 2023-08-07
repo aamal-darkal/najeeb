@@ -86,6 +86,9 @@
                     <div class="box-header text-primary">
                         <h2> Subjects </h2>
                     </div>
+                    @php
+                        $student_id = $student->id;
+                    @endphp
                     <div class="table-responsive">
                         <table class="table table-bordered table-condensed table-header-center">
                             <thead class="dker text-dark">
@@ -105,7 +108,8 @@
                                         <td>{{ $subject->cost }}</td>
                                         <td>{{ $subject->package->name }}</td>
                                         <td>{{ \Carbon\Carbon::create($subject->pivot->created_at)->diffForHumans() }}</td>
-                                        <td> under working</td>
+                                    <td> {{ round($subject->lectures()->whereHas('students' , function($q) use($student_id){
+                                    return $q->where('student_id',$student_id); })->count()/$subject->lectures->count() * 100,0)}}%</td>
                                         <td class="text-center">
                                             <form action="{{ route('students.subcribe-destroy', $student) }}"
                                                 method="post">

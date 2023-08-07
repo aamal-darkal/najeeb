@@ -21,15 +21,9 @@ class PaymentResource extends JsonResource
         return [
             'payment_id' => $this->id ,
             'student_id' => $this->order->student->id,
-            'amt_paid' => $this->amount,
-            'balance' => Payment::where('payment_date', '<=' , $this->payment_date )->sum('amount'),             
-            'paid' => true,
-            'order_confirm' => $this->state == 'approved'?  true : false,                
-            'student_my_class_id' => null, //needed
-            'year' => null,
-            'month_number' => null,
-            'created_at' => $this->payment_date,
-            'updated_at' => null,
+            'amount' => $this->amount,
+            'bill_number' =>$this->bill_number,
+            'payment_date' => $this->payment_date,          
         ];
     }
 
