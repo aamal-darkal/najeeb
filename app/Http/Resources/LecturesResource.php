@@ -17,7 +17,7 @@ class LecturesResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'video_link' => $this->link_video,
+            'video_link' => $this->video_link,
             'time_publish' => $this->date,
             'duration' => $this->duration,
             'pdf_files' => PdfFilesResource::collection($this->pdfFIles)
