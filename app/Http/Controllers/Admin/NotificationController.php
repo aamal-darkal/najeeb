@@ -17,32 +17,34 @@ class NotificationController extends Controller
     /**
      * view broadcast and student notification form
      *
+     * @param no param
+     * @return void
+     */
+    public function index()
+    {
+        $notifications = Notification::withCount('students')->orderby('time_publish' , 'desc')->get();
+        return view('pages.notifications.index' , compact('notifications'));
+    }
+    /**
+     * view broadcast and student notification form
+     *
      * @param Request $request
      * @return void
      */
     public function create(Request $request)
     {
+        $all = $request->input('all');
         $package = $request->input('package');
         $subject = $request->input('subject');
+        $student = $request->input('student');
 
-        $students = Student::select('id')->when(
-            $package,
-            function ($q) use ($package) {
-                return $q->wherehas('subjects', function ($q) use ($package) {
-                    return $q->where("package_id", $package);
-                });
-            }
-
-        )->when($subject, function ($q) use ($subject) {
-            return $q->wherehas('subjects', function ($q) use ($subject) {
-                return $q->where('students.id', $subject);
-            });
-        })->where('state', 'current')->get()->pluck('id');
         if ($package)
             $package = Package::find($package);
         if ($subject)
             $subject = Subject::find($subject);
-        return view('pages.notifications.create', compact('students', 'package', 'subject'));
+        if ($student)
+            $student = Student::find($student);
+        return view('pages.notifications.create', compact('all', 'package', 'subject', 'student'));
     }
 
     /**
@@ -61,27 +63,31 @@ class NotificationController extends Controller
         $validated['time_publish'] = Carbon::parse($validated['time_publish'])->format('Y-m-d H:i');
         $validated['created_at'] = now();
 
+        $all = $request->input('all');
         $package = $request->input('package');
         $subject = $request->input('subject');
+        $student = $request->input('student');
 
         $notification = Notification::create($validated);
 
         $tokens = [];
-        $students = Student::where('state', 'current')
-            ->when(
-                $package,
-                function ($q) use ($package) {
-                    return $q->wherehas('subjects', function ($q) use ($package) {
-                        return $q->where('package_id', $package);
-                    });
-                }
-            )
-            ->when($subject, function ($q) use ($subject) {
-                return $q->wherehas('subjects', function ($q) use ($subject) {
-                    return $q->where('subject_id', $subject);
+        $students = Student::when($all, function ($q) {
+            return $q->where('state', 'current');
+        })->when(
+            $package,
+            function ($q) use ($package) {
+                return $q->wherehas('subjects', function ($q) use ($package) {
+                    return $q->where('package_id', $package);
                 });
-            })
-            ->get();
+            }
+        )->when($subject, function ($q) use ($subject) {
+            return $q->wherehas('subjects', function ($q) use ($subject) {
+                return $q->where('subject_id', $subject);
+            });
+        })
+            ->when($student, function ($q) use ($student) {
+                return $q->where('id', $student);
+            })->get();
         $studentIds =  $students->pluck('id');
 
         foreach ($students as $student)
@@ -97,8 +103,52 @@ class NotificationController extends Controller
             return redirect()->route('packages.index')->with('success', 'Notification has been sent successfully');
 
         else if ($subject)
-            return redirect()->route('packages.show' , ['package' => Subject::find( $subject)->package_id])->with('success', 'Notification has been sent successfully');
+            return redirect()->route('packages.show', ['package' => Subject::find($subject)->package_id])->with('success', 'Notification has been sent successfully');
+        else if ($student)
+            return redirect()->route('students.show', ['student' => $student])->with('success', 'Notification has been sent successfully');
 
         return back()->with('success', 'Notification has been sent successfully');
+    }
+    /**
+     * view broadcast and student notification form
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function edit(Request $request , Notification $notification)
+    {       
+        return view('pages.notifications.edit', compact('notification'));
+    }
+
+    /**
+     * store broadcast and student notification 
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function update(Request $request  , Notification $notification)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:25',
+            'description' => 'required|string|max:255',
+            'time_publish' => 'required|date',
+        ]);
+        $validated['time_publish'] = Carbon::parse($validated['time_publish'])->format('Y-m-d H:i');
+        
+        $notification->update($validated);       
+
+        return redirect('notification.index')->with('success', 'Notification has been updated successfully');
+    }
+    /**
+     * store broadcast and student notification 
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function destroy( Notification $notification)
+    {
+        $notification->delete();       
+
+        return redirect()->route('notifications.index')->with('success', 'Notification has been updated successfully');
     }
 }

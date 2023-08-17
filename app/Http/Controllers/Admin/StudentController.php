@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\MessagingHelper;
-use App\Http\Helpers\NotificationHelper;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
-use App\Models\Notification;
 use App\Models\Package;
 use App\Models\Student;
 use App\Models\PaymentMethod;
@@ -27,6 +25,8 @@ class StudentController extends Controller
         $state = $request->input('state', 'current');
         $package = $request->input('package');
         $subject =  $request->input('subject');
+        $subject =  $request->input('subject');
+        $notification =  $request->input('notification');
         $students = Student::where('state', $state)
             ->with('user')
             ->with('subjects')
@@ -44,7 +44,16 @@ class StudentController extends Controller
                 return $q->wherehas('subjects', function ($q) use ($subject) {
                     return $q->where('subject_id', $subject);
                 });
-            })->paginate(8);
+            })
+            ->when(
+                $notification,
+                function ($q) use ($notification) {
+                    return $q->wherehas('notifications', function ($q) use ($notification) {
+                        return $q->where('notification_id', $notification);
+                    });
+                }
+            )
+            ->paginate(8);
         if ($package)
             $package = Package::find($package);
         if ($subject)
@@ -195,7 +204,7 @@ class StudentController extends Controller
             $students = Student::find($validated['ids']);
             foreach ($students as $student)
                 $student->update(['state' => 'current']);
-            return back()->with('success', 'Student is ubanned successfully');;
+            return back()->with('success', 'Student is unbanned successfully');;
         }
     }
 
@@ -259,44 +268,7 @@ class StudentController extends Controller
 
         return redirect()->route('students.show', $student)->with('success', 'Password changed successfully');
     }
-    //****************************** send notication change  **************************************/
-    /**
-     * show input for password
-     *
-     * @param Student $student
-     * @return void
-     */
-    public function noticationCreate(Student $student)
-    {
-        return view('pages.students.notifcation', compact('student'));
-    }
-    /**
-     * saved Entered password
-     *
-     * @param Request $request
-     * @param Student $student
-     * @return void
-     */
-    public function noticationStore(Request $request, Student $student)
-    {
-        $validated = $request->validate([
-            'title' => 'required|string|max:25',
-            'description' => 'required|string|max:255',
-            'time_publish' => 'required|date',
-        ]);
-        $validated['time_publish'] = Carbon::parse($validated['time_publish'])->format('Y-m-d H:i');
-        $validated['created_at'] = now();
 
-        $notification = Notification::create($validated);
-
-        $student->notifications()->attach($notification);
-
-        $token = $student->user->fcm_token;
-
-        NotificationHelper::sendNotification($notification, $token);
-
-        return redirect()->route('students.show', $student)->with('success', 'Notification has been sent successfully');
-    }
     //************************************** subcribe *****************************************/
 
     public function subcribeCreate(Student $student)

@@ -1,50 +1,25 @@
 @extends('layouts.master')
 @section('content')
-    <!-- ############ PAGE START-->
     <div class="container padding ">
         <div class="box col-md-6 offset-md-3">
             <div class="box-header text-primary">
-                <h2>Send notification for
-                    @if ($all)
-                        All Student
-                    @endif
-                    @if ($package)
-                        {{ $package->name }} package
-                    @endif
-                    @if ($subject)
-                        {{ $subject->name }} subject
-                    @endif
-                    @if ($student)
-                        {{ $student->first_name }}
-                        {{ $student->father_name }}
-                        {{ $student->last_name }} student
-                    @endif
-                </h2>
-            </div>
+                <a class="md-btn md-raised primary text-white m-0"
+                    onclick="history.back()"><i class="fas fa-long-arrow-left"></i></a>
+                <h2 class="inline ml-2">Edit notification </h2>
+            </div>      
             <div>
                 @foreach ($errors->all() as $error)
                     <p> {{ $error }}</p>
                 @endforeach
             </div>
             <div class="box-divider"></div>
-            <form role="form" method="POST" action="{{ route('notifications.store') }}" class="container mt-2">
+            <form role="form" method="POST" action="{{ route('notifications.update' , $notification) }}" class="container mt-2">
                 @csrf
-                @if ($all)
-                    <input type="hidden" name="all" value='all'>
-                @endif
-                @if ($package)
-                    <input type="hidden" name="package" value={{ $package->id }}>
-                @endif
-                @if ($subject)
-                    <input type="hidden" name="subject" value={{ $subject->id }}>
-                @endif
-                @if ($student)
-                    <input type="hidden" name="student" value={{ $student->id }}>
-                @endif
+               @method('put')
                 <div class="form-group">
                     <label for="title">Title</label>
                     <input type="text" class="form-control" placeholder="Enter notification title" id="title"
-                        id="title" name="title" value="{{ old('title') }}" required>
+                        id="title" name="title" value="{{ old('title' , $notification->title) }}" required>
                     <div class="text-danger">
                         @error('title')
                             {{ $message }}
@@ -54,7 +29,7 @@
                 <div class="form-group">
                     <label for="description">Content</label>
                     <input type="text" class="form-control" placeholder="Enter notification content" id="description"
-                        id="description" name="description" value="{{ old('description') }}" required>
+                        id="description" name="description" value="{{ old('description' , $notification->description) }}" required>
                     <div class="text-danger">
                         @error('description')
                             {{ $message }}
@@ -64,7 +39,7 @@
 
                 <div class="form-group">
                     <label for="time_publish">Publish Time</label>
-                    <input type='text' class="form-control datetimepicker" name="time_publish" id="time_publish" value="{{ old('time_publish')}}"required
+                    <input type='text' class="form-control datetimepicker" name="time_publish" id="time_publish" value="{{ old('time_publish' , $notification->time_publish) }}" required
                         autocomplete="off">
                     <div class="text-danger">
                         @error('time_publish')

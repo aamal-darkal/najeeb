@@ -35,8 +35,6 @@ Route::middleware('auth')->group(function () {
     Route::controller(StudentController::class)->group(function () {
         Route::get('students-password/{student}', 'passwordEdit')->name('students.password-edit');
         Route::post('students-password/{student}', 'passwordUpdate')->name('students.password-update');
-        Route::get('students-notification/{student}', 'noticationCreate')->name('students.notification-create');
-        Route::post('students-notification/{student}', 'noticationStore')->name('students.notification-store');
         Route::get('students-subcribe/{student}', 'subcribeCreate')->name('students.subcribe-create');
         Route::post('students-subcribe/{student}', 'subcribeStore')->name('students.subcribe-store');
         Route::delete('students-subcribe/{student}', 'subcribeDestroy')->name('students.subcribe-destroy');
@@ -60,7 +58,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('lectures', LectureController::class);
 
     /***************************************  notification *********************************/
-    Route::resource('notifications', NotificationController::class)->only('create', 'store');
+    Route::resource('notifications', NotificationController::class);
 
     /***************************************  Subscription *********************************/
     Route::controller(SubscriptionController::class)->group(function () {

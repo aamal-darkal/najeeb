@@ -49,11 +49,9 @@ class PackageController extends Controller
             $file = $request->file('image');
             $filename = $package->id . '.' . $file->extension();
             $file->storeAs($path,  $filename, 'public');
-        } else
-            $filename = 'no-image.png';
-        $package->image = $filename;
+            $package->image = $filename;
+        }
         $package->save();
-        // return redirect()->route('packages');
         return redirect()->route('packages.index')->with('success', 'package created successfuly');;
     }
 
@@ -68,9 +66,9 @@ class PackageController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Package $package): View    
+    public function edit(Package $package): View
     {
-        return view('pages.packages.edit' , compact('package'));
+        return view('pages.packages.edit', compact('package'));
     }
 
     /**
@@ -78,12 +76,19 @@ class PackageController extends Controller
      */
     public function update(Request $request, Package $package): RedirectResponse
     {
-        $validated = $request->validate(  [
+        $validated = $request->validate([
             'name' => 'required',
             'image' => 'sometimes|image|mimes:jpeg,gif,png,jpg',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
         ]);
+        if ($request->file('image')) {
+            $path = 'images/packages';
+            $file = $request->file('image');
+            $filename = $package->id . '.' . $file->extension();
+            $file->storeAs($path,  $filename, 'public');
+            $validated['image']= $filename;
+        }
         $package->update($validated);
         return redirect()->route('packages.index')->with('success', 'package updated successfuly');;
     }

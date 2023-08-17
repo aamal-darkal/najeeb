@@ -10,15 +10,20 @@
 
                 <div class="p-2 b-a b-primary b-2x text-center bg-white ">
                     <div>
-                        <img src="{{ asset('storage/images/packages/' . $package->image) }}"
-                            alt={{ asset('storage/images/packges/' . $package->image) }} width="100%" height="130px">
+                        @if($package->image)
+                        <img src="{{ asset( 'storage/images/packages/' . $package->image) }}"
+                             width="100%" height="130px">
+                        @else
+                        <img src="{{   asset('storage/images/packages/no-image.png') }}"
+                            width="100%" height="130px">
+                        @endif
                     </div>
                     <div class="p-2 text mt-1">
                         <div class=" _800">
                             <div class="text-primary">package Name: </div>
                             {{ $package->name }}
                         </div>
-                        <div class="text-primary text _800">Starts at:
+                        <div class="text-primary text _800">Starts at:  
                             <div class="text-dark _100 " >{{ $package->start_date }}</div>
                         </div>
                         <div class="text-primary text _800">Ends at:

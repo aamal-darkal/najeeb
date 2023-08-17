@@ -3,7 +3,7 @@
     <div class="container">
         <div class="col-md-8 offset-md-2 box p-2 ">
             <div class="box-header">
-                <a class="md-btn md-raised primary text-white m-0" href="{{ route('students.index') }}"><i
+                <a class="md-btn md-raised primary text-white m-0" href="{{ route('students.index' , ['state' => $student->state]) }}"><i
                         class="fas fa-long-arrow-left"></i></a>
 
                 <h2 class="text-primary d-inline ml-2 text-2x"> Student info: {{ $student->first_name }}
@@ -20,7 +20,7 @@
                     data</a>
                 <a href="{{ route('students.subcribe-create', $student) }}"
                     class="md-btn md-raised w-sm py-1 info mt-1">subcribe</a>
-                <a href="{{ route('students.notification-create', $student) }}"
+                <a href="{{ route('notifications.create', ['student' => $student]) }}"
                     class="md-btn md-raised w-sm py-1 warn mt-1">notify</a>
                 <form action="{{ route('students.destroy', ['student' => $student]) }}" class="d-inline" method="post"
                     onsubmit="return confirm('delete student ?')">
@@ -82,7 +82,7 @@
         {{-- subjects --}}
         @if ($student->subjects->count())
             <div class="container">
-                <div class="col-md-8 offset-md-2 box p-2 ">
+                <div class="col-md-8 offset-md-2 box p-2">
                     <div class="box-header text-primary">
                         <h2> Subjects </h2>
                     </div>
@@ -90,7 +90,7 @@
                         $student_id = $student->id;
                     @endphp
                     <div class="table-responsive">
-                        <table class="table table-bordered table-condensed table-header-center">
+                        <table class="table table-bordered table-condensed text-center">
                             <thead class="dker text-dark">
                                 <tr>
                                     <th>name</th>
@@ -108,8 +108,20 @@
                                         <td>{{ $subject->cost }}</td>
                                         <td>{{ $subject->package->name }}</td>
                                         <td>{{ \Carbon\Carbon::create($subject->pivot->created_at)->diffForHumans() }}</td>
-                                    <td> {{ round($subject->lectures()->whereHas('students' , function($q) use($student_id){
-                                    return $q->where('student_id',$student_id); })->count()/$subject->lectures->count() * 100,0)}}%</td>
+                                        <td>
+                                            @if ($subject->lectures->count() > 0)
+                                                {{ round(
+                                                    ($subject->lectures()->whereHas('students', function ($q) use ($student_id) {
+                                                            return $q->where('student_id', $student_id);
+                                                        })->count() /
+                                                        $subject->lectures->count()) *
+                                                        100,
+                                                    0,
+                                                ) }}%
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
                                         <td class="text-center">
                                             <form action="{{ route('students.subcribe-destroy', $student) }}"
                                                 method="post">
@@ -137,7 +149,7 @@
                         <h2> Orders </h2>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-bordered table-condensed  table-header-center">
+                        <table class="table table-bordered table-condensed text-center">
 
                             <thead class="dker text-dark">
                                 <tr>
@@ -165,7 +177,7 @@
                         <h2> Payments </h2>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-bordered table-condensed table-header-center">
+                        <table class="table table-bordered table-condensed text-center">
                             <thead class="dker text-dark">
                                 <tr>
                                     <th>amount</th>
@@ -203,7 +215,7 @@
                         <h2> Notications </h2>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-bordered table-condensed table-header-center">
+                        <table class="table table-bordered table-condensed text-center">
                             <thead class="dker text-dark">
                                 <tr>
                                     <th>title</th>
