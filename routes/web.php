@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LectureController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\PackageController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\SubscriptionController;
@@ -66,10 +67,15 @@ Route::middleware('auth')->group(function () {
         Route::get('subscriptions/edit/{status}', 'edit')->name('subscriptions.edit');
         Route::post('subscriptions/update', 'update')->name('subscriptions.update');
     });
-    Route::get('generate', function (){
-        \Illuminate\Support\Facades\Artisan::call('storage:link');
-        return 'ok';
+    /***************************************  Settings *********************************/
+    Route::controller(SettingController::class)->group(function () {
+        Route::get('settings', 'index')->name('settings.index');
+        Route::put('settings/{setting}', 'update')->name('settings.update');
     });
+    // Route::get('generate', function (){
+    //     \Illuminate\Support\Facades\Artisan::call('storage:link');
+    //     return 'ok';
+    // });
 });
 
 

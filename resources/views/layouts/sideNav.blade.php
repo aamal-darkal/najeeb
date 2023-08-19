@@ -79,7 +79,7 @@
                                     <a href="{{ route('packages.index') }}">
                                         <span class="nav-text">All Packages</span>
                                     </a>
-                                </li>                                
+                                </li>
                             </ul>
                         </li>
                     @endif
@@ -101,7 +101,7 @@
                                     <a href="{{ route('subjects.index') }}">
                                         <span class="nav-text">All subjects</span>
                                     </a>
-                                </li>                               
+                                </li>
                             </ul>
                         </li>
                     @endif
@@ -124,7 +124,7 @@
                                     <a href="{{ route('lectures.index') }}">
                                         <span class="nav-text">All lectures</span>
                                     </a>
-                                </li>                            
+                                </li>
                             </ul>
                         </li>
                     @endif
@@ -171,7 +171,7 @@
                             </ul>
                         </li>
                     @endif
-                    @if (Route::has('notifications.create'))
+                    @if (Route::has('notifications.index'))
                         <li>
                             <a>
                                 <span class="nav-caret">
@@ -186,47 +186,30 @@
                             </a>
                             <ul class="nav-sub">
                                 <li>
-                                    <a href="{{ route('notifications.create' , ['all' => 'all']) }}">
-                                        <span class="nav-text">Broadcast</span>
+                                    <a href="{{ route('notifications.index') }}">
+                                        <span class="nav-text">All Notification</span>
                                     </a>
-                                </li>                                
+                                </li>
                             </ul>
                             <ul class="nav-sub">
                                 <li>
-                                    <a href="{{ route('notifications.index' ) }}">
-                                        <span class="nav-text">All Notification</span>
+                                    <a href="{{ route('notifications.create', ['all' => 'all']) }}">
+                                        <span class="nav-text">Broadcast</span>
                                     </a>
-                                </li>                                
+                                </li>
                             </ul>
+                            
                         </li>
                     @endif
-                    @if (Route::has('configuration.edit'))
+                    @if (Route::has('settings.index'))
                         <li>
-                            <a>
-                                <span class="nav-caret">
-                                    <i class="fa fa-caret-down"></i>
-                                </span>
+                            <a href="{{ route('settings.index') }}">
                                 <span class="nav-icon">
-                                    <i class="material-icons">&#xe7f7;
-                                        <span ui-include="'../assets/images/i_1.svg'"></span>
-                                    </i>
+                                        <i class="fas fa-cog">                                        
+                                        </i>                                       
                                 </span>
-                                <span class="nav-text">configuration</span>
+                                <span class="nav-text">Configuration</span>
                             </a>
-                            <ul class="nav-sub">
-                                <li>
-                                    <a href="{{ route('notifications.create' , ['all' => 'all']) }}">
-                                        <span class="nav-text">Broadcast</span>
-                                    </a>
-                                </li>                                
-                            </ul>
-                            <ul class="nav-sub">
-                                <li>
-                                    <a href="{{ route('notifications.index' ) }}">
-                                        <span class="nav-text">All Notification</span>
-                                    </a>
-                                </li>                                
-                            </ul>
                         </li>
                     @endif
                 </ul>

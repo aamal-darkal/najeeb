@@ -58,8 +58,7 @@ class StudentController extends Controller
             $package = Package::find($package);
         if ($subject)
             $subject = Subject::find($subject);
-        $group = $package ? $package->name : ($subject ? $subject->name : 'All');
-
+        $group = $package ? $package->name : ($subject ? $subject->name : ($notification? $notification->title:'All'));
 
         return view('pages.students.index', compact('students', 'state', 'group'));
 

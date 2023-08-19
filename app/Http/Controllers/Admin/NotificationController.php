@@ -44,6 +44,7 @@ class NotificationController extends Controller
             $subject = Subject::find($subject);
         if ($student)
             $student = Student::find($student);
+            
         return view('pages.notifications.create', compact('all', 'package', 'subject', 'student'));
     }
 
