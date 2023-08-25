@@ -68,13 +68,14 @@
                                         <div class="col-auto my-1 text-center">
                                             <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="days[]"
                                                 required>
-                                                <option selected value="sunday">Sunday</option>
-                                                <option value="monday">Monday</option>
-                                                <option value="tuesday">Tuesday</option>
-                                                <option value="wednesday">Wednesday</option>
-                                                <option value="thursday">Thursday</option>
-                                                <option value="friday">Friday</option>
-                                                <option value="saturday">Saturday</option>
+                                                <option hidden>select a day</option>
+                                                <option @selected(old('day') == 'sunday') value="sunday">Sunday</option>
+                                                <option @selected(old('day') == 'monday') value="monday">Monday</option>
+                                                <option @selected(old('day') == 'tuesday') value="tuesday">Tuesday</option>
+                                                <option @selected(old('day') == 'wednesday') value="wednesday">Wednesday</option>
+                                                <option @selected(old('day') == 'thursday') value="thursday">Thursday</option>
+                                                <option @selected(old('day') == 'friday') value="friday">Friday</option>
+                                                <option @selected(old('day') == 'saturday') value="saturday">Saturday</option>
                                             </select>
                                         </div>
                                     </div>

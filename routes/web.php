@@ -8,7 +8,6 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\SubscriptionController;
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,7 +26,9 @@ require __DIR__ . '/auth.php';
 
 Route::middleware('auth')->group(function () {
     /***************************************  profile *********************************/
-    Route::resource('profile' , ProfileController::class)->only('edit','update');
+    // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    // Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     /***************************************  dashboard *********************************/
     Route::get('/', [DashboardController::class, 'home'])->name('dashboard');

@@ -14,13 +14,13 @@ class NotificationHelper
         $SERVER_API_KEY = 'AAAAK-2cV9k:APA91bG_0iTqiuL8jkrOrPd5SLVrfH-ncsN6L7TA9ywzESej7ACUi4OCVroRDwam7iHj7V77piYyPTCJE3xvThyvyxK5jOTMJsOgd_itFBeHPp_Co6f6RDr1BfRIX-CXR89f6aWYESfd' ;       
 
         $data = [
-            "registration_ids" => $tokens, // for All device
-            "notification" => array(
+             "registration_ids" => $tokens, // for All device
+            // "registration_ids" => 'dZsYFunMTEeaVgdU7aCllR:APA91bF0BjZJlVHXGpGxkb7sPwVzbmOYXiR-fxuiicmsEyvK2r3M_zRDHqDP-DIA118cPnUj2HW2h-87YVtxKmGmMR8Q_RI0K-3tkcqqQKS7bP5gZ3_mOLAExNdufKCW3kLcwKjY8oDn',
+            "notification" => [
                 'title' => $notification->title,
                 'body' => $notification->body,
                 'sound' => "default" // required for sound on ios
-
-            ),
+            ],
             "priority" => "high",
         ];
         $dataString = json_encode($data);

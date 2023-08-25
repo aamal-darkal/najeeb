@@ -97,8 +97,13 @@ class NotificationController extends Controller
         $tokens = User::select('fcm_token')->whereHas('student', function ($q) use ($studentIds) {
             $q->wherein('id', $studentIds);
         })->get();
+        
+        foreach ($tokens as $key => $token) {
+            $FCMs[$key] = $token['fcm_token'];
+        }
 
-        NotificationHelper::sendNotification($notification, $tokens);
+        // return $tokens;
+        NotificationHelper::sendNotification($notification, $FCMs);
 
         if ($package)
             return redirect()->route('packages.index')->with('success', 'Notification has been sent successfully');

@@ -77,7 +77,6 @@
             </div>
         </div>
 
-        <!-- ############ LAYOUT END-->
     </div>
 
     <!-- jQuery -->

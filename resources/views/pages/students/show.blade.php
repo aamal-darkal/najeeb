@@ -225,7 +225,7 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white">
-                                @foreach ($student->notifications as $notification)
+                                @foreach ($student->notifications()->orderby('time_publish' , 'desc')->get() as $notification)
                                     <tr>
                                         <td>{{ $notification->title }}</td>
                                         <td>{{ $notification->description }}</td>
