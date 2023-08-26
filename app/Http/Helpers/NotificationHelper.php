@@ -13,11 +13,21 @@ class NotificationHelper
         
         $SERVER_API_KEY = 'AAAAK-2cV9k:APA91bG_0iTqiuL8jkrOrPd5SLVrfH-ncsN6L7TA9ywzESej7ACUi4OCVroRDwam7iHj7V77piYyPTCJE3xvThyvyxK5jOTMJsOgd_itFBeHPp_Co6f6RDr1BfRIX-CXR89f6aWYESfd' ;       
 
+        // $data = [
+        //      "registration_ids" => $tokens, // for one device or more as indexed arrray
+        //      "notification" => [
+        //         'title' => $notification->title,
+        //         'body' => $notification->body,
+        //         'sound' => "default" // required for sound on ios
+        //     ],
+        //     "priority" => "high",
+        // ];
         $data = [
-             "registration_ids" => $tokens, // for one device or more as indexed arrray
+             "registration_ids" => $tokens, // for one device or more as indexed array
              "notification" => [
-                'title' => $notification->title,
-                'body' => $notification->body,
+                'title' => "notification->title",
+                'body' => "notification->body",
+                'x' => "notification->x",
                 'sound' => "default" // required for sound on ios
             ],
             "priority" => "high",
