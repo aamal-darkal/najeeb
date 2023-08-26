@@ -15,7 +15,7 @@ class NotificationHelper
         $SERVER_API_KEY = env("FIREBASE_SERVER_KEY");
 
         $data = [
-             "registration_ids" => $tokens, // for one device or more as indexed arrray
+             "registration_ids" => $tokens, // for one device or more as indexed array
              "notification" => [
                 'title' => $notification->title,
                 'body' => $notification->description,
