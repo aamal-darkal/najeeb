@@ -3,6 +3,7 @@
 namespace App\Http\Helpers;
 
 use App\Models\Notification;
+use App\Models\Setting;
 use App\Models\Student;
 use App\Models\User;
 
@@ -11,27 +12,18 @@ class NotificationHelper
     public static function sendNotification(Notification $notification , $tokens)
     {                
         
-        $SERVER_API_KEY = 'AAAAK-2cV9k:APA91bG_0iTqiuL8jkrOrPd5SLVrfH-ncsN6L7TA9ywzESej7ACUi4OCVroRDwam7iHj7V77piYyPTCJE3xvThyvyxK5jOTMJsOgd_itFBeHPp_Co6f6RDr1BfRIX-CXR89f6aWYESfd' ;       
+        $SERVER_API_KEY = env("FIREBASE_SERVER_KEY");
 
-        // $data = [
-        //      "registration_ids" => $tokens, // for one device or more as indexed arrray
-        //      "notification" => [
-        //         'title' => $notification->title,
-        //         'body' => $notification->body,
-        //         'sound' => "default" // required for sound on ios
-        //     ],
-        //     "priority" => "high",
-        // ];
         $data = [
-             "registration_ids" => $tokens, // for one device or more as indexed array
+             "registration_ids" => $tokens, // for one device or more as indexed arrray
              "notification" => [
-                'title' => "notification->title",
-                'body' => "notification->body",
-                'x' => "notification->x",
+                'title' => $notification->title,
+                'body' => $notification->description,
                 'sound' => "default" // required for sound on ios
             ],
             "priority" => "high",
         ];
+        
         $dataString = json_encode($data);
 
         $headers = [

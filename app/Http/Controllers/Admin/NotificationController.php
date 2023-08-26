@@ -89,6 +89,7 @@ class NotificationController extends Controller
             ->when($student, function ($q) use ($student) {
                 return $q->where('id', $student);
             })->get();
+            return $students;
         $studentIds =  $students->pluck('id');
 
         foreach ($students as $student)
@@ -98,8 +99,8 @@ class NotificationController extends Controller
             $q->wherein('id', $studentIds);
         })->get();
         
-        foreach ($tokens as $key => $token) {
-            $FCMs[$key] = $token['fcm_token'];
+        foreach ($tokens as $token) {
+            $FCMs[] = $token['fcm_token'];
         }
 
         // return $tokens;
