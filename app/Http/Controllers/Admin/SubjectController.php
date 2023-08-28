@@ -50,7 +50,7 @@ class SubjectController extends Controller
             $subject->weekProgs()->create(['day' => $day, 'start_time' => $start_time, 'end_time' => $end_time]);
         }
 
-        return redirect()->route('package.show', ['packages' => $subject->package_id]);
+        return redirect()->route('packages.show', ['packages' => $subject->package_id]);
     }
 
     /**
@@ -86,7 +86,7 @@ class SubjectController extends Controller
             }
         }
 
-        return redirect()->route('package.show', ['packages' => $subject->package_id]);
+        return redirect()->route('packages.show', ['packages' => $subject->package_id]);
     }
 
     /**
@@ -104,7 +104,7 @@ class SubjectController extends Controller
     public function destroy(Subject $subject)
     {
         if ($subject->lectures->count()) return back()->with('error', 'sorry, we can\'t delete subject that has lecture, you should delete its lectures first ');
-        if ($subject->students->count()) return back()->with('error', 'sorry, we can\'t delete subject that subcribed by students first, you should unsubcribe students first ');
+        if ($subject->students->count()) return back()->with('error', 'sorry, we can\'t delete subject that subcribed by students , first you should unsubcribe students first ');
         $subject->delete();
         return back()->with('success', 'package deleted successfuly');
     }
