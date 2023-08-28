@@ -50,7 +50,7 @@ class SubjectController extends Controller
             $subject->weekProgs()->create(['day' => $day, 'start_time' => $start_time, 'end_time' => $end_time]);
         }
 
-        return redirect()->route('packages.show', ['packages' => $subject->package_id]);
+        return redirect()->route('packages.show', ['package' => $subject->package_id]);
     }
 
     /**
@@ -86,7 +86,7 @@ class SubjectController extends Controller
             }
         }
 
-        return redirect()->route('packages.show', ['packages' => $subject->package_id]);
+        return redirect()->route('packages.show', ['package' => $subject->package_id]);
     }
 
     /**

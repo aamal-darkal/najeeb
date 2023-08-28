@@ -47,7 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('setAttendence/{lecture_id}',  'setAttendence');
     });
 
-    Route::post('class_order_create', [SubjectController::class, 'subscribe']);
+    Route::post('class_order_create', [SubjectController::class, 'subscribe']); /**** review need prevent resubcribe */
 });
 
 
