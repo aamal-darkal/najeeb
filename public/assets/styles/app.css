@@ -17,6 +17,7 @@ body {
 .fc-day-today {
   background-color: inherit !important;
 }
+
 *:focus {
   outline: 0 !important;
 }

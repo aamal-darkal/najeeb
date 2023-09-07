@@ -5,13 +5,44 @@
                 class="fas fa-long-arrow-left"></i></a>
     </div>
     <div class="container">
-
         <div class="row">
             <div class="col-md-7">
+                <div class="container-fluid">
+
+                    <div class="row p-2 b-a b-primary b-2x text-center bg-white ">
+                        <div class="col-6">
+                            @if ($package->image)
+                                <img src="{{ asset('storage/images/packages/' . $package->image) }}" width="100%"
+                                    height="130px">
+                            @else
+                                <img src="{{ asset('storage/images/packages/no-image.png') }}" width="100%"
+                                    height="130px">
+                            @endif
+                        </div>
+                        <div class="p-2 text mt-1 col-6">
+                            <div class=" _800">
+                                <div class="text-primary">package Name: </div>
+                                {{ $package->name }}
+                            </div>
+                            <div class="text-primary text _800">Starts at:
+                                <div class="text-dark _100 ">{{ $package->start_date }}</div>
+                            </div>
+                            <div class="text-primary text _800">Ends at:
+                                <div class="text-dark _100 ">{{ $package->end_date }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div id='calendar'>
 
 
                 </div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
             </div>
 
 
@@ -144,7 +175,8 @@
                                                     <select class="custom-select mr-sm-2" name="days[]" required>
                                                         @foreach ($weekDays as $weekDay)
                                                             <option value="{{ $weekDays }}"
-                                                                @selected($weekDay == $days[$i])>{{ $weekDays }}</option>
+                                                                @selected($weekDay == $days[$i])>{{ $weekDays }}
+                                                            </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -156,7 +188,8 @@
                                                     <select name="start_times[]" class="form-control">
                                                         @foreach ($times as $time)
                                                             <option value="{{ $time }}"
-                                                                @selected($time == $start_times[$i])>{{ $time }}</option>
+                                                                @selected($time == $start_times[$i])>{{ $time }}
+                                                            </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -165,7 +198,8 @@
                                                     <select name="end_times[]" class="form-control">
                                                         @foreach ($times as $time)
                                                             <option value="{{ $time }}"
-                                                                @selected($time == $end_times[$i])>{{ $time }}</option>
+                                                                @selected($time == $end_times[$i])>{{ $time }}
+                                                            </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -187,7 +221,8 @@
                                                     <select class="custom-select mr-sm-2" name="days[]" required>
                                                         @foreach ($weekDays as $weekDay)
                                                             <option value="{{ $weekDay }}"
-                                                                @selected($weekprog == $weekDay)>{{ $weekDay }}</option>
+                                                                @selected($weekprog == $weekDay)>{{ $weekDay }}
+                                                            </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
