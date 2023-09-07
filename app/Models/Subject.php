@@ -13,6 +13,7 @@ class Subject extends Model
         'package_id',
         'name',
         'cost',
+        'color',
     ];
 
     public function package()

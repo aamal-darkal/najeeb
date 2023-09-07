@@ -7,6 +7,7 @@
 
         <div class="row">
 
+            {{-- ************** package box ***************** --}}
             <div class="col-md-3 p-2 text-center">
                 <div class="box p-2">
                     <div class="text-primary box-header ">
@@ -18,6 +19,7 @@
                 </div>
             </div>
 
+            {{-- ************** subjects box ***************** --}}
             <div class="col-md-4 p-2 text-center">
                 <div class="box p-1">
                     <div class="text-primary box-header">
@@ -47,6 +49,7 @@
                 </div>
             </div>
 
+            {{-- ************** form box ***************** --}}
             <div class="col-md-5  p-2">
                 <div class="box">
                     <div class="box-header text-primary">
@@ -60,54 +63,39 @@
                             @endforeach
                         </div>
 
-                        {{-- ========================== start of template-week prog instance ======================================= --}}
-                        <div id="time-template" style="display: none">
+                        {{-- start time-template --}}
+                        <div class="time-template" style="display: none">
                             <div class="time-item">
-                                <input type="hidden" name="weekProgStates[]" value="new">
-                                <input type="hidden" name="weekProgIds[]" value="new">                                                        
+                                <input type="hidden" name="weekProgStates[]" value="insert">
+                                <input type="hidden" name="weekProgIds[]" value="insert">       
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Day</label>
-                                    <div class="btn-group dropdown ">
-                                        <div class="col-auto my-1 text-center">
-                                            <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="days[]"
-                                                required>
-                                                <option hidden>select a day</option>
-                                                <option @selected(old('day' , $subject->day) == 'sunday') value="sunday">Sunday</option>
-                                                <option @selected($subject->day == 'monday') value="monday">Monday</option>
-                                                <option @selected($subject->day == 'tuesday') value="tuesday">Tuesday</option>
-                                                <option @selected($subject->day == 'wednesday') value="wednesday">Wednesday</option>
-                                                <option @selected($subject->day == 'thursday') value="thursday">Thursday</option>
-                                                <option @selected($subject->day == 'friday') value="friday">Friday</option>
-                                                <option @selected($subject->day == 'saturday') value="saturday">Saturday</option>
-                                            </select>
-                                        </div>
+                                    <label>Day</label>
+                                    <div class="col-auto my-1 text-center">
+                                        <select class="custom-select mr-sm-2" name="days[]" required>
+                                            @foreach ($weekDays as $weekDay)
+                                                <option value="{{ $weekDay }}" == {{ $weekDay }}>
+                                                    {{ $weekDay }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="form-group col-sm-5">
-                                        <label for="start_time">Start time</label>
-                                        <div class='input-group date' id='start_time'>
-                                            <input type='text' class="form-control" name="start_times[]" id="start_time"
-                                                value="{{ old('start_time', $subject->start_time) }}"
-                                                placeholder="08:00 AM" required
-                                                pattern="(1[012]|[1-9]):[0-5][0-9] (am|pm|AM|PM)" title="time 8:00 AM" />
-                                            <span class="input-group-addon">
-                                                <span class="glyphicon glyphicon-time"></span>
-                                            </span>
-                                        </div>
+                                        <label>Start time</label>
+                                        <select name="start_times[]" class="form-control">
+                                            @foreach ($times as $time)
+                                                <option value="{{ $time }}">{{ $time }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="form-group col-sm-5">
-                                        <label for="end_time">End time</label>
-                                        <div class='input-group date' id='start_time'>
-                                            <input type='text' class="form-control" name="end_times[]" id="end_time"
-                                                value="{{ old('end_time', $subject->end_time) }}" placeholder="12:00 AM"
-                                                required pattern="(1[012]|[1-9]):[0-5][0-9] (am|pm|AM|PM)"
-                                                title="time 8:00 AM" />
-                                            <span class="input-group-addon">
-                                                <span class="glyphicon glyphicon-time"></span>
-                                            </span>
-                                        </div>
+                                        <label>End time</label>
+                                        <select name="end_times[]" class="form-control">
+                                            @foreach ($times as $time)
+                                                <option value="{{ $time }}">{{ $time }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="col-sm-1">
                                         <button type="button" class="btn btn-outline-danger mt-4"
@@ -116,108 +104,80 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- ========================== end of template-week prog instance ======================================= --}}
-
+                        {{-- end time-template --}}
 
                         <form role="form" method="POST" id="myForm" action="{{ route('subjects.update' , $subject) }}">
                             @csrf
+                            @method('put')
                             <input type="hidden" value="{{ $package->id }}" name="package_id">
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Name</label>
-                                <input type="text" class="form-control" id="exampleInputEmail1"
-                                    value="{{ old('name', $subject->name) }}" placeholder="Enter Name" name="name"
-                                    required>
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" id="name" value="{{ old('name' , $subject->name) }}"
+                                    placeholder="Enter Name" name="name" maxlength="100" required>
                                 <div class="text-danger">
-                                    @error('first_name')
+                                    @error('name')
                                         {{ $message }}
                                     @enderror
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Cost</label>
-                                <input type="number" class="form-control" id="exampleInputEmail1"
-                                    value="{{ old('cost', $subject->cost) }}" placeholder="Enter Cost" name="cost"
-                                    required>
+                                <label for="cost">Cost</label>
+                                <input type="number" class="form-control" id="cost" value="{{ old('cost' , $subject->cost) }}"
+                                    placeholder="Enter Cost" name="cost" min=0 required>
                                 <div class="text-danger">
-                                    @error('first_name')
+                                    @error('cost')
                                         {{ $message }}
                                     @enderror
                                 </div>
                             </div>
-
-
+                            
                             <div id="time-wrapper">
                                 <div class="">
                                     <button type="button" class="btn btn-outline-success mt-4" onclick="plus_time()"
                                         title="Add new time">+</button>
                                 </div>
-
+                                
                                 {{-- has pre posted value (old) --}}
                                 @php
-                                    $days = old('days');
-                                    $start_time = old('start_time');
-                                    $end_time = old('end_time');
+                                    $days= old('days');
+                                    $start_times= old('start_times');
+                                    $end_times= old('end_times');
+                                    $weekProgStates = old('weekProgStates');
+                                    $weekProgIds = old('weekProgIds');
                                 @endphp
-
+                                
                                 @if ($days)
-                                    @for ($i = 0; $i < count($days); $i++)
-                                        <div class="time-item">
+                                    @for ($i = 0 ; $i < count($days) ; $i++)
+                                        <div class="time-item" @if($weekProgStates[$i] == 'delete') style="display: none" @endif>
+                                            <input type="hidden" name="weekProgStates[]" value="{{ $weekProgStates[$i] }}">
+                                            <input type="hidden" name="weekProgIds[]" value="{{ $weekProgIds[$i] }}">     
                                             <div class="form-group">
-                                                <label for="exampleInputEmail1">Day</label>
-                                                <div class="btn-group dropdown ">
-                                                    <div class="col-auto my-1 text-center">
-                                                        <input type="hidden" name="weekProgStates[]" value="{{ $weekProgStates[$i] }}">
-                                                        <input type="hidden" name="weekProgIds[]" value="{{ $weekProgIds[$i] }}">
-                                                        <select class="custom-select mr-sm-2" id="inlineFormCustomSelect"
-                                                            name="days[]" required>
-                                                            <option hidden>select day</option>
-                                                            <option @selected($weekProg->day == 'sunday') value="sunday">Sunday
-                                                            </option>
-                                                            <option @selected($weekProg->day == 'monday') value="monday">Monday
-                                                            </option>
-                                                            <option @selected($weekProg->day == 'tuesday') value="tuesday">Tuesday
-                                                            </option>
-                                                            <option @selected($weekProg->day == 'wednesday') value="wednesday">Wednesday
-                                                            </option>
-                                                            <option @selected($weekProg->day == 'thursday') value="thursday">Thursday
-                                                            </option>
-                                                            <option @selected($weekProg->day == 'friday') value="friday">Friday
-                                                            </option>
-                                                            <option @selected($weekProg->day == 'saturday') value="saturday">Saturday
-                                                            </option>
-                                                        </select>
-                                                    </div>
+                                                <label>Day</label>
+                                                <div class="col-sm-5 my-1 text-center">
+                                                    <select class="custom-select mr-sm-2" name="days[]" required>
+                                                        @foreach ($weekDays as $weekDay)
+                                                            <option value="{{ $weekDays }}" @selected($weekDay == $days[$i])>{{ $weekDays }}</option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="form-group col-sm-5">
-                                                    <label for="start_time">Start time</label>
-                                                    <div class='input-group date' id='start_time'>
-                                                        <input type='text' class="form-control" name="start_times[]"
-                                                            id="start_time"
-                                                            value="{{ old('start_time', $weekProg->start_time) }}"
-                                                            placeholder="8:00 AM" required
-                                                            pattern="(1[012]|[1-9]):[0-5][0-9] (am|pm|AM|PM)"
-                                                            title="time 8:00 AM" />
-                                                        <span class="input-group-addon">
-                                                            <span class="glyphicon glyphicon-time"></span>
-                                                        </span>
-                                                    </div>
+                                                    <label>Start time</label>
+                                                    <select name="start_times[]" class="form-control" >
+                                                        @foreach ($times as $time)
+                                                            <option value="{{ $time }}" @selected($time == $start_times[$i])>{{ $time }}</option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                                 <div class="form-group col-sm-5">
-                                                    <label for="end_time">End time</label>
-                                                    <div class='input-group date' id='start_time'>
-                                                        <input type='text' class="form-control" name="end_times[]"
-                                                            id="end_time"
-                                                            value="{{ old('end_time', $weekProg->end_time) }}"
-                                                            placeholder="8:00 AM" required
-                                                            pattern="(1[012]|[1-9]):[0-5][0-9] (am|pm|AM|PM)"
-                                                            title="time 8:00 AM" />
-                                                        <span class="input-group-addon">
-                                                            <span class="glyphicon glyphicon-time"></span>
-                                                        </span>
-                                                    </div>
+                                                    <label>End time</label>
+                                                    <select name="end_times[]" class="form-control">
+                                                        @foreach ($times as $time)
+                                                            <option value="{{ $time }}" @selected($time == $end_times[$i])>{{ $time }}</option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                                 <div class="col-sm-1">
                                                     <button type="button" class="btn btn-outline-danger mt-4"
@@ -227,66 +187,37 @@
                                         </div>
                                     @endfor
                                 @else
-                                    {{-- has already saved value --}}
-                                    @foreach ($subject->weekProgs() as $weekProg)
-                                        <div class="time-item">
-                                            <input type="hidden" name="weekProgStates[]" value="old">
-                                            <input type="hidden" name="weekProgIds[]" value="{{ $weekProg->id }}">
+                                    @foreach ($subject->weekProgs as $weekprog)
+                                        <div class="time-item">    
+                                            <input type="hidden" name="weekProgStates[]" value="update">
+                                            <input type="hidden" name="weekProgIds[]" value="{{ $weekprog->id }}">                                       
                                             <div class="form-group">
-                                                <label for="exampleInputEmail1">Day</label>
-                                                <div class="btn-group dropdown ">
-                                                    <div class="col-auto my-1 text-center">
-                                                        <select class="custom-select mr-sm-2" id="inlineFormCustomSelect"
-                                                            name="days[]" required>
-                                                            <option hidden>select day</option>
-                                                            <option @selected($weekProg->day == 'sunday') value="sunday">Sunday
-                                                            </option>
-                                                            <option @selected($weekProg->day == 'monday') value="monday">Monday
-                                                            </option>
-                                                            <option @selected($weekProg->day == 'tuesday') value="tuesday">Tuesday
-                                                            </option>
-                                                            <option @selected($weekProg->day == 'wednesday') value="wednesday">
-                                                                Wednesday
-                                                            </option>
-                                                            <option @selected($weekProg->day == 'thursday') value="thursday">Thursday
-                                                            </option>
-                                                            <option @selected($weekProg->day == 'friday') value="friday">Friday
-                                                            </option>
-                                                            <option @selected($weekProg->day == 'saturday') value="saturday">Saturday
-                                                            </option>
-                                                        </select>
-                                                    </div>
+                                                <label>Day</label>
+                                                <div class="col-sm-5 my-1 text-center">
+                                                    <select class="custom-select mr-sm-2" name="days[]" required>
+                                                        @foreach ($weekDays as $weekDay)
+                                                            <option value="{{ $weekDay }}" @selected($weekprog == $weekDay)>{{ $weekDay }}</option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="form-group col-sm-5">
-                                                    <label for="start_time">Start time</label>
-                                                    <div class='input-group date' id='start_time'>
-                                                        <input type='text' class="form-control" name="start_times[]"
-                                                            id="start_time"
-                                                            value="{{ old('start_time', $weekProg->start_time) }}"
-                                                            placeholder="8:00 AM" required
-                                                            pattern="(1[012]|[1-9]):[0-5][0-9] (am|pm|AM|PM)"
-                                                            title="time 8:00 AM" />
-                                                        <span class="input-group-addon">
-                                                            <span class="glyphicon glyphicon-time"></span>
-                                                        </span>
-                                                    </div>
+                                                    <label>Start time</label>
+                                                    <select name="start_times[]" class="form-control">
+                                                        @foreach ($times as $time)
+                                                            <option value="{{ $time }}">{{ $time }}</option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                                 <div class="form-group col-sm-5">
-                                                    <label for="end_time">End time</label>
-                                                    <div class='input-group date' id='start_time'>
-                                                        <input type='text' class="form-control" name="end_times[]"
-                                                            id="end_time"
-                                                            value="{{ old('end_time', $weekProg->end_time) }}"
-                                                            placeholder="8:00 AM" required
-                                                            pattern="(1[012]|[1-9]):[0-5][0-9] (am|pm|AM|PM)"
-                                                            title="time 8:00 AM" />
-                                                        <span class="input-group-addon">
-                                                            <span class="glyphicon glyphicon-time"></span>
-                                                        </span>
-                                                    </div>
+                                                    <label>End time</label>
+                                                    <select name="end_times[]" class="form-control">
+                                                        @foreach ($times as $time)
+                                                            <option value="{{ $time }}">{{ $time }}</option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                                 <div class="col-sm-1">
                                                     <button type="button" class="btn btn-outline-danger mt-4"
@@ -296,63 +227,28 @@
                                         </div>
                                     @endforeach
                                 @endif
-
-                                <button type="submit" class="btn primary m-b" id="submit-btn">Submit</button>
+                            </div>
+                            <button type="submit" class="btn primary m-b" id="submit-btn">Save Subject</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
-    @push('css')
-        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
-    @endpush
 
     @push('js')
-        <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+        <script>
+            function plus_time() {
+                let newTime = document.querySelector(".time-template").cloneNode(true)
+                newTime.style.display = 'block'            
+                document.querySelector("#time-wrapper").appendChild(newTime)
+            }
+
+            function delete_time(inp) {
+                inp.parentNode.parentNode.parentNode.style.display = 'none';
+                inp.parentNode.parentNode.parentNode.firstElementChild.value = 'delete';
+            }
+
+        </script>
     @endpush
-
-
-    <script>
-        // $(function() {
-        //     $('#start_time').datetimepicker({
-        //         format: 'LT'
-        //     });
-        // });
-
-
-        function plus_time() {
-            let newTime = document.querySelector("#time-template").children[0].cloneNode(true)
-            document.querySelector("#time-wrapper").appendChild(newTime)
-        }
-
-        function delete_time(inp) {
-            inp.parentNode.parentNode.style.visibility = 'collapse';
-            inp.parentNode.parentNode.firstElementChild.firstElementChild.value = 'del';
-        }
-
-        
-        // const startTime = document.getElementById('start_time');
-        // const endTime = document.getElementById('end_time');
-        // const submitBtn = document.getElementById('submit-btn');
-        // document.getElementById('myForm').addEventListener('submit', function(event) {
-        //     // Prevent form submission
-        //     event.preventDefault();
-        //     const startTimeVal = new Date("2023-01-01 " + startTime.value);
-        //     const endTimeVal = new Date("2023-01-01 " + endTime.value);
-
-        //     var starttimestamp = startTimeVal.getTime();
-        //     var endtimestamp = endTimeVal.getTime();
-        //     // Check condition
-        //     if (endtimestamp < starttimestamp) {
-        //         // Display error message
-        //         alert('Your error message here');
-        //     } else {
-        //         // Submit form
-        //         this.submit();
-        //     }
-        // });
-    </script>
-    <!-- ############ PAGE END-->
 @endsection

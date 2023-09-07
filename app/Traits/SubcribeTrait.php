@@ -7,31 +7,26 @@ use App\Models\Subject;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 trait SubcribeTrait
 {
 
-    public function subcribe($subjects_ids, $amount, $bill_number, $payment_method_id, $student, $state)
+    public function subcribe($subjects_ids, $amount, $bill_number, $payment_method_id, $student)
     {
-        $status = 'success';
-        $message = '';
-        $subjects = Subject::find($subjects_ids);
-
-        if (!$subjects) {
-            $status = 'error';
-            $message = 'These subjects does not exist';
-        }
-        // return response()->json();
+        
+        $subjects = Subject::find($subjects_ids);        
 
         $totalCost = $subjects->sum('cost');
 
         if ($totalCost > $amount) {
-            $status = 'error';
-            $message = 'the amount you paid is less than the cost';
+            return [
+                'status' => 'error',
+                'message' => 'the amount you paid is less than the cost'
+            ];            
         }
-        // return response()->json('');
 
         $order = $student->orders()->create(
             [
@@ -47,18 +42,15 @@ trait SubcribeTrait
             'amount' => $amount,
             'payment_method_id' => $payment_method_id,
             'start_duration_date' => $subjects->first()->package->start_date,
-            'payment_date' => Carbon::now(), //should be given by app
-            'state' => $state
+            'payment_date' => Carbon::now(), 
         ]);
         return [
-            'status' => $status,
-            'msg' => $message,
-            'subjects' => $subjects
+            'status' => 'success',            
         ];
     }
     private function generatePassword($n)
     {
-        $characters = '123456789abcdefghijklmnopqrstuvwxyz';
+        $characters = '123456789';
         $randomString = '';
 
         for ($i = 0; $i < $n; $i++) {
@@ -71,14 +63,8 @@ trait SubcribeTrait
 
     private function createUser($student)
     {
-        //get username
-        $usedUserName = true;
-        while ($usedUserName) {
-            $code = rand(111, 999);
-            $userName = $student->first_name . '-' . $student->last_name . '-' . $code;
-            $usedUserName = User::where('user_name', $userName)->exists();
-        }
-        $usedUserName = true;
+        
+        $userName = $student->first_name . $student->id;
         $password = $this->generatePassword(8);
 
         $user = $student->user()->create([

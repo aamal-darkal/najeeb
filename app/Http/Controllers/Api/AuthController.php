@@ -10,6 +10,7 @@ use App\Http\Resources\PaymentResource;
 use App\Http\Resources\UserInfoResource;
 use App\Models\Payment;
 use App\Models\Student;
+use App\Models\Subject;
 use App\Models\User;
 use App\Traits\SubcribeTrait;
 use Carbon\Carbon;
@@ -27,18 +28,18 @@ class AuthController extends Controller
             'data' => $student,
             'errors' => 'error in register student',
         ]);
+        $subjectIds = $request->subjects_ids;
         $result = $this->subcribe(
-            $request->subjects_ids,
+           $subjectIds,
             $request->amount,
             $request->bill_number,
             $request->payment_method_id,
-            $student,
-            'pending'
+            $student
         );
         if ($result['status'] = 'success')
-            return ResponseHelper::success($result['subjects'], 'Subscribed successfully');
+            return ResponseHelper::success($subjectIds , 'Subscribed successfully');
         else
-            return response()->json($result['msg']);
+            return response()->json($result['message']);
     }
 
     public function login(Request $request)

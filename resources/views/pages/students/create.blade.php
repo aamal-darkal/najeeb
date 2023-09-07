@@ -32,7 +32,7 @@
                             </option>
                         @endforeach
                     </select>
-                </div>  
+                </div>
                 {{-- end of template --}}
 
                 <form role="form" method="POST" action="{{ route('students.store') }}">
@@ -77,23 +77,13 @@
                             </div>
                             <div class="col">
                                 <label for="governorate">Governorate</label>
-                                <select name="governorate" id="governorate" 
-                                class="form-control mt-2 ui search selection dropdown">
+                                <select name="governorate" id="governorate"
+                                    class="form-control ui dropdown search selection ">
                                     <option hidden selected value="">Enter governorate</option>
-                                    <option value="دمشق" @selected(old('governorate') == 'دمشق')>دمشق</option>
-                                    <option value="ريف دمشق" @selected(old('governorate') == 'ريف دمشق')>ريف دمشق</option>
-                                    <option value="حلب" @selected(old('governorate') == 'حلب')>حلب</option>
-                                    <option value="حمص" @selected(old('governorate') == 'حمص')>حمص</option>
-                                    <option value="اللاذقية" @selected(old('governorate') == 'اللاذقية')>اللاذقية</option>
-                                    <option value="حماه" @selected(old('governorate') == 'حماه')>حماه</option>
-                                    <option value="طرطوس" @selected(old('governorate') == 'طرطوس')>طرطوس</option>
-                                    <option value="الرقة" @selected(old('governorate') == 'الرقة')>الرقة</option>
-                                    <option value="ديرالزور" @selected(old('governorate') == 'ديرالزور')>ديرالزور</option>
-                                    <option value="السويداء" @selected(old('governorate') == 'السويداء')>السويداء</option>
-                                    <option value="الحسكة" @selected(old('governorate') == 'الحسكة')>الحسكة</option>
-                                    <option value="درعا" @selected(old('governorate') == 'درعا')>درعا</option>
-                                    <option value="إدلب" @selected(old('governorate') == 'إدلب')>إدلب</option>
-                                    <option value="القنيطرة" @selected(old('governorate') == 'القنيطرة')>القنيطرة</option>
+                                    @foreach ($governorates as $governorate)
+                                        <option value="{{ $governorate }}" @selected(old('governorate') == $governorate)>
+                                            {{ $governorate }}</option>
+                                    @endforeach
                                 </select>
                                 <div class="text-danger">
                                     @error('governorate')
@@ -109,7 +99,8 @@
                             <div class="col">
                                 <label for="phone">Phone</label>
                                 <input type="text" class="form-control" placeholder="Enter Phone Number" name="phone"
-                                    value="{{ old('phone') }}" required minlength="10" maxlength="10" pattern="[0-9]{7,10}" title="enter valid phone">
+                                    value="{{ old('phone') }}" required minlength="10" maxlength="10"
+                                    pattern="[0-9]{7,10}" title="enter valid phone">
                                 <div class="text-danger">
                                     @error('phone')
                                         {{ $message }}
@@ -120,7 +111,7 @@
                                 <label for="parent_phone">Parent phone</label>
                                 <input type="text" id="parent_phone" class="form-control"
                                     placeholder="Enter parent phone" name="parent_phone" value="{{ old('parent_phone') }}"
-                                     minlength="10" maxlength="10" pattern="[0-9]{10}" title="enter valid phone">
+                                    minlength="10" maxlength="10" pattern="[0-9]{10}" title="enter valid phone">
                                 <div class="text-danger">
                                     @error('parent_phone')
                                         {{ $message }}
@@ -129,7 +120,7 @@
                             </div>
                         </div>
                     </div>
-        {{-- ********************************* subjects ************************ --}}
+                    {{-- ********************************* subjects ************************ --}}
 
                     <div class="form-group">
                         <div class="row">
@@ -145,9 +136,9 @@
                                             {{ $package->name }}
                                         </option>
                                     @endforeach
-                                </select>                               
+                                </select>
                             </div>
-                            
+
                             <div class="col">
                                 <label for="subjects">subjects</label>
                                 <select id='subjects' onchange="addSubject(this)"
@@ -175,11 +166,12 @@
                             <div class="col-md-3 text-secondary py-2">
                                 <label for="sum-subject">sum of subject</label>
                             </div>
-                            <div class="col-md-3"><input id="sum-subject" type="text" value=0 class="form-control w-sm" disabled>
+                            <div class="col-md-3"><input id="sum-subject" type="text" value=0
+                                    class="form-control w-sm" disabled>
                             </div>
                         </div>
                     </div>
-                    {{--********************* end of subjects ****************************--}}
+                    {{-- ********************* end of subjects **************************** --}}
                     <div class="form-group">
                         <div class="row">
                             <div class="col">
@@ -196,7 +188,7 @@
                                 <label for="land_line">Land line</label>
                                 <input type="text" id="land_line" class="form-control"
                                     placeholder="Enter land line number" name="land_line" value="{{ old('land_line') }}"
-                                     minlength="7" maxlength="10" pattern="[0-9]{7,10}" title="enter valid phone">
+                                    minlength="7" maxlength="10" pattern="[0-9]{7,10}" title="enter valid phone">
                                 <div class="text-danger">
                                     @error('land_line')
                                         {{ $message }}
@@ -212,7 +204,7 @@
                                 <label for="bill_number">bill_number</label>
                                 <input type="text" id="bill_number" class="form-control"
                                     placeholder="Enter bill Number" name="bill_number" value="{{ old('bill_number') }}"
-                                        pattern="[0-9]{1-20}" maxlength="20">
+                                    pattern="[0-9]{1-20}" maxlength="20">
                                 <div class="text-danger">
                                     @error('bill_number')
                                         {{ $message }}
@@ -247,62 +239,62 @@
         @push('js')
             <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
-        @endpush
 
-        <script>
-            var selectedSubjects = []
+            <script>
+                var selectedSubjects = []
 
-            function filter(parentList, filteredList) {
-                dataList = document.getElementById('data-list')
-                filteredList = document.getElementById(filteredList)
-                clearList(filteredList)
-                filteredList.options[0].selected = true //check
-                for (option of dataList.options) {
-                    if (option.getAttribute('data-fk') == parentList.value) {
-                        if (!selectedSubjects.includes(option.value)) {
-                            selectedSubjects.push(option.value)
-                            let optionElement = option.cloneNode(true)
-                            filteredList.appendChild(optionElement)
+                function filter(parentList, filteredList) {
+                    dataList = document.getElementById('data-list')
+                    filteredList = document.getElementById(filteredList)
+                    clearList(filteredList)
+                    filteredList.options[0].selected = true //check
+                    for (option of dataList.options) {
+                        if (option.getAttribute('data-fk') == parentList.value) {
+                            if (!selectedSubjects.includes(option.value)) {
+                                selectedSubjects.push(option.value)
+                                let optionElement = option.cloneNode(true)
+                                filteredList.appendChild(optionElement)
+                            }
                         }
                     }
                 }
-            }
 
-            function clearList(list) {
-                for (let i = 1; i < list.options.length; i++) {
-                    list.remove(i)
+                function clearList(list) {
+                    for (let i = 1; i < list.options.length; i++) {
+                        list.remove(i)
+                    }
                 }
-            }
 
 
-            function doAddSubject(subjectId, subjectCost, label) {
-                let template = document.getElementById("template-subject").children[0]
-                let newSubject = template.cloneNode(true)
-                newSubject.children[1].value = subjectCost
-                newSubject.children[2].value = subjectId
-                newSubject.children[3].innerHTML = label
-                document.querySelector("#subject-names .row").appendChild(newSubject)
-                document.getElementById("sum-subject").value = Number(document.getElementById("sum-subject").value) + Number(
-                    subjectCost)
-            }
+                function doAddSubject(subjectId, subjectCost, label) {
+                    let template = document.getElementById("template-subject").children[0]
+                    let newSubject = template.cloneNode(true)
+                    newSubject.children[1].value = subjectCost
+                    newSubject.children[2].value = subjectId
+                    newSubject.children[3].innerHTML = label
+                    document.querySelector("#subject-names .row").appendChild(newSubject)
+                    document.getElementById("sum-subject").value = Number(document.getElementById("sum-subject").value) + Number(
+                        subjectCost)
+                }
 
-            function addSubject(inp) {
-                let selectedOption = inp.options[inp.selectedIndex]
-                let subjectId = selectedOption.value
-                let subjectCost = selectedOption.getAttribute('data-Cost')
-                let label = selectedOption.getAttribute('data-info')
-                doAddSubject(subjectId, subjectCost, label)
-            }
+                function addSubject(inp) {
+                    let selectedOption = inp.options[inp.selectedIndex]
+                    let subjectId = selectedOption.value
+                    let subjectCost = selectedOption.getAttribute('data-Cost')
+                    let label = selectedOption.getAttribute('data-info')
+                    doAddSubject(subjectId, subjectCost, label)
+                }
 
-            function delete_subject(inp) {
-                subjectCost = inp.nextElementSibling.value
-                document.getElementById("sum-subject").value = Number(document.getElementById("sum-subject").value) - Number(
-                    subjectCost)
-                inp.parentNode.remove();
-            }
-        </script>
+                function delete_subject(inp) {
+                    subjectCost = inp.nextElementSibling.value
+                    document.getElementById("sum-subject").value = Number(document.getElementById("sum-subject").value) - Number(
+                        subjectCost)
+                    inp.parentNode.remove();
+                }
+            </script>
 
-        <script>
-            $('.ui.dropdown').dropdown();
-        </script>
+            <script>
+                $('.ui.dropdown').dropdown();
+            </script>
+        @endpush
     @endsection

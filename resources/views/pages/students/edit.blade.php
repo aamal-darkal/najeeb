@@ -4,8 +4,8 @@
     <div class="padding">
         <div class="box col-md-6 offset-md-3">
             <div class="box-header">
-                <a class="md-btn md-raised primary text-white m-0"
-                    href="{{ route('students.show', $student) }}"><i class="fas fa-long-arrow-left"></i></a>
+                <a class="md-btn md-raised primary text-white m-0" href="{{ route('students.show', $student) }}"><i
+                        class="fas fa-long-arrow-left"></i></a>
                 <h2 class="text-primary text-2x d-inline ml-2">Edit Student Data</h2>
             </div>
             <div class="box-divider m-0"></div>
@@ -73,23 +73,14 @@
                             <div class="col">
                                 <label for="governorate">Governorate</label>
                                 <select name="governorate" id="governorate"
-                                    class="form-control mt-2 ui search selection dropdown">
+                                    class="form-control ui dropdown search selection ">
                                     <option hidden selected value="">Enter governorate</option>
-                                    <option value="دمشق" @selected(old('governorate', $student->governorate) == 'دمشق')>دمشق</option>
-                                    <option value="ريف دمشق" @selected(old('governorate', $student->governorate) == 'ريف دمشق')>ريف دمشق</option>
-                                    <option value="حلب" @selected(old('governorate', $student->governorate) == 'حلب')>حلب</option>
-                                    <option value="حمص" @selected(old('governorate', $student->governorate) == 'حمص')>حمص</option>
-                                    <option value="اللاذقية" @selected(old('governorate', $student->governorate) == 'اللاذقية')>اللاذقية</option>
-                                    <option value="حماه" @selected(old('governorate', $student->governorate) == 'حماه')>حماه</option>
-                                    <option value="طرطوس" @selected(old('governorate', $student->governorate) == 'طرطوس')>طرطوس</option>
-                                    <option value="الرقة" @selected(old('governorate', $student->governorate) == 'الرقة')>الرقة</option>
-                                    <option value="ديرالزور" @selected(old('governorate', $student->governorate) == 'ديرالزور')>ديرالزور</option>
-                                    <option value="السويداء" @selected(old('governorate', $student->governorate) == 'السويداء')>السويداء</option>
-                                    <option value="الحسكة" @selected(old('governorate', $student->governorate) == 'الحسكة')>الحسكة</option>
-                                    <option value="درعا" @selected(old('governorate', $student->governorate) == 'درعا')>درعا</option>
-                                    <option value="إدلب" @selected(old('governorate', $student->governorate) == 'إدلب')>إدلب</option>
-                                    <option value="القنيطرة" @selected(old('governorate', $student->governorate) == 'القنيطرة')>القنيطرة</option>
+                                    @foreach ($governorates as $governorate)
+                                        <option value="{{ $governorate }}" @selected(old('governorate', $student->governorate) == $governorate)>
+                                            {{ $governorate }}</option>
+                                    @endforeach
                                 </select>
+
                                 <div class="text-danger">
                                     @error('governorate')
                                         {{ $message }}
@@ -131,10 +122,9 @@
 
                         <div class="col">
                             <label for="land_line">Land line</label>
-                            <input type="text" id="land_line" class="form-control"
-                                placeholder="Enter land line number" name="land_line"
-                                value="{{ old('land_line', $student->land_line) }}" minlength="7" maxlength="10"
-                                pattern="[0-9]{7,10}" title="enter valid phone">
+                            <input type="text" id="land_line" class="form-control" placeholder="Enter land line number"
+                                name="land_line" value="{{ old('land_line', $student->land_line) }}" minlength="7"
+                                maxlength="10" pattern="[0-9]{7,10}" title="enter valid phone">
                             <div class="text-danger">
                                 @error('land_line')
                                     {{ $message }}
@@ -158,10 +148,9 @@
     @push('js')
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+
+        <script>
+            $('.ui.dropdown').dropdown();
+        </script>
     @endpush
-
-
-    <script>
-        $('.ui.dropdown').dropdown();
-    </script>
 @endsection

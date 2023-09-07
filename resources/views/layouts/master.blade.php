@@ -34,7 +34,6 @@
     <link rel="stylesheet" href="{{ asset('assets/styles/font.css') }}" type="text/css" />
     
     @stack('css')
-    @stack('js')
 
     
 </head>
@@ -112,6 +111,7 @@
     <script src="{{ asset('scripts/ajax.js') }}"></script>
     {{-- font-awsome --}}
     <script src="{{ asset('scripts/all.min.js') }}"></script>
+    @stack('js')
 
    
 </body>

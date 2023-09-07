@@ -13,6 +13,7 @@ use App\Models\Subject;
 use App\Traits\SubcribeTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
@@ -24,7 +25,6 @@ class StudentController extends Controller
     {
         $state = $request->input('state', 'current');
         $package = $request->input('package');
-        $subject =  $request->input('subject');
         $subject =  $request->input('subject');
         $notification =  $request->input('notification');
         $students = Student::where('state', $state)
@@ -91,7 +91,8 @@ class StudentController extends Controller
         $paymentMethods = PaymentMethod::get();
         $subjects = Subject::with('package')->get();
         $packages = Package::with('subjects')->get();
-        return view('pages.students.create', compact('paymentMethods', 'subjects', 'packages'));
+        $governorates = ["دمشق" ,"ريف دمشق","حلب" , "حمص","اللاذقية","حماه","طرطوس","الرقة","ديرالزور","السويداء","الحسكة" ,"درعا" ,"إدلب" ,"القنيطرة"];
+        return view('pages.students.create', compact('paymentMethods', 'subjects', 'packages' ,'governorates'));
     }
 
     /**
@@ -157,7 +158,6 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-
         foreach ($student->orders as $order) {
             foreach ($order->payments as $paymant)
                 $paymant->delete();
@@ -189,7 +189,10 @@ class StudentController extends Controller
         // reset token of students
         if ($validated['action'] == 'reset-token') {
             $students = Student::with('user')->find($validated['ids']);
-            foreach ($students as $student)
+            foreach ($students as $student)                
+                $student->user->tokens->each(function ($token, $key) {
+                    $token->delete();
+                });
                 $student->user->update(['token_birth' => null]);
             return back()->with('success', 'Studnet\'s token is reset successfully');;
 
@@ -215,7 +218,8 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
-        return view('pages.students.edit', compact('student'));
+        $governorates = ["دمشق" ,"ريف دمشق","حلب" , "حمص","اللاذقية","حماه","طرطوس","الرقة","ديرالزور","السويداء","الحسكة" ,"درعا" ,"إدلب" ,"القنيطرة"];
+        return view('pages.students.edit', compact('student' ,'governorates'));
     }
 
     /**

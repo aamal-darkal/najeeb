@@ -83,7 +83,7 @@
                             </ul>
                         </li>
                     @endif
-                    @if (Route::has('subjects.index'))
+                    {{-- @if (Route::has('subjects.index'))
                         <li>
                             <a>
                                 <span class="nav-caret">
@@ -127,7 +127,7 @@
                                 </li>
                             </ul>
                         </li>
-                    @endif
+                    @endif --}}
                     @if (Route::has('subscriptions.index'))
                         <li>
                             <a>

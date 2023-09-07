@@ -14,11 +14,17 @@ body {
 .app {
   width: 100% !important;
 }
+.fc-day-today {
+  background-color: inherit !important;
+}
 *:focus {
   outline: 0 !important;
 }
 .bold {
   font-weight: bolder !important;
+}
+.hidden {
+  display: none;
 }
 nav a {
   color: white;
@@ -4137,6 +4143,9 @@ div.input-group>.select2-container>.selection {
 .primary {
   color: rgba(255, 255, 255, 0.87);
   background-color: #0cc2aa;
+}
+.border-primary {
+  border-color: #0cc2aa !important ;
 }
 
 .primary .lt {

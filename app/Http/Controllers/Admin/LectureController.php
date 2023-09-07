@@ -2,55 +2,43 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\NotificationHelper;
 use App\Http\Requests\StoreLectureRequest;
 use App\Models\Lecture;
 use App\Models\Notification;
-use App\Models\Package;
 use App\Models\PdfFile;
+use App\Models\Student;
 use App\Models\Subject;
+use App\Models\User;
 use App\Models\WeekProgram;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class LectureController extends Controller
-{
-
-    // public function index1(Request $request)
-    // {
-    //     $subject = $request->subject;
-    //     $subjects = Subject::when($subject , function($q) use ($subject) {
-    //         return $q->where('id' , $subject);
-    //     })->with('package','weekProgs')->withCount('students')->get();
-    //     return view('pages.subjects.index',compact('subjects'));
-    // }
-
+{    
     public function index($subjectId = null)
-    {
+    {       
         $lectures = Lecture::join('week_programs', 'lectures.week_program_id', '=', 'week_programs.id')
-            ->when($subjectId, function ($query, $subjectId) {
-                return $query->where('week_programs.subject_id', $subjectId);
-            })
-            ->select('lectures.id', 'name as title', DB::raw("CONCAT(date,'T',week_programs.start_time) as start"), DB::raw("CONCAT(date,'T',week_programs.end_time) as end"))
-            ->get(3);
-        // return $lectures;
-        $lectures->map(function ($lecture) {
-            $lecture['color'] = $this->rndRGBColorCode(200);
-            $lecture['url'] = route('lectures.show', $lecture->id);
-            return $lecture;
-        });
+        ->when($subjectId, function ($query, $subjectId) {
+            return $query->where('week_programs.subject_id', $subjectId);
+        })
+        ->select('lectures.id', 'name as title', 
+        DB::raw("CONCAT(date,'T',week_programs.start_time) as start"), 
+        DB::raw("CONCAT(date,'T',week_programs.end_time) as end"))
+        ->get();
 
+        $newLectures = "";
+        // add two fields then convert collection to one string
         foreach ($lectures as $lecture) {
-            $newLectures[] = (string) $lecture;
-        }
-
-        if (isset($newLectures))
-            $lectures = implode(',', $newLectures);
-        else
-            $lectures = null;
-        return view('pages.lectures.index', compact('lectures'));
+            $lecture->color = $this->rndRGBColorCode(200);
+            $lecture->url = route('lectures.show', $lecture->id);
+            $newLectures .= (string) $lecture . ",";
+        }  
+        // return $newLectures;
+        return view('pages.lectures.index')->with('lectures' , $newLectures );
     }
 
     private function rndRGBColorCode($min = 0, $max = 255)
@@ -104,9 +92,17 @@ class LectureController extends Controller
                 $lecture->pdfFiles()->create(['pdf_link' => $link_pdf, 'name' => '']);
             }
         }
-        $notification = Notification::create(['title' => 'New Lecture', 'description' => "$lecture->name at $lecture->date", 'time_publish' => $validated['date'], 'created_at'  => now()]);
 
-        NotificationHelper::broadcastLectureNotification($validated['subject_id'], $notification);
+        /***************** send notification ***************** */
+        $req = new Request()        ;
+        $req['title'] = 'New Lecture';
+        $req['description'] = "$lecture->name at $lecture->date";
+        $req['time_publish'] =  $validated['date'];
+        $req['created_at'] =  now();
+        $req['subject'] =  $validated['subject_id'];
+        $n = new NotificationController();
+        $n->store($req) ;             
+
         return redirect()->route('lectures.index')->with('success', 'Lecture Saved successfuly');
     }
     /**

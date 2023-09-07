@@ -17,7 +17,7 @@
                 </div>
             @endif
             <div class="col mt-2">
-                <form action="{{ route('students.search' , $group) }}" method="get" class="h-100">
+                <form action="{{ route('students.search', $group) }}" method="get" class="h-100">
                     <div class="row">
                         <input type="hidden" name="state" value="{{ $state }}">
                         <input type="text" class="form-control col-10" name="search" placeholder="Type keyword">
@@ -40,7 +40,7 @@
         @endif
         <div class="col-md-6    ">
             @if ($students->isNotEmpty())
-                {{ $students->links() }}
+                {{ $students->appends(request()->except('page'))->links() }}.
             @endif
         </div>
         <div class="mt-2">
@@ -93,6 +93,19 @@
                                                                 style="margin-left: 10px; padding: 4px 0px 4px 20px">
                                                                 <div class="tl-content text-center">
                                                                     {{ $subject->name }}
+                                                                    @php $student_id = $student->id; @endphp
+                                                                    @if ($subject->lectures->count() > 0)
+                                                                    %{{ round(
+                                                                            ($subject->lectures()->whereHas('students', function ($q) use ($student_id) {
+                                                                                    return $q->where('student_id', $student_id);
+                                                                                })->count() /
+                                                                                $subject->lectures->count()) *
+                                                                                100,
+                                                                            0,
+                                                                        ) }}
+                                                                    @else
+                                                                        -
+                                                                    @endif
                                                                 </div>
                                                             </div>
                                                         </li>
@@ -166,7 +179,7 @@
             @endif
         </div>
     </div>
-    
+
     <script>
         function checkSelection() {
             let anySelected = document.querySelector("input[type='checkbox']:checked");

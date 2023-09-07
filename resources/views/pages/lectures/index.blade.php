@@ -1,7 +1,5 @@
 @extends('layouts.master')
 @section('content')
-
-    <!-- ############ PAGE START-->
     <div class="padding">
         <div class="row m-b">
             <div class="col-sm-4 m-b-sm">
@@ -15,17 +13,21 @@
                 </div>
             </div>
         </div>
-        <div class="fullcalendar" ui-jp="fullCalendar" ui-options="{
+        <div class="fullcalendar" ui-jp="fullCalendar"
+            ui-options="{
         header: {
           left: 'prev',
           center: 'title',
           right: 'next'
         },
-        defaultDate: '{{\Carbon\Carbon::now()->toDateString()}}',
+        initialDate: '2023-01-12',
+        {{-- defaultView: 'agendaWeek', --}}
+        {{-- nowIndicator: true, --}}
+        defaultDate: '{{ \Carbon\Carbon::now()->toDateString() }}',
         editable: true,
         eventLimit: false,
         events: [
-        {{$lectures}}
+        {{ $lectures }}
 
         ]
       }">
@@ -33,5 +35,4 @@
     </div>
 
     <!-- ############ PAGE END-->
-
 @endsection

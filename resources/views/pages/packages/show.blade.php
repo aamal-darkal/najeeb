@@ -37,10 +37,11 @@
                     <h2 class="d-inline ml-2">{{ $package->name }}’s subjects ({{ $package->subjects->count() }})</h2>
                 </div>
                 <div class="box">
-                    <div class="table-responsive p-2">
+                    <div class="table-responsive p-2 text-left">
+                        
                         <a class="md-btn md-raised primary text-white w-md m-3"
-                            href="{{ route('subjects.create', ['package' => $package->id]) }}"> Add subject
-                            &nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-plus-square fa-lg"></i></a>
+                            href="{{ route('subjects.create', ['package' => $package->id]) }}"><i class="fas fa-plus-square fa-lg"></i> &emsp; Add subject
+                            </a>
                         <table class="table table-striped b-a b-2x">
                             <thead class="dker text-primary">
                                 <tr>
@@ -63,7 +64,6 @@
                                                 href="{{ route('notifications.create', ['subject' => $subject]) }}">
                                                 <i class="fa fa-bell"></i></a>
                                             <a class="btn btn-sm btn-outline-info border-0" title="edit"
-                                                onclick="alert('under working')"
                                                 href="{{ route('subjects.edit', $subject) }}">
                                                 <i class="fa fa-edit"></i></a>
                                             <form action="{{ route('subjects.destroy', ['subject' => $subject]) }}"

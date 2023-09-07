@@ -50,7 +50,7 @@
                                                             <div class="tl-wrap b-primary"
                                                                 style="margin-left: 10px; padding: 4px 0px 4px 20px">
                                                                 <div class="tl-content text-center">
-                                                                    {{ $subject->name }}
+                                                                    {{ $subject->package->name }} - {{ $subject->name }} 
                                                                 </div>
                                                             </div>
                                                         </li>

@@ -12,12 +12,19 @@ use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class SubjectController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    private $weekDays =   ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+    private $times = [
+        '8:00 AM', '8:30 AM',  '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM',
+        '12:00 PM', '12:30 PM', '1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM', '4:00 PM'
+    ];
+
     public function index()
     {
         $subjects = Subject::with('package', 'weekProgs')->withCount('students')->get();
@@ -30,27 +37,50 @@ class SubjectController extends Controller
             'package' => 'required|exists:packages,id'
         ]);
         $package = Package::find($request->package);
+        // notAllowedTimes******* to review *******!!!!
 
-        // return view('pages.subjects.create-step1',compact('packages'));
-        // notAllowedTimes**************!!!!
-        return view('pages.subjects.create', compact('package'));
+        $weekprogs = WeekProgram::join('subjects' , 'Week_programs.subject_id' , '=' , 'subjects.id' )->wherehas('subject', function ($q) use ($package) {
+            return $q->where('package_id', $package->id);
+        })
+            ->select(
+                'name as title',
+                'color as backgroundColor',
+                DB::raw('"black" as textColor') ,
+                'start_time as startTime',
+                'end_time as endTime',
+                DB::raw("CONCAT('[\'' , (day+5)%7 , '\']') as daysOfWeek"),                                
+            )
+            ->get();
+                // return $weekprogs;
+            // foreach ($weekprogs as $weekprog) {
+            //     $weekprog->backgroundColor = $this->rndRGBColorCode(200);
+            //     $weekprog->textColor = 'black';
+            // } 
+            // return $newWeekprogs; 
+        return view('pages.subjects.create', compact('package'))
+            ->with('weekDays', $this->weekDays)
+            ->with('times', $this->times)
+            ->with('weekprogs' , $weekprogs);
     }
 
-
+    private function rndRGBColorCode($min = 0, $max = 255)
+    {
+        return 'rgb(' . rand($min, $max) . ',' . rand($min, $max) . ',' . rand($min, $max) . ')'; #using the inbuilt random function 
+    }
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreSubjectRequest $request): RedirectResponse
+    public function store(StoreSubjectRequest $request)
     {
-        $subject = Subject::create($request->only(['name', 'cost', 'package_id']));
+        // return $request;
+        $subject = Subject::create($request->only(['name', 'cost', 'color' , 'package_id']));
         $days = $request->days;
         foreach ($days as $i => $day) {
             $start_time = Carbon::createFromFormat('h:i A', $request['start_times'][$i]);
             $end_time = Carbon::createFromFormat('h:i A', $request['end_times'][$i]);
             $subject->weekProgs()->create(['day' => $day, 'start_time' => $start_time, 'end_time' => $end_time]);
         }
-
-        return redirect()->route('packages.show', ['package' => $subject->package_id]);
+        return back()->with('success' , 'Subject is added successfully');
     }
 
     /**
@@ -58,16 +88,19 @@ class SubjectController extends Controller
      */
     public function edit(Subject $subject)
     {
-        return view('pages.subjects.edit', compact('subject'));
+        $package = $subject->package;
+        return view('pages.subjects.edit', compact('subject', 'package'))
+            ->with('weekDays', $this->weekDays)
+            ->with('times', $this->times);
     }
 
 
     public function update(UpdateSubjectRequest $request, Subject $subject)
     {
         $subject->update($request->only(['name', 'cost', 'package_id']));
-        
-        $ids = $request->weekProgsIds;
-        $states = $request->weekProgsStates;
+
+        $ids = $request->weekProgIds;
+        $states = $request->weekProgStates;
         $days = $request->days;
         $start_times = $request->start_times;
         $end_times = $request->end_times;
@@ -76,11 +109,11 @@ class SubjectController extends Controller
             $start_time = Carbon::createFromFormat('h:i A', $start_times[$i]);
             $end_time = Carbon::createFromFormat('h:i A', $end_times[$i]);
 
-            if ($states[$i] == 'new') {
-                WeekProgram::create(['day' => $day, 'start_time' => $start_time, 'end_time' => $end_time]);
-            } elseif ($states[$i] == 'del' && $ids[$i] != 'new') {
+            if ($states[$i] == 'insert') {
+                WeekProgram::create(['day' => $day, 'start_time' => $start_time, 'end_time' => $end_time, 'subject_id' => $subject->id]);
+            } elseif ($states[$i] == 'delete' && $ids[$i] != 'insert') {
                 WeekProgram::find($ids[$i])->delete();
-            } elseif ($states[$i] == 'old') {
+            } elseif ($states[$i] == 'delete') {
                 $weekProgram = WeekProgram::find($ids[$i]);
                 $weekProgram->update(['day' => $day, 'start_time' => $start_time, 'end_time' => $end_time]);
             }

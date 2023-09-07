@@ -22,7 +22,7 @@ class PackageController extends Controller
 
     public function paginatedIndex(Request $request)
     {
-        if ($request->ajax()) {
+        if ($request->ajax()) { /** review meaning */
             $packages = Package::withCount('subjects')->paginate(2);
             return view('pages.packages.index', compact('packages'))->render();
         }

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('package_id')->constrained();
             $table->string('name' , 100);
             $table->integer('cost');
+            $table->integer('color');
             $table->timestamps();
         });
     }

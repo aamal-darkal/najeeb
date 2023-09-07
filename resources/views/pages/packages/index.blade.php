@@ -2,10 +2,10 @@
 @section('content')
 {{-- ***************************  packages ************************** --}}
     <div class="padding">
-        <div class="box col-md-10 offset-md-1">
+        <h2 class="text-primary text-center">All Packages</h2> <br>
 
-            <div class="box-header text-primary d-flex justify-content-between">
-                <h2>All Packages</h2>
+        <div class="box col-md-10 offset-md-1">
+            <div class="box-header">
                 <a class="md-btn md-raised primary text-white w-md" href="{{ route('packages.create') }}">Add package &nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-plus-square fa-lg"></i></a></a>
             </div>
             <div class="table-responsive">
@@ -13,7 +13,7 @@
                     <thead>
                         <tr>
                             <th></th>
-                            <th>Name</th>
+                            <th class="w">Name</th>
                             <th>Starts at</th>
                             <th>Ends at</th>
                             <th>Subjects count</th>
