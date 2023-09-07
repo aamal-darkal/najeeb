@@ -37,7 +37,7 @@ class SubjectController extends Controller
         $package = Package::find($request->package);
         // notAllowedTimes******* to review *******!!!!
 
-        $weekprogs = WeekProgram::join('subjects' , 'Week_programs.subject_id' , '=' , 'subjects.id' )->wherehas('subject', function ($q) use ($package) {
+        $weekprogs = WeekProgram::join('subjects' , 'week_programs.subject_id' , '=' , 'subjects.id' )->wherehas('subject', function ($q) use ($package) {
             return $q->where('package_id', $package->id);
         })
             ->select(
@@ -78,7 +78,7 @@ class SubjectController extends Controller
     public function edit(Subject $subject)
     {
         $package = $subject->package;
-        $weekprogs = WeekProgram::join('subjects' , 'Week_programs.subject_id' , '=' , 'subjects.id' )->wherehas('subject', function ($q) use ($package) {
+        $weekprogs = WeekProgram::join('subjects' , 'week_programs.subject_id' , '=' , 'subjects.id' )->wherehas('subject', function ($q) use ($package) {
             return $q->where('package_id', $package->id);
         })
             ->select(
