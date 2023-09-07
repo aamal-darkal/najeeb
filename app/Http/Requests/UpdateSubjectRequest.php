@@ -25,6 +25,7 @@ class UpdateSubjectRequest extends FormRequest
             'package_id' => 'required',
             'name' => 'required',
             'cost' => 'required',
+            'color' => 'required',
             'days.*' => 'required',
             'start_times.*' => ['required','regex:/(1[012]|[1-9]):[0-5][0-9][\\s]?(?i)(am|pm)/'],
             'end_times.*' => ['required','regex:/(1[012]|[1-9]):[0-5][0-9][\\s]?(?i)(am|pm)/'],

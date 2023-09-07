@@ -9,9 +9,7 @@ use App\Models\Package;
 use App\Models\Subject;
 use App\Models\WeekProgram;
 use Carbon\Carbon;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class SubjectController extends Controller
@@ -51,22 +49,13 @@ class SubjectController extends Controller
                 DB::raw("CONCAT('[\'' , (day+5)%7 , '\']') as daysOfWeek"),                                
             )
             ->get();
-                // return $weekprogs;
-            // foreach ($weekprogs as $weekprog) {
-            //     $weekprog->backgroundColor = $this->rndRGBColorCode(200);
-            //     $weekprog->textColor = 'black';
-            // } 
-            // return $newWeekprogs; 
+            
         return view('pages.subjects.create', compact('package'))
             ->with('weekDays', $this->weekDays)
             ->with('times', $this->times)
             ->with('weekprogs' , $weekprogs);
     }
-
-    private function rndRGBColorCode($min = 0, $max = 255)
-    {
-        return 'rgb(' . rand($min, $max) . ',' . rand($min, $max) . ',' . rand($min, $max) . ')'; #using the inbuilt random function 
-    }
+    
     /**
      * Store a newly created resource in storage.
      */
@@ -89,7 +78,19 @@ class SubjectController extends Controller
     public function edit(Subject $subject)
     {
         $package = $subject->package;
-        return view('pages.subjects.edit', compact('subject', 'package'))
+        $weekprogs = WeekProgram::join('subjects' , 'Week_programs.subject_id' , '=' , 'subjects.id' )->wherehas('subject', function ($q) use ($package) {
+            return $q->where('package_id', $package->id);
+        })
+            ->select(
+                'name as title',
+                'color as backgroundColor',
+                DB::raw('"black" as textColor') ,
+                'start_time as startTime',
+                'end_time as endTime',
+                DB::raw("CONCAT('[\'' , (day+5)%7 , '\']') as daysOfWeek"),                                
+            )
+            ->get();
+        return view('pages.subjects.edit', compact('subject', 'package', 'weekprogs'))
             ->with('weekDays', $this->weekDays)
             ->with('times', $this->times);
     }
@@ -97,7 +98,7 @@ class SubjectController extends Controller
 
     public function update(UpdateSubjectRequest $request, Subject $subject)
     {
-        $subject->update($request->only(['name', 'cost', 'package_id']));
+        $subject->update($request->only(['name', 'cost','color', 'package_id']));
 
         $ids = $request->weekProgIds;
         $states = $request->weekProgStates;
@@ -118,8 +119,7 @@ class SubjectController extends Controller
                 $weekProgram->update(['day' => $day, 'start_time' => $start_time, 'end_time' => $end_time]);
             }
         }
-
-        return redirect()->route('packages.show', ['package' => $subject->package_id]);
+        return back()->with('success' , 'Subject is updated successfully');
     }
 
     /**

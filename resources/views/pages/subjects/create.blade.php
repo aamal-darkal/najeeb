@@ -232,27 +232,7 @@
                     displayEventTime: false,
                     slotMinTime: '08:00',
                     slotMaxTime: '20:00',
-                    events: weekProg,
-
-                    // events: [{
-                    //         title: 'blueEvents \n', // recurrent events in this group move together
-                    //         daysOfWeek: ['4'],
-                    //         startTime: '10:45',
-                    //         endTime: '12:45',
-                    //         backgroundColor: 'pink',
-                    //         textColor: 'red', // an option!
-                    //         description: "Testing Description",
-                    //     },                    
-                    //     {
-                    //         title: 'xx', // recurrent events in this group move together
-                    //         daysOfWeek: ['3'], // these recurrent events move separately
-                    //         startTime: '11:00',
-                    //         endTime: '11:30',
-                    //         color: 'red',
-                    //         textColor: 'yellow' // an option!
-
-                    //     }
-                    // ],
+                    events: weekProg,                    
                 });
 
                 calendar.render();
