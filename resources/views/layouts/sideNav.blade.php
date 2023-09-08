@@ -63,24 +63,15 @@
                     @endif
                     @if (Route::has('packages.index'))
                         <li>
-                            <a>
-                                <span class="nav-caret">
-                                    <i class="fa fa-caret-down"></i>
-                                </span>
+                            
+                            <a href="{{ route('packages.index') }}">
                                 <span class="nav-icon">
                                     <i class="material-icons">&#xe1db;
                                         <span ui-include="'../assets/images/i_1.svg'"></span>
                                     </i>
                                 </span>
-                                <span class="nav-text">Packages</span>
+                                <span class="nav-text">All Packages</span>
                             </a>
-                            <ul class="nav-sub">
-                                <li>
-                                    <a href="{{ route('packages.index') }}">
-                                        <span class="nav-text">All Packages</span>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
                     @endif
                     {{-- @if (Route::has('subjects.index'))
@@ -198,15 +189,15 @@
                                     </a>
                                 </li>
                             </ul>
-                            
+
                         </li>
                     @endif
                     @if (Route::has('settings.index'))
                         <li>
                             <a href="{{ route('settings.index') }}">
                                 <span class="nav-icon">
-                                        <i class="fas fa-cog">                                        
-                                        </i>                                       
+                                    <i class="fas fa-cog">
+                                    </i>
                                 </span>
                                 <span class="nav-text">Configuration</span>
                             </a>

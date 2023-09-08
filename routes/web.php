@@ -52,6 +52,8 @@ Route::middleware('auth')->group(function () {
 
     /***************************************  Subjects *********************************/    
     Route::resource('subjects', SubjectController::class);
+    Route::get('subjects-excel/{subject}', [SubjectController::class, 'excel'])->name('subjects.excel');
+
 
     /***************************************  lectures *********************************/
     Route::controller(LectureController::class)->group(function () {        

@@ -11,6 +11,8 @@ use App\Models\WeekProgram;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Exports\ExportStudents;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SubjectController extends Controller
 {
@@ -140,5 +142,9 @@ class SubjectController extends Controller
         if ($subject->students->count()) return back()->with('error', 'sorry, we can\'t delete subject that subcribed by students , first you should unsubcribe students first ');
         $subject->delete();
         return back()->with('success', 'package deleted successfuly');
+    }
+    public function excel(Subject $subject) 
+    {
+        return Excel::download(new ExportStudents($subject), $subject->name ."_students.xlsx");
     }
 }

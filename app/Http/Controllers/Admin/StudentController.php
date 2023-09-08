@@ -13,8 +13,8 @@ use App\Models\Subject;
 use App\Traits\SubcribeTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+
 
 class StudentController extends Controller
 {
@@ -355,4 +355,6 @@ class StudentController extends Controller
 
         return back()->with('success', 'Student unsubcribe successfully');
     }
+
+    
 }

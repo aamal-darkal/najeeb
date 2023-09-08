@@ -42,7 +42,7 @@
                         <a class="md-btn md-raised primary text-white w-md m-3"
                             href="{{ route('subjects.create', ['package' => $package->id]) }}"><i class="fas fa-plus-square fa-lg"></i> &emsp; Add subject
                             </a>
-                        <table class="table table-striped b-a b-2x">
+                        <table class="table table-striped b-a b-2x text-center">
                             <thead class="dker text-primary">
                                 <tr>
                                     <th>Subject Name</th>
@@ -74,7 +74,11 @@
                                                 <button class="btn btn-outline-danger border-0" title="delete">
                                                     <i class="fa fa-trash"></i>
                                                 </button>
-                                            </form>
+                                            </form>                                    
+                                            <a class="btn btn-sm btn-outline-success border-0"  title="edit"
+                                                href="{{ route('subjects.excel', $subject) }}">
+                                                <i class="fa fa-table"></i>
+                                            </a>
                                         </td>
                                         <td class="text-center">
                                             <a title="Lectures" class="md-btn md-raised primary text-white w-sm r-15"
