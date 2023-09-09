@@ -10,11 +10,12 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class ExportStudents implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize, WithStyles, WithEvents
+class ExportStudents implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize, WithStyles, WithEvents, WithHeadingRow
 {
     /**
      * @return \Illuminate\Support\Collection
@@ -57,30 +58,43 @@ class ExportStudents implements FromQuery, WithHeadings, WithMapping, ShouldAuto
         ];
     }
 
+    // header & row header
     public function headings(): array
     {
         return [
-            'الاسم الأول',
-            'الاسم الثاني',
-            'نسبة الحضور',
-            'رقم الجوال',
-            'رقم الأب',
-            'تاريخ انشاء الحساب'
+            ["طلاب مادة " . $this->subject->name . " بتاريخ " .  \Carbon\Carbon::today()->toDateString()],
+            [
+                'الاسم الأول',
+                'الاسم الثاني',
+                'نسبة الحضور',
+                'رقم الجوال',
+                'رقم الأب',
+                'تاريخ انشاء الحساب'
+            ]
         ];
     }
+    public function headingRow(): int
+    {
+        return 2;
+    }
 
+    //styles
     public function styles(Worksheet $sheet)
     {
         return [
             // Style the first row as bold text.
-            1    => ['font' => ['bold' => true]],
-            'A1:F1' => [
+            1 => [
+                    'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
+                    'font' => ['bold' => true],
+                    'font' => ['size' => 16]
+                ] ,
+            'A2:F2' => [
                 'fill' => [
                     'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                    'color' => ['argb' => 'f4f7c4']
+                    'color' => ['argb' => 'fdfddb']
                 ]
             ],
-            "A1:F$this->recCount"    => [
+            "A2:F$this->recCount"    => [
                 'borders' => [
                     'allBorders' => [
                         'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
@@ -99,6 +113,7 @@ class ExportStudents implements FromQuery, WithHeadings, WithMapping, ShouldAuto
         return [
             AfterSheet::class => function (AfterSheet $event) {
                 $event->sheet->getDelegate()->setRightToLeft(true); // this change
+                $event->sheet->mergeCells('A1:F1'); // this change
             },
         ];
     }

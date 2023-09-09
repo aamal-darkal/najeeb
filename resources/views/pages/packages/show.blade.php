@@ -75,7 +75,7 @@
                                                     <i class="fa fa-trash"></i>
                                                 </button>
                                             </form>                                    
-                                            <a class="btn btn-sm btn-outline-success border-0"  title="edit"
+                                            <a class="btn btn-sm btn-outline-success border-0"  title="excel"
                                                 href="{{ route('subjects.excel', $subject) }}">
                                                 <i class="fa fa-table"></i>
                                             </a>
