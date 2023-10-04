@@ -37,7 +37,7 @@ class ExportStudents implements FromQuery, WithHeadings, WithMapping, ShouldAuto
         $students = Student::wherehas('subjects', function ($q) use ($subject_id) {
             return $q->where('subject_id', $subject_id);
         });
-        $this->recCount = $students->count() + 1;
+        $this->recCount = $students->count() + 2;
         return  $students;
     }
 

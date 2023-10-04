@@ -7,6 +7,7 @@ use App\Http\Requests\StorePackageRequest;
 use App\Models\Package;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class PackageController extends Controller
@@ -83,10 +84,10 @@ class PackageController extends Controller
             'end_date' => 'required|date|after:start_date',
         ]);
         if ($request->file('image')) {
-            $path = 'images/packages';
+            Storage::delete('public/images/packages/'  .   $package->image );
             $file = $request->file('image');
             $filename = $package->id . '.' . $file->extension();
-            $file->storeAs($path,  $filename, 'public');
+            $file->storeAs('public/images/packages',  $filename);
             $validated['image']= $filename;
         }
         $package->update($validated);
@@ -101,7 +102,9 @@ class PackageController extends Controller
         $subjectsCount =  $package->subjects->count();
         if ($subjectsCount > 0)
             return back()->with('error', 'sorry, we can\'t delete package that has subject, you should delete its subjects first');
-        else {
+        else {            
+            Storage::delete('public/images/packages/' .    $package->image );
+
             $package->delete();
             return back()->with('success', 'package deleted successfuly');
         }

@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 
 require __DIR__ . '/auth.php';
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth','admin')->group(function () {
     /***************************************  profile *********************************/
     // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     // Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -34,14 +34,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'home'])->name('dashboard');
 
     /***************************************  Students *********************************/
-    Route::controller(StudentController::class)->group(function () {
-        Route::get('students-password/{student}', 'passwordEdit')->name('students.password-edit');
-        Route::post('students-password/{student}', 'passwordUpdate')->name('students.password-update');
-        Route::get('students-subcribe/{student}', 'subcribeCreate')->name('students.subcribe-create');
-        Route::post('students-subcribe/{student}', 'subcribeStore')->name('students.subcribe-store');
-        Route::delete('students-subcribe/{student}', 'subcribeDestroy')->name('students.subcribe-destroy');
-        Route::post('student/update-many/',  'updateMany')->name('students.update-many');
-        Route::get('students-search', 'search')->name('students.search');
+    Route::controller(StudentController::class)->name('students.')->group(function () {
+        Route::get('students-password/{student}', 'passwordEdit')->name('password-edit');
+        Route::post('students-password/{student}', 'passwordUpdate')->name('password-update');
+        Route::get('students-subcribe/{student}', 'subcribeCreate')->name('subcribe-create');
+        Route::post('students-subcribe/{student}', 'subcribeStore')->name('subcribe-store');
+        Route::delete('students-subcribe/{student}', 'subcribeDestroy')->name('subcribe-destroy');
+        Route::post('student/update-many/',  'updateMany')->name('update-many');
+        Route::get('students-search', 'search')->name('search');
     });
     Route::resource('students', StudentController::class);
 
@@ -65,15 +65,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('notifications', NotificationController::class);
 
     /***************************************  Subscription *********************************/
-    Route::controller(SubscriptionController::class)->group(function () {
-        Route::get('subscriptions', 'index')->name('subscriptions.index');
-        Route::get('subscriptions/edit/{status}', 'edit')->name('subscriptions.edit');
-        Route::post('subscriptions/update', 'update')->name('subscriptions.update');
+    Route::controller(SubscriptionController::class)->name('subscriptions.')->group(function () {
+        Route::get('subscriptions', 'index')->name('index');
+        Route::get('subscriptions/edit/{status}', 'edit')->name('edit');
+        Route::post('subscriptions/update', 'update')->name('update');
     });
     /***************************************  Settings *********************************/
-    Route::controller(SettingController::class)->group(function () {
-        Route::get('settings', 'index')->name('settings.index');
-        Route::put('settings/{setting}', 'update')->name('settings.update');
+    Route::controller(SettingController::class)->name('settings.')->group(function () {
+        Route::get('settings', 'index')->name('index');
+        Route::put('settings/{setting}', 'update')->name('update');
     });
     // Route::get('generate', function (){
     //     \Illuminate\Support\Facades\Artisan::call('storage:link');

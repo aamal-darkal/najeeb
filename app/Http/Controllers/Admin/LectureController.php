@@ -4,18 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Controller;
-use App\Http\Helpers\NotificationHelper;
 use App\Http\Requests\StoreLectureRequest;
 use App\Models\Lecture;
-use App\Models\Notification;
 use App\Models\PdfFile;
-use App\Models\Student;
 use App\Models\Subject;
-use App\Models\User;
 use App\Models\WeekProgram;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class LectureController extends Controller
 {    
@@ -86,10 +83,11 @@ class LectureController extends Controller
         if ($request->has('pdf_files')) {
             $path = 'pdf/files';
             foreach ($request->file('pdf_files') as $pdf) {
-                $filename = date('YmdHi') . $pdf->getClientOriginalName();
-                $pdf->move(public_path($path), $filename);
-                $link_pdf = $path . '/' . $filename;
-                $lecture->pdfFiles()->create(['pdf_link' => $link_pdf, 'name' => '']);
+                $name = $pdf->getClientOriginalName();
+                $filename = date('YmdHi') . '-'. $name;
+
+                $pdf->storeAs('pdf/lectures' , $filename , 'public');
+                $lecture->pdfFiles()->create(['pdf_link' => $filename, 'name' => $name]);
             }
         }
 
@@ -113,8 +111,9 @@ class LectureController extends Controller
      */
     public function destroy(Lecture $lecture)
     {
+        foreach($lecture->pdfFiles as $pdf)
+            Storage::delete('public/pdf/lectures/' .    $pdf->pdf_link );
         $lecture->delete();
-        //!!!!!!!!!!!!!!!! delete files
         return back()->with('success', 'file deleted successfuly');
     }
 

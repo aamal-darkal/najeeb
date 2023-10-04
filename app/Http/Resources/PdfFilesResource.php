@@ -15,7 +15,7 @@ class PdfFilesResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'pdf_link' => url($this->pdf_link ),
+            'pdf_link' => url('storage/pdf/lectures/' . $this->pdf_link ),
         ]; 
     }
 }

@@ -78,11 +78,7 @@
             </form>
         </div>
 
-        <script type="text/javascript">
-            $(".datetimepicker").each(function() {
-                $(this).datetimepicker();
-            });
-        </script>
+       
 
         @push('css')
             <link rel="stylesheet"
@@ -93,6 +89,11 @@
             <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
             <!-- datetimepicker jQuery CDN -->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
+            </script>
+             <script type="text/javascript">
+                $(".datetimepicker").each(function() {
+                    $(this).datetimepicker();
+                });
             </script>
         @endpush
         <!-- ############ PAGE END-->
