@@ -35,9 +35,7 @@
                                     <i class="fa fa-caret-down"></i>
                                 </span>
                                 <span class="nav-icon">
-                                    <i class="material-icons">&#xe8d3;
-                                        <span ui-include="'../assets/images/i_1.svg'"></span>
-                                    </i>
+                                    <i class="fa fa-users"></i>
                                 </span>
                                 <span class="nav-text">Students</span>
                             </a>
@@ -63,62 +61,16 @@
                     @endif
                     @if (Route::has('packages.index'))
                         <li>
-                            
+
                             <a href="{{ route('packages.index') }}">
                                 <span class="nav-icon">
-                                    <i class="material-icons">&#xe1db;
-                                        <span ui-include="'../assets/images/i_1.svg'"></span>
-                                    </i>
+                                    <i class="fa fa-layer-group"></i>
                                 </span>
                                 <span class="nav-text">All Packages</span>
                             </a>
                         </li>
                     @endif
-                    {{-- @if (Route::has('subjects.index'))
-                        <li>
-                            <a>
-                                <span class="nav-caret">
-                                    <i class="fa fa-caret-down"></i>
-                                </span>
-                                <span class="nav-icon">
-                                    <i class="material-icons">&#xe865;
-                                        <span ui-include="'../assets/images/i_1.svg'"></span>
-                                    </i>
-                                </span>
-                                <span class="nav-text">Subjects</span>
-                            </a>
-                            <ul class="nav-sub">
-                                <li>
-                                    <a href="{{ route('subjects.index') }}">
-                                        <span class="nav-text">All subjects</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    @endif
 
-                    @if (Route::has('lectures.index'))
-                        <li>
-                            <a>
-                                <span class="nav-caret">
-                                    <i class="fa fa-caret-down"></i>
-                                </span>
-                                <span class="nav-icon">
-                                    <i class="material-icons">&#xe431;
-                                        <span ui-include="'../assets/images/i_1.svg'"></span>
-                                    </i>
-                                </span>
-                                <span class="nav-text">Lectures</span>
-                            </a>
-                            <ul class="nav-sub">
-                                <li>
-                                    <a href="{{ route('lectures.index') }}">
-                                        <span class="nav-text">All lectures</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    @endif --}}
                     @if (Route::has('subscriptions.index'))
                         <li>
                             <a>
@@ -149,16 +101,16 @@
                                         </span>
                                     </a>
                                 </li>
-                                <li>
+                                {{-- <li>
                                     <a href="{{ route('subscriptions.edit', 'approved') }}">
                                         <span class="nav-text">Approved </span>
                                     </a>
-                                </li>
-                                <li>
+                                </li> --}}
+                                {{-- <li>
                                     <a href="{{ route('subscriptions.edit', 'rejected') }}">
                                         <span class="nav-text">Rejected</span>
                                     </a>
-                                </li>
+                                </li> --}}
                             </ul>
                         </li>
                     @endif
@@ -203,6 +155,16 @@
                             </a>
                         </li>
                     @endif
+                    <li>                        
+                        <a onclick="location.reload()">
+                            <span class="nav-icon">
+                                <i class="fas fa-eye-slash">
+                                </i>
+                            </span>
+                            <span class="nav-text">Hide</span>
+                        </a>
+                    </li>
+                   
                 </ul>
             </nav>
         </div>

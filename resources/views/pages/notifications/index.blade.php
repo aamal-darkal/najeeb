@@ -8,7 +8,7 @@
                 <h2>All Notifications</h2>
             </div>
             <div class="table-responsive">
-                <table class="table table-striped b-a b-2x text-center">
+                <table class="table table-striped b-a b-2x text-center no-wrap">
                     <thead>
                         <tr>
                             <th></th>
@@ -25,7 +25,7 @@
                             <tr>
                                 <td></td>
                                 <td>{{ $notification->title }}</td>
-                                <td>{{ $notification->description }}</td>
+                                <td class="text-right">{{ $notification->description }}</td>
                                 <td>{{ $notification->time_publish }}</td>
                                 <td>{{ $notification->created_at }}</td>
                                 <td>{{ $notification->students_count }}</td>

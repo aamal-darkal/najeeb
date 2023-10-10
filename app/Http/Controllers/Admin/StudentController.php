@@ -353,7 +353,7 @@ class StudentController extends Controller
         $student->subjects()->detach($subjectId);
 
 
-        return back()->with('success', 'Student unsubcribe successfully');
+        return back()->with('success', 'Student unsubcribed successfully');
     }
 
     

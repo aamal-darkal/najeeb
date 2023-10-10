@@ -4,7 +4,9 @@
     <div class="container padding ">
         <div class="box col-md-6 offset-md-3">
             <div class="box-header text-primary">
-                <h2>Send notification for
+                <a class="md-btn md-raised primary text-white" onclick="history.back()"><i
+                        class="fas fa-long-arrow-left"></i></a>
+                <h2 class="d-inline ml-2">Send notification for
                     @if ($all)
                         All Student
                     @endif
@@ -64,8 +66,8 @@
 
                 <div class="form-group">
                     <label for="time_publish">Publish Time</label>
-                    <input type='text' class="form-control datetimepicker" name="time_publish" id="time_publish" value="{{ old('time_publish')}}"required
-                        autocomplete="off">
+                    <input type='text' class="form-control datetimepicker" name="time_publish" id="time_publish"
+                        value="{{ old('time_publish') }}"required autocomplete="off">
                     <div class="text-danger">
                         @error('time_publish')
                             {{ $message }}
@@ -78,7 +80,7 @@
             </form>
         </div>
 
-       
+
 
         @push('css')
             <link rel="stylesheet"
@@ -90,7 +92,7 @@
             <!-- datetimepicker jQuery CDN -->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
             </script>
-             <script type="text/javascript">
+            <script type="text/javascript">
                 $(".datetimepicker").each(function() {
                     $(this).datetimepicker();
                 });

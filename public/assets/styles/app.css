@@ -17,7 +17,14 @@ body {
 .fc-day-today {
   background-color: inherit !important;
 }
-
+.pagination {
+  overflow-x: auto !important;
+}
+.responsive{
+  width: 100;
+  overflow-x: auto;
+  overflow-y:hidden;
+}
 *:focus {
   outline: 0 !important;
 }

@@ -9,11 +9,11 @@
                 <a class="md-btn md-raised primary text-white w-md" href="{{ route('packages.create') }}">Add package &nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-plus-square fa-lg"></i></a></a>
             </div>
             <div class="table-responsive">
-                <table class="table table-striped b-a b-2x text-center">
+                <table class="table table-striped b-a b-2x text-center no-wrap">
                     <thead>
                         <tr>
                             <th></th>
-                            <th class="w">Name</th>
+                            <th class="w-sm">Name</th>
                             <th>Starts at</th>
                             <th>Ends at</th>
                             <th>Subjects count</th>
@@ -57,16 +57,5 @@
             </div>
         </div>
     </div>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 
-    <!-- ############ PAGE END-->
 @endsection

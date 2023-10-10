@@ -42,7 +42,7 @@
                         <a class="md-btn md-raised primary text-white w-md m-3"
                             href="{{ route('subjects.create', ['package' => $package->id]) }}"><i class="fas fa-plus-square fa-lg"></i> &emsp; Add subject
                             </a>
-                        <table class="table table-striped b-a b-2x text-center">
+                        <table class="table table-striped b-a b-2x text-center no-wrap">
                             <thead class="dker text-primary">
                                 <tr>
                                     <th>Subject Name</th>

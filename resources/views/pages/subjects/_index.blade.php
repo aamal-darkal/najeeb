@@ -8,7 +8,7 @@
                 <h2>Subjects</h2>
             </div>
             <div class="table-responsive">
-                <table class="table table-striped b-t b-b">
+                <table class="table table-striped b-t b-b    ">
                     <thead>
                         <tr>
                             <th></th>

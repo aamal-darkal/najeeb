@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Models\Payment;
+use App\Models\Student;
 use App\Traits\SubcribeTrait;
 use Illuminate\Http\Request;
 
@@ -45,20 +47,25 @@ class SubscriptionController extends Controller
         $ids = $validated['ids'];
 
 
-        // ********************* reject **************************
         if ($action == 'reject') {
+        // ********************* reject **************************
             $payments = payment::find($ids);
-            foreach ($payments as $payment)
-                $payment->update(['state' => 'rejected']);
 
-            // ********************* unreject **************************            
-        } else if ($action == 'unreject') {
-            $payments = payment::find($ids);
-            foreach ($payments as $payment)
-                $payment->update(['state' => 'pending']);
+            foreach ($payments as $payment){
+                $order  = $payment->order;
+                $student =  $order->student;
+                $payment->delete();
+                //check if order has no old payments => delete it
+                if (! $order->payments->count())
+                    $order->delete();
+                //check if student new => delete it
+                if ($student->state == 'new')
+                    $student->delete();
 
-            // ********************* approve **************************
+            }                
+
         } else if ($action == 'approve') {
+            // ********************* approve **************************
             $payments = payment::with('order.student.user', 'order.subjects')->find($ids);
 
             foreach ($payments as $payment) {

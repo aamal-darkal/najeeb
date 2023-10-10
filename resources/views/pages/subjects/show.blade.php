@@ -52,7 +52,7 @@
                             </form>
                         </div>
                         <div class="table-responsive mt-3">
-                            <table class="table table-striped  b-a b-3x">
+                            <table class="table table-striped  b-a b-3x no-wrap">
                                 <thead class="dker">
                                     <tr>
                                         <th>Name</th>

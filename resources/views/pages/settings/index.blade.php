@@ -8,7 +8,7 @@
                 <h2> Settings</h2>
             </div>
             <div class="table-responsive">
-                <table class="table table-striped b-a b-2x text-center">
+                <table class="table table-striped b-a b-2x text-center no-wrap">
                     <thead>
                         <tr>
                             <th></th>
@@ -23,8 +23,8 @@
                                 <td></td>
                                 <td>{{ $setting->description }}</td>
                                 <form action="{{ route('settings.update', $setting) }}" method="POST">
-                                    <td><input type="text" class="form-control" value="{{ $setting->value }}" name="value" disabled></td>
-                                    <td class="text-left w-md">
+                                    <td class=""><input type="text" class="form-control w-100" style="min-width: 300px" value="{{ $setting->value }}" name="value" disabled></td>
+                                    <td class="text-left">
                                         @csrf
                                         @method('put')
                                         <button class="btn btn-outline-primary" onclick="return openEdit(this)">Edit</button>
